@@ -26,8 +26,6 @@ const Card = ({ title }) => (
                 <option value="audi">Audi</option>
             </select>
         </section>
-
-        <footer></footer>
     </div>
 );
 

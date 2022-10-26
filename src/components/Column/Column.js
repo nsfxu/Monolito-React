@@ -5,16 +5,24 @@ import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ title, data }) => {
+const Column = ({ title, data, addNewCard }) => {
     return (
         <div className="w-100 ba bw1" style={{ backgroundColor: 'yellow' }}>
-            <div className="bb flex justify-center">
+            <div className="bb flex flex-column justify-center items-center">
                 <h1>{title}</h1>
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        addNewCard(title);
+                    }}
+                >
+                    Adicionar card
+                </button>
             </div>
             <Droppable droppableId={title}>
                 {(provided) => (
                     <ul
-                        className="list pl3 pr3 pb2"
+                        className="list pl3 pr3 pb2 h-100"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >
@@ -48,7 +56,8 @@ const Column = ({ title, data }) => {
 
 Column.propTypes = {
     title: propTypes.string,
-    data: propTypes.any
+    data: propTypes.any,
+    addNewCard: propTypes.func
 };
 
 export default Column;
