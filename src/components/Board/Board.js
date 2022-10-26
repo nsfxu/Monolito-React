@@ -12,22 +12,42 @@ const Board = () => {
                 name: 'To-Do',
                 count: 2,
                 data: [
-                    { id: 1, name: 'Monolith' },
-                    { id: 2, name: 'Merc' }
+                    {
+                        id: 1,
+                        name: 'Monolith',
+                        description: 'description lorem ipsum dolor asi amet',
+                        tags: [{ id: 1, text: 'Tester' }]
+                    },
+                    {
+                        id: 2,
+                        name: 'Merc',
+                        description: '123',
+                        tags: [{ id: 1, text: 'Oi' }]
+                    }
                 ]
             },
             {
                 name: 'Doing',
                 count: 2,
                 data: [
-                    { id: 4, name: 'Loner' },
-                    { id: 3, name: 'Bandit' }
+                    {
+                        id: 4,
+                        name: 'Loner',
+                        description: '',
+                        tags: []
+                    },
+                    {
+                        id: 3,
+                        name: 'Bandit',
+                        description: '',
+                        tags: [{ id: 1, text: 'Tester' }]
+                    }
                 ]
             },
             {
                 name: 'Done',
                 count: 1,
-                data: [{ id: 5, name: 'Ecolog' }]
+                data: [{ id: 5, name: 'Ecolog', description: '', tags: [] }]
             }
         ],
         next_id: 6
