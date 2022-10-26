@@ -83,14 +83,21 @@ const Board = () => {
         updateBoardInfo(items);
     };
 
-    const addNewCard = (columnName) => {
+    const addNewCard = (
+        columnName,
+        title,
+        description,
+        person,
+        status,
+        tags
+    ) => {
         const items = board_info;
         const column_to_add = items.columns.find(
             (column) => column.name === columnName
         );
 
         column_to_add.count++;
-        column_to_add.data.push({ id: items.next_id, name: 'OOOOOO' });
+        column_to_add.data.push({ id: items.next_id, name: title, description: description });
         items.next_id++;
 
         forceUpdate();
