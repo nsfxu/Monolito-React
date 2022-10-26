@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { ToastContainer, toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import Column from '../Column/Column';
 
 /* eslint-disable */
@@ -97,31 +99,39 @@ const Board = () => {
         );
 
         column_to_add.count++;
-        column_to_add.data.push({ id: items.next_id, name: title, description: description });
+        column_to_add.data.push({
+            id: items.next_id,
+            name: title,
+            description: description
+        });
         items.next_id++;
 
         forceUpdate();
+        toast('Default notis!');
         updateBoardInfo(items);
     };
 
     return (
-        <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
-            <h1>Board</h1>
-            {board_info && (
-                <div className="flex flex-row w-75">
-                    <DragDropContext onDragEnd={handleOnDragEnd}>
-                        {board_info.columns.map((column, index) => (
-                            <Column
-                                title={column.name}
-                                data={column.data}
-                                key={index}
-                                addNewCard={addNewCard}
-                            />
-                        ))}
-                    </DragDropContext>
-                </div>
-            )}
-        </div>
+        <>
+            <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
+                <h1>Board</h1>
+                {board_info && (
+                    <div className="flex flex-row w-75">
+                        <DragDropContext onDragEnd={handleOnDragEnd}>
+                            {board_info.columns.map((column, index) => (
+                                <Column
+                                    title={column.name}
+                                    data={column.data}
+                                    key={index}
+                                    addNewCard={addNewCard}
+                                />
+                            ))}
+                        </DragDropContext>
+                    </div>
+                )}
+            </div>
+            <ToastContainer />
+        </>
     );
 };
 
