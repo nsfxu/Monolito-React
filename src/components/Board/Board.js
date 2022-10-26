@@ -33,22 +33,12 @@ const Board = () => {
 
     const [board_info, updateBoardInfo] = useState(data);
 
-    const returnColumnData = (columnName) => {
-        return board_info.columns.find((column) => column.name === columnName);
-    };
-
     const handleOnDragEnd = (result) => {
-        console.clear();
-
         if (!result.destination) return;
-
-        // remover o card movido da coluna
-        // adicionar o card movido para a outra coluna
 
         const items = board_info;
         const source_column_name = result.source.droppableId;
         const destination_column_name = result.destination.droppableId;
-
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
@@ -68,9 +58,9 @@ const Board = () => {
     };
 
     return (
-        <div className="ba bw w-50 pr4" style={{ backgroundColor: 'red' }}>
+        <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
             <h1>{title}</h1>
-            <div className="flex flex-row justify-around">
+            <div className="flex flex-row w-75">
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     {board_info.columns.map((column, index) => (
                         <Column

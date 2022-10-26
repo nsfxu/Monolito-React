@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
+import propTypes from 'prop-types';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ title, data, handleOnDragEnd }) => {
-    const [characters, updateCharacters] = useState(data);
-
+const Column = ({ title, data }) => {
     return (
-        <div className="ba bw w-50 pr4" style={{ backgroundColor: 'yellow' }}>
-            <h1>{title}</h1>
+        <div className="w-100 ba bw1" style={{ backgroundColor: 'yellow' }}>
+            <div className="bb flex justify-center">
+                <h1>{title}</h1>
+            </div>
             <Droppable droppableId={title}>
                 {(provided) => (
                     <ul
-                        className="characters"
+                        className="list pl3 pr3 pb2"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >
-                        {characters.map(({ id, name }, index) => {
+                        {data.map(({ id, name }, index) => {
                             return (
                                 <Draggable
                                     key={id}
@@ -28,9 +30,9 @@ const Column = ({ title, data, handleOnDragEnd }) => {
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
-                                            className="ba bw1"
+                                            className="ba bw1 mt3"
                                         >
-                                            <p>{name}</p>
+                                            <Card title={name} />
                                         </li>
                                     )}
                                 </Draggable>
@@ -44,6 +46,9 @@ const Column = ({ title, data, handleOnDragEnd }) => {
     );
 };
 
-Column.propTypes = {};
+Column.propTypes = {
+    title: propTypes.string,
+    data: propTypes.any
+};
 
 export default Column;
