@@ -1,15 +1,11 @@
 import React from 'react';
+import Board from '../../components/Board';
 
-const Home = () => {   
-
-    const title = "Hello World";
-
-    return (
-        <div className="ph1 ph4-m ph5-ns pb5">
-            <h1>{title}</h1>
-        </div>
-    );
-};
+const Home = () => (
+    <div className="ph1 ph4-m ph5-ns pb5 flex flex-row">
+        <Board />
+    </div>
+);
 
 Home.propTypes = {};
 
