@@ -54,6 +54,9 @@ export const TEST_DATA = {
             ]
         }
     ],
-    lanes: [],
+    lanes: [
+        { id: 1, name: 'Oi' },
+        { id: 2, name: 'eae' }
+    ],
     nextId: 6
 };

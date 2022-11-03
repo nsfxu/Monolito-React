@@ -20,6 +20,10 @@ class ModalStyles {
             transform: 'translate(-50%, -50%)'
         }
     };
+
+    static createLane = {
+        content: {}
+    };
 }
 
 export default ModalStyles;

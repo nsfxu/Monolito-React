@@ -11,6 +11,7 @@ import { TEST_DATA } from '../../constants/board-test-data';
 
 import Column from '../Column/Column';
 import CreateColumn from '../CreateColumn/CreateColumn';
+import CreateLane from '../CreateLane';
 
 const CREATE_COLUMN = 'CreateColumn';
 const CREATE_LANE = 'CreateLane';
@@ -28,14 +29,17 @@ const Board = () => {
     const [board_info, updateBoardInfo] = useState(data);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
+    const [modal_style, setModalStyle] = useState(null);
 
     const openCustomModal = (modal) => {
         if (modal === CREATE_COLUMN) {
             setModalType(modal);
+            setModalStyle(ModalStyles.createColumn);
         }
 
         if (modal === CREATE_LANE) {
             setModalType(modal);
+            setModalStyle(ModalStyles.CreateLane);
         }
 
         openModal();
@@ -113,6 +117,7 @@ const Board = () => {
         <>
             <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
                 <h1>Board</h1>
+                {/* Criar coluna */}
                 <button
                     onClick={(e) => {
                         openCustomModal(CREATE_COLUMN);
@@ -121,6 +126,7 @@ const Board = () => {
                 >
                     Adicionar coluna
                 </button>
+                {/* Criar raia */}
                 <button
                     onClick={(e) => {
                         openCustomModal(CREATE_LANE);
@@ -129,6 +135,7 @@ const Board = () => {
                 >
                     Criar raias
                 </button>
+
                 {board_info && (
                     <div className="flex flex-row w-75">
                         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -147,7 +154,7 @@ const Board = () => {
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
-                style={ModalStyles.createColumn}
+                style={modal_style}
                 appElement={document.getElementById('root')}
             >
                 {modal_type === 'CreateColumn' && (
@@ -157,7 +164,9 @@ const Board = () => {
                     />
                 )}
 
-                {modal_type === 'CreateLane' && <h1>Criar lana</h1>}
+                {modal_type === 'CreateLane' && (
+                    <CreateLane current_lanes={data.lanes} />
+                )}
             </Modal>
             <ToastContainer />
         </>
