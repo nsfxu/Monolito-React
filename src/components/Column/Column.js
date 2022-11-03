@@ -3,6 +3,9 @@ import Modal from 'react-modal';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
+
+import ModalStyles from '../../constants/modal-styles';
+
 import Card from '../Card';
 import CreateCard from '../CreateCard';
 
@@ -40,11 +43,11 @@ const Column = ({ title, data, addNewCard }) => {
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                         >
-                            {data.map(({ id, name }, index) => {
+                            {data.map((obj, index) => {
                                 return (
                                     <Draggable
-                                        key={id}
-                                        draggableId={`${id}`}
+                                        key={obj.id}
+                                        draggableId={`${obj.id}`}
                                         index={index}
                                     >
                                         {(provided) => (
@@ -54,7 +57,7 @@ const Column = ({ title, data, addNewCard }) => {
                                                 {...provided.dragHandleProps}
                                                 className="ba bw1 mt3"
                                             >
-                                                <Card title={name} />
+                                                <Card object={obj} />
                                             </li>
                                         )}
                                     </Draggable>
@@ -67,6 +70,7 @@ const Column = ({ title, data, addNewCard }) => {
             </div>
             <Modal
                 isOpen={isModalOpen}
+                style={ModalStyles.create}
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >

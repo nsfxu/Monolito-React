@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+
+import propTypes from 'prop-types';
+
 import Modal from 'react-modal';
+import ShowCard from '../ShowCard';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Card = ({ title }) => {
+const Card = ({ object }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -30,7 +34,7 @@ const Card = ({ title }) => {
                         />
                     </div>
                     <div>
-                        <h4>{title}</h4>
+                        <h4>{object.name}</h4>
                     </div>
                 </header>
 
@@ -49,12 +53,14 @@ const Card = ({ title }) => {
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >
-                <h1>Hello World</h1>
+                <ShowCard object={object} />
             </Modal>
         </>
     );
 };
 
-Card.propTypes = {};
+Card.propTypes = {
+    object: propTypes.object
+};
 
 export default Card;

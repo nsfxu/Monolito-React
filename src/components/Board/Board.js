@@ -1,9 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
+import Modal from 'react-modal';
+import ModalStyles from '../../constants/modal-styles';
+
 import Column from '../Column/Column';
+import CreateColumn from '../CreateColumn/CreateColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -58,6 +63,15 @@ const Board = () => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     const [board_info, updateBoardInfo] = useState(data);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     const handleOnDragEnd = (result) => {
         if (!result.destination) return;
@@ -111,10 +125,26 @@ const Board = () => {
         updateBoardInfo(items);
     };
 
+    const addNewColumn = (name) => {
+        const items = board_info;
+
+        items.columns.push({ name: name, count: 0, data: [] });
+        updateBoardInfo(items);
+        toast('Default notis!');
+    };
+
     return (
         <>
             <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
                 <h1>Board</h1>
+                <button
+                    onClick={(e) => {
+                        openModal();
+                        e.preventDefault();
+                    }}
+                >
+                    Adicionar coluna
+                </button>
                 {board_info && (
                     <div className="flex flex-row w-75">
                         <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -130,6 +160,17 @@ const Board = () => {
                     </div>
                 )}
             </div>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                style={ModalStyles.createColumn}
+                appElement={document.getElementById('root')}
+            >
+                <CreateColumn
+                    addNewColumn={addNewColumn}
+                    closeModal={closeModal}
+                />
+            </Modal>
             <ToastContainer />
         </>
     );
