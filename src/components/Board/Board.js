@@ -7,63 +7,39 @@ import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
+import { TEST_DATA } from '../../constants/board-test-data';
+
 import Column from '../Column/Column';
 import CreateColumn from '../CreateColumn/CreateColumn';
+
+const CREATE_COLUMN = 'CreateColumn';
+const CREATE_LANE = 'CreateLane';
 
 /* eslint-disable */
 // eslint-disable-next-line
 const Board = () => {
-    const data = {
-        columns: [
-            {
-                name: 'To-Do',
-                count: 2,
-                data: [
-                    {
-                        id: 1,
-                        name: 'Monolith',
-                        description: 'description lorem ipsum dolor asi amet',
-                        tags: [{ id: 1, text: 'Tester' }]
-                    },
-                    {
-                        id: 2,
-                        name: 'Merc',
-                        description: '123',
-                        tags: [{ id: 1, text: 'Oi' }]
-                    }
-                ]
-            },
-            {
-                name: 'Doing',
-                count: 2,
-                data: [
-                    {
-                        id: 4,
-                        name: 'Loner',
-                        description: '',
-                        tags: []
-                    },
-                    {
-                        id: 3,
-                        name: 'Bandit',
-                        description: '',
-                        tags: [{ id: 1, text: 'Tester' }]
-                    }
-                ]
-            },
-            {
-                name: 'Done',
-                count: 1,
-                data: [{ id: 5, name: 'Ecolog', description: '', tags: [] }]
-            }
-        ],
-        next_id: 6
-    };
+    const data = TEST_DATA;
+
+    console.log(data);
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
+
     const [board_info, updateBoardInfo] = useState(data);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modal_type, setModalType] = useState(null);
+
+    const openCustomModal = (modal) => {
+        if (modal === CREATE_COLUMN) {
+            setModalType(modal);
+        }
+
+        if (modal === CREATE_LANE) {
+            setModalType(modal);
+        }
+
+        openModal();
+    };
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -114,11 +90,11 @@ const Board = () => {
 
         column_to_add.count++;
         column_to_add.data.push({
-            id: items.next_id,
+            id: items.nextId,
             name: title,
             description: description
         });
-        items.next_id++;
+        items.nextId++;
 
         forceUpdate();
         toast('Default notis!');
@@ -139,11 +115,19 @@ const Board = () => {
                 <h1>Board</h1>
                 <button
                     onClick={(e) => {
-                        openModal();
+                        openCustomModal(CREATE_COLUMN);
                         e.preventDefault();
                     }}
                 >
                     Adicionar coluna
+                </button>
+                <button
+                    onClick={(e) => {
+                        openCustomModal(CREATE_LANE);
+                        e.preventDefault();
+                    }}
+                >
+                    Criar raias
                 </button>
                 {board_info && (
                     <div className="flex flex-row w-75">
@@ -166,10 +150,14 @@ const Board = () => {
                 style={ModalStyles.createColumn}
                 appElement={document.getElementById('root')}
             >
-                <CreateColumn
-                    addNewColumn={addNewColumn}
-                    closeModal={closeModal}
-                />
+                {modal_type === 'CreateColumn' && (
+                    <CreateColumn
+                        addNewColumn={addNewColumn}
+                        closeModal={closeModal}
+                    />
+                )}
+
+                {modal_type === 'CreateLane' && <h1>Criar lana</h1>}
             </Modal>
             <ToastContainer />
         </>

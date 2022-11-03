@@ -15,6 +15,7 @@ const ShowCard = ({ object }) => {
     return (
         <form className="pa4 black-80">
             {/* Title */}
+            {object.id}
             <div>
                 <label className="f6 b db mb2">Titulo</label>
                 <input
