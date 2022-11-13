@@ -1,6 +1,6 @@
 {
-  "name": "react-template",
-  "version": "0.1.0",
+  "name": "task-x-react",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "axios": "^0.21.4",

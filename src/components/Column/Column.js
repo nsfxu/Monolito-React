@@ -8,10 +8,11 @@ import ModalStyles from '../../constants/modal-styles';
 
 import Card from '../Card';
 import CreateCard from '../CreateCard';
+import SubColumn from '../SubColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ title, data, addNewCard }) => {
+const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -35,38 +36,60 @@ const Column = ({ title, data, addNewCard }) => {
                     >
                         Adicionar card
                     </button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            addNewSubColumn(title);
+                        }}
+                    >
+                        Criar coluna
+                    </button>
                 </div>
-                <Droppable droppableId={title}>
-                    {(provided) => (
-                        <ul
-                            className="list pl3 pr3 pb2 h-100"
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {data.map((obj, index) => {
-                                return (
-                                    <Draggable
-                                        key={obj.id}
-                                        draggableId={`${obj.id}`}
-                                        index={index}
-                                    >
-                                        {(provided) => (
-                                            <li
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                className="ba bw1 mt3"
-                                            >
-                                                <Card object={obj} />
-                                            </li>
-                                        )}
-                                    </Draggable>
-                                );
-                            })}
-                            {provided.placeholder}
-                        </ul>
-                    )}
-                </Droppable>
+
+                {subColumns.length > 0 ? (
+                    <div className="flex flex-row items-start justify-center">
+                        {subColumns?.map((obj) => (
+                            <SubColumn
+                                title={obj.name}
+                                parentColumn={title}
+                                key={obj.id}
+                                data={obj.data}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <Droppable droppableId={title}>
+                        {(provided) => (
+                            <ul
+                                className="list pl3 pr3 pb2 h-100"
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                {data.map((obj, index) => {
+                                    return (
+                                        <Draggable
+                                            key={obj.id}
+                                            draggableId={`${obj.id}`}
+                                            index={index}
+                                        >
+                                            {(provided) => (
+                                                <li
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    className="ba bw1 mt3"
+                                                >
+                                                    <Card object={obj} />
+                                                </li>
+                                            )}
+                                        </Draggable>
+                                    );
+                                })}
+                                {provided.placeholder}
+                            </ul>
+                        )}
+                    </Droppable>
+                )}
             </div>
             <Modal
                 isOpen={isModalOpen}
@@ -83,7 +106,9 @@ const Column = ({ title, data, addNewCard }) => {
 Column.propTypes = {
     title: propTypes.string,
     data: propTypes.any,
-    addNewCard: propTypes.func
+    subColumns: propTypes.array,
+    addNewCard: propTypes.func,
+    addNewSubColumn: propTypes.func
 };
 
 export default Column;

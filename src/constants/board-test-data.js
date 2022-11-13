@@ -3,20 +3,49 @@ export const TEST_DATA = {
         {
             name: 'To-Do',
             count: 2,
-            data: [
+            data: [],
+            subColumns: [
                 {
-                    id: 1,
-                    laneId: '',
-                    name: 'Monolith',
-                    description: 'description lorem ipsum dolor asi amet',
-                    tags: [{ id: 1, text: 'Tester' }]
+                    id: 0,
+                    name: 'Commited',
+                    data: [
+                        {
+                            id: 1,
+                            laneId: '',
+                            name: 'Monolith',
+                            description:
+                                'description lorem ipsum dolor asi amet',
+                            tags: [{ id: 1, text: 'Tester' }]
+                        },
+                        {
+                            id: 2,
+                            laneId: '',
+                            name: 'Merc',
+                            description: '123',
+                            tags: [{ id: 1, text: 'Oi' }]
+                        }
+                    ]
                 },
                 {
-                    id: 2,
-                    laneId: '',
-                    name: 'Merc',
-                    description: '123',
-                    tags: [{ id: 1, text: 'Oi' }]
+                    id: 1,
+                    name: 'Done',
+                    data: [
+                        {
+                            id: 56,
+                            laneId: '',
+                            name: 'Ford Stream',
+                            description:
+                                'description lorem ipsum dolor asi amet',
+                            tags: [{ id: 1, text: 'Tester' }]
+                        },
+                        {
+                            id: 57,
+                            laneId: '',
+                            name: 'Compiled',
+                            description: '123',
+                            tags: [{ id: 1, text: 'Oi' }]
+                        }
+                    ]
                 }
             ]
         },
@@ -38,7 +67,8 @@ export const TEST_DATA = {
                     description: '',
                     tags: [{ id: 1, text: 'Tester' }]
                 }
-            ]
+            ],
+            subColumns: []
         },
         {
             name: 'Done',
@@ -51,7 +81,8 @@ export const TEST_DATA = {
                     description: '',
                     tags: []
                 }
-            ]
+            ],
+            subColumns: []
         }
     ],
     lanes: [
