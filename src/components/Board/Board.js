@@ -9,6 +9,13 @@ import ModalStyles from '../../constants/modal-styles';
 
 import { TEST_DATA } from '../../constants/board-test-data';
 
+import {
+    findColumnByName,
+    findSubColumnByName,
+    removeObjectByPosition,
+    addObjectIntoPosition
+} from '../../utils/column-utils';
+
 import Column from '../Column/Column';
 import CreateColumn from '../CreateColumn/CreateColumn';
 import CreateLane from '../CreateLane';
@@ -61,7 +68,7 @@ const Board = () => {
         return selected_column.id;
     };
 
-    const handleOnDragEndSubColumn = (
+    const checkHowToHandle = (
         items,
         result,
         destinationIsSubColumn,
@@ -69,7 +76,6 @@ const Board = () => {
     ) => {
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
-        const card_id = result.draggableId;
 
         const destination_subcolumn = destinationIsSubColumn
             ? result.destination.droppableId.split(';')[0]
@@ -86,111 +92,188 @@ const Board = () => {
             : result.source.droppableId;
 
         if (destinationIsSubColumn && sourceIsSubColumn) {
-            // for cards changes inside the same column
             if (source_column === destination_column) {
-                const selected_column = items.columns.find(
-                    (column) => column.name === source_column
-                );
-
-                const selected_subcolumn = selected_column.subColumns.find(
-                    (sub_column) => sub_column.name === source_subcolumn
-                );
-
-                const removed_item = selected_subcolumn.data.splice(
-                    source_pos_id,
-                    1
-                );
-
-                const subcolumn_to_add = selected_column.subColumns.find(
-                    (sub_column) => sub_column.name === destination_subcolumn
-                );
-
-                subcolumn_to_add.data.splice(
+                handleWhenSourceIsDestination(
+                    items,
+                    source_column,
+                    source_subcolumn,
+                    destination_subcolumn,
                     destination_pos_id,
-                    0,
-                    removed_item[0]
+                    source_pos_id
                 );
 
                 return;
             }
 
-            // for card changes to another column with subcolumns
-            const column_to_delete = items.columns.find(
-                (column) => column.name === source_column
-            );
-
-            const subcolumn_to_delete = column_to_delete.subColumns.find(
-                (subcolumn) => subcolumn.name === source_subcolumn
-            );
-
-            column_to_delete.count--;
-            const removed_item = subcolumn_to_delete.data.splice(
+            handleWhenSourceIsntDestination(
+                items,
+                source_column,
+                source_subcolumn,
+                destination_column,
+                destination_subcolumn,
                 source_pos_id,
-                1
-            );
-
-            const column_to_add = items.columns.find(
-                (column) => column.name === destination_column
-            );
-
-            const subcolumn_to_add = column_to_add.subColumns.find(
-                (subcolumn) => subcolumn.name === destination_subcolumn
-            );
-
-            column_to_add.count++;
-            subcolumn_to_add.data.splice(
-                destination_pos_id,
-                0,
-                removed_item[0]
+                destination_pos_id
             );
 
             return;
         }
 
         if (sourceIsSubColumn) {
-            const column_to_delete = items.columns.find(
-                (column) => column.name === source_column
-            );
-
-            const subcolumn_to_delete = column_to_delete.subColumns.find(
-                (subcolumn) => subcolumn.name === source_subcolumn
-            );
-
-            column_to_delete.count--;
-            const removed_item = subcolumn_to_delete.data.splice(
+            handleWhenSourceIsSubColumn(
+                items,
+                source_column,
+                source_subcolumn,
+                destination_column,
                 source_pos_id,
-                1
+                destination_pos_id
             );
-
-            const column_to_add = items.columns.find(
-                (column) => column.name === destination_column
-            );
-
-            column_to_add.count++;
-            column_to_add.data.splice(destination_pos_id, 0, removed_item[0]);
 
             return;
         }
 
         if (destinationIsSubColumn) {
-            const column_to_delete = items.columns.find(
-                (column) => column.name === source_column
+            handleWhenDestinationIsSubColumn(
+                items,
+                source_column,
+                destination_column,
+                destination_subcolumn,
+                destination_pos_id,
+                source_pos_id
             );
 
-            column_to_delete.count--;
-            const removed_item = column_to_delete.data.splice(source_pos_id, 1);
-
-            const column_to_add = items.columns.find(
-                (column) => column.name === destination_column
-            );
-
-            const subcolumn_to_add = column_to_add.subColumns.find(
-                (subcolumn) => subcolumn.name === destination_subcolumn
-            );
-
-            column_to_add.count++;
-            subcolumn_to_add.data.splice(destination_pos_id, 0, removed_item[0]);
+            return;
         }
+    };
+
+    const handleWhenSourceIsSubColumn = (
+        items,
+        source_column,
+        source_subcolumn,
+        destination_column,
+        source_pos_id,
+        destination_pos_id
+    ) => {
+        const column_to_delete = findColumnByName(items, source_column);
+
+        const subcolumn_to_delete = findSubColumnByName(
+            column_to_delete,
+            source_subcolumn
+        );
+
+        column_to_delete.count--;
+        const removed_item = removeObjectByPosition(
+            subcolumn_to_delete,
+            source_pos_id
+        );
+
+        const column_to_add = findColumnByName(items, destination_column);
+
+        column_to_add.count++;
+        addObjectIntoPosition(
+            column_to_add,
+            destination_pos_id,
+            removed_item[0]
+        );
+    };
+
+    const handleWhenDestinationIsSubColumn = (
+        items,
+        source_column,
+        destination_column,
+        destination_subcolumn,
+        destination_pos_id,
+        source_pos_id
+    ) => {
+        const column_to_delete = findColumnByName(items, source_column);
+
+        column_to_delete.count--;
+        const removed_item = removeObjectByPosition(
+            column_to_delete,
+            source_pos_id
+        );
+
+        const column_to_add = findColumnByName(items, destination_column);
+
+        const subcolumn_to_add = findSubColumnByName(
+            column_to_add,
+            destination_subcolumn
+        );
+
+        column_to_add.count++;
+        addObjectIntoPosition(
+            subcolumn_to_add,
+            destination_pos_id,
+            removed_item[0]
+        );
+    };
+
+    const handleWhenSourceIsDestination = (
+        items,
+        source_column,
+        source_subcolumn,
+        destination_subcolumn,
+        destination_pos_id,
+        source_pos_id
+    ) => {
+        const selected_column = findColumnByName(items, source_column);
+
+        const selected_subcolumn = findSubColumnByName(
+            selected_column,
+            source_subcolumn
+        );
+
+        const removed_item = removeObjectByPosition(
+            selected_subcolumn,
+            source_pos_id
+        );
+
+        const subcolumn_to_add = findSubColumnByName(
+            selected_column,
+            destination_subcolumn
+        );
+
+        addObjectIntoPosition(
+            subcolumn_to_add,
+            destination_pos_id,
+            removed_item[0]
+        );
+    };
+
+    const handleWhenSourceIsntDestination = (
+        items,
+        source_column,
+        source_subcolumn,
+        destination_column,
+        destination_subcolumn,
+        source_pos_id,
+        destination_pos_id
+    ) => {
+        const column_to_delete = findColumnByName(items, source_column);
+
+        const subcolumn_to_delete = findSubColumnByName(
+            column_to_delete,
+            source_subcolumn
+        );
+
+        column_to_delete.count--;
+        const removed_item = removeObjectByPosition(
+            subcolumn_to_delete,
+            source_pos_id
+        );
+
+        const column_to_add = findColumnByName(items, destination_column);
+
+        const subcolumn_to_add = findSubColumnByName(
+            column_to_add,
+            destination_subcolumn
+        );
+
+        column_to_add.count++;
+        addObjectIntoPosition(
+            subcolumn_to_add,
+            destination_pos_id,
+            removed_item[0]
+        );
     };
 
     const handleOnDragEnd = (result) => {
@@ -205,7 +288,7 @@ const Board = () => {
         const sourceIsSubColumn = result.source.droppableId.includes(';');
 
         if (destinationIsSubColumn || sourceIsSubColumn) {
-            handleOnDragEndSubColumn(
+            checkHowToHandle(
                 items,
                 result,
                 destinationIsSubColumn,

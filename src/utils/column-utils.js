@@ -1,16 +1,14 @@
 /* eslint-disable */
 // eslint-disable-next-line
-const getSubColumnId = (name, subColumns) => {
-    const selected_column = subColumns.find((column) => column.name === name);
+const findSubColumnByName = (object, subColumnName) =>
+    object.subColumns.find((sub_column) => sub_column.name === subColumnName);
 
-    console.log(selected_column.id);
+const findColumnByName = (object, columnName) =>
+    object.columns.find((column) => column.name === columnName);
 
-    return selected_column.id;
-};
+const removeObjectByPosition = (object, pos) => object.data.splice(pos, 1);
 
-const getIndexOfDraggableId = (cards, draggableId) =>
-    cards.findIndex((card) => {
-        return (card.id == draggableId);
-    });
+const addObjectIntoPosition = (object, pos, item) =>
+    object.data.splice(pos, 0, item);
 
-export { getSubColumnId, getIndexOfDraggableId };
+export { findColumnByName, findSubColumnByName, removeObjectByPosition, addObjectIntoPosition };
