@@ -10,16 +10,16 @@ import Card from '../Card';
 // eslint-disable-next-line
 const SubColumn = ({ title, parentColumn, data }) => {
     return (
-        <div className="ba w-100 h-100 flex flex-column items-start justify-center ma2">
-            <header className='self-center'>
-                <h3>{title}</h3>
+        <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
+            <header className="self-center">
+                <h3 className="ma0 pa0">{title}</h3>
             </header>
             <section className="w-100 h-100">
                 {data && (
                     <Droppable droppableId={`${title};${parentColumn}`}>
                         {(provided) => (
                             <ul
-                                className="list pl3 pr3 pb2 h-100"
+                                className="list pl1 pr1 pb2 h-100 flex flex-column items-start"
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >

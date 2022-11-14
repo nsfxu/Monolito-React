@@ -4,9 +4,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import { Stack, Button, Divider } from '@mui/material';
 
 import ModalStyles from '../../constants/modal-styles';
 
@@ -38,7 +36,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
     return (
         <>
             <div
-                className="w-100 ba"
+                className="ba w-100"
                 style={{
                     backgroundColor: '#1e272e',
                     maxWidth: returnMaxWidth(),
@@ -47,7 +45,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
             >
                 <div className="bb flex flex-column justify-center items-center">
                     <div>
-                        <h1>{title}</h1>
+                        <h3>{title}</h3>
                     </div>
                     <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
                         <Stack
@@ -55,7 +53,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                             divider={
                                 <Divider orientation="vertical" flexItem />
                             }
-                            spacing={2}
+                            spacing={1}
                         >
                             <Button
                                 variant="contained"
@@ -65,11 +63,11 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                     openModal();
                                 }}
                             >
-                                Adicionar card
+                                Criar
                             </Button>
                             <Button
                                 variant="contained"
-                                size="medium"
+                                size="small"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     addNewSubColumn(title);
@@ -83,7 +81,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
 
                 <div className="h-100">
                     {subColumns.length > 0 ? (
-                        <div className="flex flex-row items-start justify-center">
+                        <div className="flex flex-row items-start justify-center h-100">
                             {subColumns?.map((obj) => (
                                 <SubColumn
                                     title={obj.name}
@@ -97,7 +95,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                         <Droppable droppableId={title}>
                             {(provided) => (
                                 <ul
-                                    className="list pl3 pr3 pb2 h-100 w-100"
+                                    className="list pb2 h-100 w-100 flex flex-column items-start"
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >
@@ -113,7 +111,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        className="bw1 mt3 w-100"
+                                                        className="bw1 mt3"
                                                     >
                                                         <Card object={obj} />
                                                     </li>
