@@ -58,16 +58,6 @@ const Board = () => {
         setIsModalOpen(false);
     };
 
-    const getSubColumnId = (name, subColumns) => {
-        const selected_column = subColumns.find(
-            (column) => column.name === name
-        );
-
-        console.log(selected_column.id);
-
-        return selected_column.id;
-    };
-
     const checkHowToHandle = (
         items,
         result,
@@ -329,16 +319,23 @@ const Board = () => {
         tags
     ) => {
         const items = board_info;
-        const column_to_add = items.columns.find(
-            (column) => column.name === columnName
-        );
 
-        column_to_add.count++;
-        column_to_add.data.push({
+        const card_object = {
             id: items.nextId,
             name: title,
             description: description
-        });
+        };
+
+        const column_to_add = findColumnByName(items, columnName);
+        column_to_add.count++;
+
+        if (column_to_add.subColumns.length > 0) {
+            const subcolumn_to_add = column_to_add.subColumns[0];
+
+            addObjectIntoPosition(subcolumn_to_add, 0, card_object);
+        } else {
+            addObjectIntoPosition(column_to_add, 0, card_object);
+        }
         items.nextId++;
 
         forceUpdate();
@@ -349,7 +346,7 @@ const Board = () => {
     const addNewColumn = (name) => {
         const items = board_info;
 
-        items.columns.push({ name: name, count: 0, data: [] });
+        items.columns.push({ name: name, count: 0, data: [], subColumns: [] });
         updateBoardInfo(items);
         toast('Default notis!');
     };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import Modal from 'react-modal';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -9,10 +9,16 @@ import Card from '../Card';
 /* eslint-disable */
 // eslint-disable-next-line
 const SubColumn = ({ title, parentColumn, data }) => {
+    const [title_disabled, setTitleDisabled] = useState(true);
     return (
         <div className="ba w-100 h-100 flex flex-column items-start justify-center ma1">
             <header>
-                <h2>{title}</h2>
+                <input
+                    type="text"
+                    value={title}
+                    disabled={title_disabled}
+                    onClick={() => setTitleDisabled(true)}
+                />
             </header>
             <section className="w-100 h-100" style={{ backgroundColor: 'red' }}>
                 {data && (
