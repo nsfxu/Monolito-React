@@ -22,7 +22,7 @@ const Card = ({ object }) => {
         <>
             <div
                 className="w-100 h-100 pt2 pl2"
-                style={{ backgroundColor: 'gray', cursor: 'pointer' }}
+                style={{ backgroundColor: '#1a2027', cursor: 'pointer' }}
                 onClick={() => openModal()}
             >
                 <header className="flex flex-row justify-start items-center">
@@ -37,16 +37,6 @@ const Card = ({ object }) => {
                         <h4>{object.name}</h4>
                     </div>
                 </header>
-
-                <section className="flex flex-row justify-start items-center">
-                    <p className="pr2">Status:</p>
-                    <select name="cars" id="cars">
-                        <option value="volvo">Volvo</option>
-                        <option value="saab">Saab</option>
-                        <option value="mercedes">Mercedes</option>
-                        <option value="audi">Audi</option>
-                    </select>
-                </section>
             </div>
             <Modal
                 isOpen={isModalOpen}

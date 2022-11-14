@@ -4,6 +4,12 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+
+import { ViewColumn, HorizontalRule } from '@mui/icons-material';
+
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
@@ -35,6 +41,8 @@ const Board = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
+
+    //#region functions
 
     const openCustomModal = (modal) => {
         if (modal === CREATE_COLUMN) {
@@ -375,45 +383,60 @@ const Board = () => {
         column_to_add.data = [];
     };
 
+    // #endregion
+
     return (
         <>
-            <div className="ba bw w-100 pr4" style={{ backgroundColor: 'red' }}>
-                <h1>Board</h1>
-                {/* Criar coluna */}
-                <button
-                    onClick={(e) => {
-                        openCustomModal(CREATE_COLUMN);
-                        e.preventDefault();
-                    }}
-                >
-                    Adicionar coluna
-                </button>
-                {/* Criar raia */}
-                <button
-                    onClick={(e) => {
-                        openCustomModal(CREATE_LANE);
-                        e.preventDefault();
-                    }}
-                >
-                    Criar raias
-                </button>
+            <div className="ba bw w-100 mt6 flex flex-column items-center">
+                <div className="w-100 h-100 flex flex-row ma3 pl3 justify-start">
+                    <Stack
+                        direction="row"
+                        divider={<Divider orientation="vertical" flexItem />}
+                        spacing={2}
+                    >
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            startIcon={<ViewColumn />}
+                            onClick={(e) => {
+                                openCustomModal(CREATE_COLUMN);
+                                e.preventDefault();
+                            }}
+                        >
+                            Adicionar coluna
+                        </Button>
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            startIcon={<HorizontalRule />}
+                            onClick={(e) => {
+                                openCustomModal(CREATE_LANE);
+                                e.preventDefault();
+                            }}
+                        >
+                            Criar raias
+                        </Button>
+                    </Stack>
+                </div>
 
-                {board_info && (
-                    <div className="flex flex-row w-75">
-                        <DragDropContext onDragEnd={handleOnDragEnd}>
-                            {board_info.columns.map((column, index) => (
-                                <Column
-                                    title={column.name}
-                                    data={column.data}
-                                    subColumns={column.subColumns}
-                                    key={index}
-                                    addNewCard={addNewCard}
-                                    addNewSubColumn={addNewSubColumn}
-                                />
-                            ))}
-                        </DragDropContext>
-                    </div>
-                )}
+                <div className="w-100 h-100">
+                    {board_info && (
+                        <div className="flex flex-row w-100">
+                            <DragDropContext onDragEnd={handleOnDragEnd}>
+                                {board_info.columns.map((column, index) => (
+                                    <Column
+                                        title={column.name}
+                                        data={column.data}
+                                        subColumns={column.subColumns}
+                                        key={index}
+                                        addNewCard={addNewCard}
+                                        addNewSubColumn={addNewSubColumn}
+                                    />
+                                ))}
+                            </DragDropContext>
+                        </div>
+                    )}
+                </div>
             </div>
             <Modal
                 isOpen={isModalOpen}

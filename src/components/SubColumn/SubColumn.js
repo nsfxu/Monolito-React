@@ -12,15 +12,10 @@ const SubColumn = ({ title, parentColumn, data }) => {
     const [title_disabled, setTitleDisabled] = useState(true);
     return (
         <div className="ba w-100 h-100 flex flex-column items-start justify-center ma1">
-            <header>
-                <input
-                    type="text"
-                    value={title}
-                    disabled={title_disabled}
-                    onClick={() => setTitleDisabled(true)}
-                />
+            <header className='self-center'>
+                <h3>{title}</h3>
             </header>
-            <section className="w-100 h-100" style={{ backgroundColor: 'red' }}>
+            <section className="w-100 h-100">
                 {data && (
                     <Droppable droppableId={`${title};${parentColumn}`}>
                         {(provided) => (
@@ -41,7 +36,7 @@ const SubColumn = ({ title, parentColumn, data }) => {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="ba bw1 mt3"
+                                                    className="ba b--white-20 bw1 mt3"
                                                 >
                                                     <Card object={obj} />
                                                 </li>

@@ -4,6 +4,12 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
+import { AddCircleOutline, ViewColumn } from '@mui/icons-material';
+
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+
 import ModalStyles from '../../constants/modal-styles';
 
 import Card from '../Card';
@@ -25,25 +31,43 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
 
     return (
         <>
-            <div className="w-100 ba bw1" style={{ backgroundColor: 'yellow' }}>
+            <div className="w-100 ba" style={{ backgroundColor: '#1e272e' }}>
                 <div className="bb flex flex-column justify-center items-center">
-                    <h1>{title}</h1>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            openModal();
-                        }}
-                    >
-                        Adicionar card
-                    </button>
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            addNewSubColumn(title);
-                        }}
-                    >
-                        Criar coluna
-                    </button>
+                    <div>
+                        <h1>{title}</h1>
+                    </div>
+                    <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
+                        <Stack
+                            direction="row"
+                            divider={
+                                <Divider orientation="vertical" flexItem />
+                            }
+                            spacing={2}
+                        >
+                            <Button
+                                variant="contained"
+                                size="medium"
+                                startIcon={<AddCircleOutline />}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    openModal();
+                                }}
+                            >
+                                Adicionar card
+                            </Button>
+                            <Button
+                                variant="contained"
+                                size="medium"
+                                startIcon={<ViewColumn />}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    addNewSubColumn(title);
+                                }}
+                            >
+                                Criar sub-coluna
+                            </Button>
+                        </Stack>
+                    </div>
                 </div>
 
                 {subColumns.length > 0 ? (
@@ -77,7 +101,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="ba bw1 mt3"
+                                                    className="ba b--white-20 bw1 mt3"
                                                 >
                                                     <Card object={obj} />
                                                 </li>

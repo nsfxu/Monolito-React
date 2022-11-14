@@ -2,82 +2,115 @@ export const TEST_DATA = {
     columns: [
         {
             name: 'To-Do',
-            count: 2,
+            count: 3,
+            data: [
+                {
+                    id: 0,
+                    laneId: '',
+                    name: 'Estudar para as provas do mês',
+                    description: '',
+                    tags: []
+                },
+                {
+                    id: 1,
+                    laneId: '',
+                    name: 'Apontar as horas de trabalho',
+                    description: '',
+                    tags: []
+                },
+                {
+                    id: 2,
+                    laneId: '',
+                    name: 'Finalizar a documentação do novo projeto',
+                    description: '',
+                    tags: []
+                }
+            ],
+            subColumns: []
+        },
+        {
+            name: 'A Fazer',
+            count: 5,
             data: [],
             subColumns: [
                 {
                     id: 0,
-                    name: 'Commited',
+                    name: 'Fazendo',
                     data: [
                         {
-                            id: 1,
+                            id: 3,
                             laneId: '',
-                            name: 'Monolith',
-                            description:
-                                'description lorem ipsum dolor asi amet',
-                            tags: [{ id: 1, text: 'Tester' }]
+                            name: 'Terminar a documentação do TCC',
+                            description: '',
+                            tags: []
                         },
                         {
-                            id: 2,
+                            id: 4,
                             laneId: '',
-                            name: 'Merc',
-                            description: '123',
-                            tags: [{ id: 1, text: 'Oi' }]
+                            name: 'Estudar para a prova de LP',
+                            description: '',
+                            tags: []
+                        },
+                        {
+                            id: 5,
+                            laneId: '',
+                            name: 'Finalizar o protótipo do TCC',
+                            description: '',
+                            tags: []
+                        },
+                        {
+                            id: 11,
+                            laneId: '',
+                            name: 'Criar o PPT do PIT',
+                            description: '',
+                            tags: []
                         }
                     ]
                 },
                 {
                     id: 1,
-                    name: 'Done',
+                    name: 'Feito',
                     data: [
                         {
-                            id: 56,
+                            id: 6,
                             laneId: '',
-                            name: 'Ford Stream',
-                            description:
-                                'description lorem ipsum dolor asi amet',
-                            tags: [{ id: 1, text: 'Tester' }]
+                            name: 'Tirar as dúvidas com o Hayala',
+                            description: '',
+                            tags: []
                         },
                         {
-                            id: 57,
+                            id: 7,
                             laneId: '',
-                            name: 'Compiled',
-                            description: '123',
-                            tags: [{ id: 1, text: 'Oi' }]
+                            name: 'Apresentar os seminários',
+                            description: '',
+                            tags: []
                         }
                     ]
                 }
             ]
         },
         {
-            name: 'Doing',
-            count: 2,
+            name: 'Done',
+            count: 3,
             data: [
                 {
-                    id: 4,
+                    id: 8,
                     laneId: '',
-                    name: 'Loner',
+                    name: 'Terminar a primeira parte da documentação',
                     description: '',
                     tags: []
                 },
                 {
-                    id: 3,
+                    id: 9,
                     laneId: '',
-                    name: 'Bandit',
+                    name: 'Criar a base do projeto do TCC',
                     description: '',
-                    tags: [{ id: 1, text: 'Tester' }]
-                }
-            ],
-            subColumns: []
-        },
-        {
-            name: 'Done',
-            count: 1,
-            data: [
+                    tags: []
+                },
                 {
-                    id: 5,
+                    id: 10,
                     laneId: '',
-                    name: 'Ecolog',
+                    name: 'Tirar dúvidas sobre o Kanban com AM',
                     description: '',
                     tags: []
                 }
