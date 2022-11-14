@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 // import Modal from 'react-modal';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -9,9 +9,8 @@ import Card from '../Card';
 /* eslint-disable */
 // eslint-disable-next-line
 const SubColumn = ({ title, parentColumn, data }) => {
-    const [title_disabled, setTitleDisabled] = useState(true);
     return (
-        <div className="ba w-100 h-100 flex flex-column items-start justify-center ma1">
+        <div className="ba w-100 h-100 flex flex-column items-start justify-center ma2">
             <header className='self-center'>
                 <h3>{title}</h3>
             </header>
@@ -36,7 +35,7 @@ const SubColumn = ({ title, parentColumn, data }) => {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="ba b--white-20 bw1 mt3"
+                                                    className="bw1 mt3"
                                                 >
                                                     <Card object={obj} />
                                                 </li>

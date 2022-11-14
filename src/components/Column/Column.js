@@ -27,16 +27,31 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
         setIsModalOpen(false);
     };
 
+    const returnMaxWidth = () => {
+        if (subColumns.length > 0) {
+            return '32rem';
+        }
+
+        return '20rem';
+    };
+
     return (
         <>
-            <div className="w-100 ba" style={{ backgroundColor: '#1e272e' }}>
+            <div
+                className="w-100 ba"
+                style={{
+                    backgroundColor: '#1e272e',
+                    maxWidth: returnMaxWidth(),
+                    minWidth: returnMaxWidth()
+                }}
+            >
                 <div className="bb flex flex-column justify-center items-center">
                     <div>
                         <h1>{title}</h1>
                     </div>
                     <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
                         <Stack
-                            direction="row"
+                            direction="column"
                             divider={
                                 <Divider orientation="vertical" flexItem />
                             }
@@ -44,7 +59,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                         >
                             <Button
                                 variant="contained"
-                                size="medium"
+                                size="small"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     openModal();
@@ -66,7 +81,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                     </div>
                 </div>
 
-                <div>
+                <div className="h-100">
                     {subColumns.length > 0 ? (
                         <div className="flex flex-row items-start justify-center">
                             {subColumns?.map((obj) => (
@@ -82,7 +97,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                         <Droppable droppableId={title}>
                             {(provided) => (
                                 <ul
-                                    className="list pl3 pr3 pb2 h-100"
+                                    className="list pl3 pr3 pb2 h-100 w-100"
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >
@@ -98,7 +113,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        className="ba b--white-20 bw1 mt3 w-100"
+                                                        className="bw1 mt3 w-100"
                                                     >
                                                         <Card object={obj} />
                                                     </li>

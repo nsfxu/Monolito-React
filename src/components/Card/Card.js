@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
 
+import {
+    Card as MUICard,
+    CardHeader,
+    CardContent,
+    Avatar,
+    Stack,
+    Chip
+} from '@mui/material';
+
+import { red, blueGrey } from '@mui/material/colors';
+
 import propTypes from 'prop-types';
 
 import Modal from 'react-modal';
@@ -20,24 +31,41 @@ const Card = ({ object }) => {
 
     return (
         <>
-            <div
-                className="w-100 h-100 pt2 pl2"
-                style={{ backgroundColor: '#1a2027', cursor: 'pointer' }}
+            <MUICard
+                sx={{ maxWidth: 500, bgcolor: blueGrey[900] }}
+                variant="outlined"
                 onClick={() => openModal()}
             >
-                <header className="flex flex-row justify-start items-center">
-                    <div className="pr3">
-                        <img
-                            src="https://picsum.photos/200/300"
-                            className="br-100"
-                            style={{ width: '35px', height: '35px' }}
+                <CardHeader
+                    sx={{ color: '#f9f9f9' }}
+                    avatar={
+                        <Avatar
+                            sx={{ bgcolor: red[500], width: 32, height: 32 }}
+                            aria-label="recipe"
+                        >
+                            GF
+                        </Avatar>
+                    }
+                    title={object.name}
+                />
+                <CardContent>
+                    <Stack direction="row" spacing={1}>
+                        <Chip
+                            label="primary"
+                            color="primary"
+                            variant="outlined"
+                            size="small"
                         />
-                    </div>
-                    <div>
-                        <h4>{object.name}</h4>
-                    </div>
-                </header>
-            </div>
+                        <Chip
+                            size="small"
+                            label="success"
+                            color="success"
+                            variant="outlined"
+                        />
+                    </Stack>
+                </CardContent>
+            </MUICard>
+
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}

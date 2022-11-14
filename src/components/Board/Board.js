@@ -385,8 +385,8 @@ const Board = () => {
 
     return (
         <>
-            <div className="ba bw w-100 mt6 flex flex-column items-center">
-                <div className="w-100 h-100 flex flex-row ma3 pl3 justify-start">
+            <div className="ba bw mt6 flex flex-column items-center flex-column">
+                <div className="ma3 pl3 w-100">
                     <Stack
                         direction="row"
                         divider={<Divider orientation="vertical" flexItem />}
