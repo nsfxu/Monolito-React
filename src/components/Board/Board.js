@@ -8,8 +8,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
-import { ViewColumn, HorizontalRule } from '@mui/icons-material';
-
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
@@ -397,7 +395,6 @@ const Board = () => {
                         <Button
                             variant="contained"
                             size="medium"
-                            startIcon={<ViewColumn />}
                             onClick={(e) => {
                                 openCustomModal(CREATE_COLUMN);
                                 e.preventDefault();
@@ -408,7 +405,6 @@ const Board = () => {
                         <Button
                             variant="contained"
                             size="medium"
-                            startIcon={<HorizontalRule />}
                             onClick={(e) => {
                                 openCustomModal(CREATE_LANE);
                                 e.preventDefault();

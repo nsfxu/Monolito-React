@@ -4,8 +4,6 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
-import { AddCircleOutline, ViewColumn } from '@mui/icons-material';
-
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -47,7 +45,6 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                             <Button
                                 variant="contained"
                                 size="medium"
-                                startIcon={<AddCircleOutline />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     openModal();
@@ -58,7 +55,6 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                             <Button
                                 variant="contained"
                                 size="medium"
-                                startIcon={<ViewColumn />}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     addNewSubColumn(title);
@@ -70,50 +66,52 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                     </div>
                 </div>
 
-                {subColumns.length > 0 ? (
-                    <div className="flex flex-row items-start justify-center">
-                        {subColumns?.map((obj) => (
-                            <SubColumn
-                                title={obj.name}
-                                parentColumn={title}
-                                key={obj.id}
-                                data={obj.data}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <Droppable droppableId={title}>
-                        {(provided) => (
-                            <ul
-                                className="list pl3 pr3 pb2 h-100"
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {data.map((obj, index) => {
-                                    return (
-                                        <Draggable
-                                            key={obj.id}
-                                            draggableId={`${obj.id}`}
-                                            index={index}
-                                        >
-                                            {(provided) => (
-                                                <li
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    className="ba b--white-20 bw1 mt3"
-                                                >
-                                                    <Card object={obj} />
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })}
-                                {provided.placeholder}
-                            </ul>
-                        )}
-                    </Droppable>
-                )}
+                <div>
+                    {subColumns.length > 0 ? (
+                        <div className="flex flex-row items-start justify-center">
+                            {subColumns?.map((obj) => (
+                                <SubColumn
+                                    title={obj.name}
+                                    parentColumn={title}
+                                    key={obj.id}
+                                    data={obj.data}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <Droppable droppableId={title}>
+                            {(provided) => (
+                                <ul
+                                    className="list pl3 pr3 pb2 h-100"
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                    {data.map((obj, index) => {
+                                        return (
+                                            <Draggable
+                                                key={obj.id}
+                                                draggableId={`${obj.id}`}
+                                                index={index}
+                                            >
+                                                {(provided) => (
+                                                    <li
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="ba b--white-20 bw1 mt3 w-100"
+                                                    >
+                                                        <Card object={obj} />
+                                                    </li>
+                                                )}
+                                            </Draggable>
+                                        );
+                                    })}
+                                    {provided.placeholder}
+                                </ul>
+                            )}
+                        </Droppable>
+                    )}
+                </div>
             </div>
             <Modal
                 isOpen={isModalOpen}
