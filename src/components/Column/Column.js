@@ -96,6 +96,7 @@ const Column = ({
                                     parentColumn={title}
                                     key={obj.id}
                                     data={obj.data}
+                                    tagsArr={tags}
                                 />
                             ))}
                         </div>

@@ -9,21 +9,21 @@ export const TEST_DATA = {
                     laneId: '',
                     name: 'Estudar para as provas do mês',
                     description: '',
-                    tags: []
+                    tags: [2]
                 },
                 {
                     id: 1,
                     laneId: '',
                     name: 'Apontar as horas de trabalho',
                     description: '',
-                    tags: []
+                    tags: [0, 1, 2]
                 },
                 {
                     id: 2,
                     laneId: '',
                     name: 'Finalizar a documentação do novo projeto',
                     description: '',
-                    tags: []
+                    tags: [2]
                 }
             ],
             subColumns: []
@@ -42,28 +42,28 @@ export const TEST_DATA = {
                             laneId: '',
                             name: 'Terminar a documentação do TCC',
                             description: '',
-                            tags: []
+                            tags: [1]
                         },
                         {
                             id: 4,
                             laneId: '',
                             name: 'Estudar para a prova de LP',
                             description: '',
-                            tags: []
+                            tags: [0]
                         },
                         {
                             id: 5,
                             laneId: '',
                             name: 'Finalizar o protótipo do TCC',
                             description: '',
-                            tags: []
+                            tags: [0, 1, 2]
                         },
                         {
                             id: 11,
                             laneId: '',
                             name: 'Criar o PPT do PIT',
                             description: '',
-                            tags: []
+                            tags: [0, 1, 2]
                         }
                     ]
                 },
@@ -76,14 +76,14 @@ export const TEST_DATA = {
                             laneId: '',
                             name: 'Tirar as dúvidas com o Hayala',
                             description: '',
-                            tags: []
+                            tags: [0, 1]
                         },
                         {
                             id: 7,
                             laneId: '',
                             name: 'Apresentar os seminários',
                             description: '',
-                            tags: []
+                            tags: [0, 1]
                         }
                     ]
                 }
@@ -98,21 +98,21 @@ export const TEST_DATA = {
                     laneId: '',
                     name: 'Terminar a primeira parte da documentação',
                     description: '',
-                    tags: []
+                    tags: [1, 2]
                 },
                 {
                     id: 9,
                     laneId: '',
                     name: 'Criar a base do projeto do TCC',
                     description: '',
-                    tags: []
+                    tags: [1, 2]
                 },
                 {
                     id: 10,
                     laneId: '',
                     name: 'Tirar dúvidas sobre o Kanban com AM',
                     description: '',
-                    tags: [0]
+                    tags: [0, 1, 2]
                 }
             ],
             subColumns: []
@@ -125,9 +125,29 @@ export const TEST_DATA = {
     tags: [
         {
             id: 0,
-            label: 'Tester',
+            label: 'Trabalho',
+            size: 'small',
+            variant: 'none',
             textColor: '#ecf0f1',
-            bgColor: '#e74c3c',
+            bgColor: '#f1c40f',
+            borderColor: 'none'
+        },
+        {
+            id: 1,
+            label: 'Faculdade',
+            size: 'small',
+            variant: 'none',
+            textColor: '#ecf0f1',
+            bgColor: '#2980b9',
+            borderColor: 'none'
+        },
+        {
+            id: 2,
+            label: 'PRA ONTEM',
+            size: 'small',
+            variant: 'none',
+            textColor: '#ecf0f1',
+            bgColor: '#c0392b',
             borderColor: 'none'
         }
     ],

@@ -8,7 +8,7 @@ import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const SubColumn = ({ title, parentColumn, data }) => {
+const SubColumn = ({ title, parentColumn, data, tagsArr }) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
             <header className="self-center">
@@ -37,7 +37,10 @@ const SubColumn = ({ title, parentColumn, data }) => {
                                                     {...provided.dragHandleProps}
                                                     className="bw1 mt3"
                                                 >
-                                                    <Card object={obj} />
+                                                    <Card
+                                                        object={obj}
+                                                        tagsArr={tagsArr}
+                                                    />
                                                 </li>
                                             )}
                                         </Draggable>
@@ -56,7 +59,8 @@ const SubColumn = ({ title, parentColumn, data }) => {
 SubColumn.propTypes = {
     title: propTypes.string,
     parentColumn: propTypes.string,
-    data: propTypes.any
+    data: propTypes.any,
+    tagsArr: propTypes.array
 };
 
 export default SubColumn;
