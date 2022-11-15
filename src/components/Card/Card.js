@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Card as MUICard,
@@ -18,8 +18,29 @@ import ShowCard from '../ShowCard';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Card = ({ object }) => {
+const Card = ({ object, tagsArr }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cardTags, setCardTags] = useState([]);
+
+    useEffect(() => {
+        getAllCardTags();
+    }, [tagsArr]);
+
+    const getAllCardTags = () => {
+        let tempTagsArr = [];
+        const card_tags = object.tags;
+
+        if (card_tags.length > 0) {
+            card_tags.map((id) => {
+                tagsArr.map((tag) => {
+                    tag.id === id && tempTagsArr.push(tag);
+                });
+            });
+        }
+
+        setCardTags(tempTagsArr);
+        console.log(tempTagsArr);
+    };
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -50,6 +71,26 @@ const Card = ({ object }) => {
                 />
                 <CardContent>
                     <Stack direction="row" spacing={1}>
+                        {cardTags.length > 0 &&
+                            cardTags.map(
+                                ({
+                                    id,
+                                    label,
+                                    textColor,
+                                    bgColor,
+                                    borderColor
+                                }) => (
+                                    <Chip
+                                        key={id}
+                                        label={label}
+                                        sx={{
+                                            color: textColor,
+                                            backgroundColor: bgColor,
+                                            borderColor: borderColor
+                                        }}
+                                    />
+                                )
+                            )}
                         <Chip
                             label="primary"
                             color="primary"
@@ -78,7 +119,8 @@ const Card = ({ object }) => {
 };
 
 Card.propTypes = {
-    object: propTypes.object
+    object: propTypes.object,
+    tagsArr: propTypes.array
 };
 
 export default Card;

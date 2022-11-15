@@ -1,5 +1,5 @@
 import React from 'react';
-// import Modal from 'react-modal';
+
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';

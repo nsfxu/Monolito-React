@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,7 +40,28 @@ const Board = () => {
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
 
+    const [status, setStatus] = useState([]);
+    const [tags, setTags] = useState([{}]);
+
+    useEffect(() => {
+        getAllColumns();
+        getAllTags();
+    }, [data]);
+
     //#region functions
+
+    const getAllTags = () => {
+        setTags(data.tags);
+    };
+
+    const getAllColumns = () => {
+        let tempArray = [];
+        data.columns.map(({ name }) => {
+            tempArray.push(name);
+        });
+
+        setStatus(tempArray);
+    };
 
     const openCustomModal = (modal) => {
         if (modal === CREATE_COLUMN) {
@@ -332,7 +353,7 @@ const Board = () => {
             description: description
         };
 
-        const column_to_add = findColumnByName(items, columnName);
+        const column_to_add = findColumnByName(items, status);
         column_to_add.count++;
 
         if (column_to_add.subColumns.length > 0) {
@@ -385,7 +406,7 @@ const Board = () => {
 
     return (
         <>
-            <div className="ba bw mt6 flex flex-column items-center flex-column">
+            <div className="ba bw mt6 flex flex-column items-center">
                 <div className="ma3 pl3 w-100">
                     <Stack
                         direction="row"
@@ -424,6 +445,8 @@ const Board = () => {
                                         title={column.name}
                                         data={column.data}
                                         subColumns={column.subColumns}
+                                        status={status}
+                                        tags={tags}
                                         key={index}
                                         addNewCard={addNewCard}
                                         addNewSubColumn={addNewSubColumn}

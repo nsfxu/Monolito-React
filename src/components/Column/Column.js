@@ -14,7 +14,15 @@ import SubColumn from '../SubColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
+const Column = ({
+    title,
+    data,
+    subColumns,
+    status,
+    tags,
+    addNewCard,
+    addNewSubColumn
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -102,7 +110,7 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                     {data.map((obj, index) => {
                                         return (
                                             <Draggable
-                                                key={obj.id}
+                                                key={`${index}${obj.id}`}
                                                 draggableId={`${obj.id}`}
                                                 index={index}
                                             >
@@ -113,7 +121,10 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                                                         {...provided.dragHandleProps}
                                                         className="bw1 mt3"
                                                     >
-                                                        <Card object={obj} />
+                                                        <Card
+                                                            object={obj}
+                                                            tagsArr={tags}
+                                                        />
                                                     </li>
                                                 )}
                                             </Draggable>
@@ -132,7 +143,12 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >
-                <CreateCard addNewCard={addNewCard} currentColumn={title} />
+                <CreateCard
+                    addNewCard={addNewCard}
+                    currentColumn={title}
+                    statusArr={status}
+                    tagsArr={tags}
+                />
             </Modal>
         </>
     );
@@ -141,6 +157,8 @@ const Column = ({ title, data, subColumns, addNewCard, addNewSubColumn }) => {
 Column.propTypes = {
     title: propTypes.string,
     data: propTypes.any,
+    status: propTypes.array,
+    tags: propTypes.array,
     subColumns: propTypes.array,
     addNewCard: propTypes.func,
     addNewSubColumn: propTypes.func

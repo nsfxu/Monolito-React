@@ -112,7 +112,7 @@ export const TEST_DATA = {
                     laneId: '',
                     name: 'Tirar dúvidas sobre o Kanban com AM',
                     description: '',
-                    tags: []
+                    tags: [0]
                 }
             ],
             subColumns: []
@@ -122,5 +122,14 @@ export const TEST_DATA = {
         { id: 1, name: 'Oi' },
         { id: 2, name: 'eae' }
     ],
-    nextId: 6
+    tags: [
+        {
+            id: 0,
+            label: 'Tester',
+            textColor: '#ecf0f1',
+            bgColor: '#e74c3c',
+            borderColor: 'none'
+        }
+    ],
+    nextId: 12
 };

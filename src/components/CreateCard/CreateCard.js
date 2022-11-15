@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const CreateCard = ({ addNewCard, currentColumn }) => {
+const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
     const title = useRef();
     const description = useRef();
     const person = useRef();
@@ -36,7 +36,8 @@ const CreateCard = ({ addNewCard, currentColumn }) => {
             {/* Description */}
             <div>
                 <label className="f6 b db mb2">
-                    Descrição <span className="normal black-60">(optional)</span>
+                    Descrição{' '}
+                    <span className="normal black-60">(optional)</span>
                 </label>
                 <textarea
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
@@ -48,13 +49,15 @@ const CreateCard = ({ addNewCard, currentColumn }) => {
             {/* Person */}
             <div>
                 <label className="f6 b db mb2">
-                    Responsável <span className="normal black-60">(optional)</span>
+                    Responsável{' '}
+                    <span className="normal black-60">(optional)</span>
                 </label>
                 <select
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
                     ref={person}
+                    disabled
                 >
-                    <option value="volvo">Volvo</option>
+                    <option value="volvo">Você</option>
                     <option value="saab">Saab</option>
                     <option value="mercedes">Mercedes</option>
                     <option value="audi">Audi</option>
@@ -67,11 +70,13 @@ const CreateCard = ({ addNewCard, currentColumn }) => {
                 <select
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
                     ref={status}
+                    defaultValue={currentColumn}
                 >
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                    {statusArr?.map((status, index) => (
+                        <option value={status} key={index}>
+                            {status}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -84,6 +89,7 @@ const CreateCard = ({ addNewCard, currentColumn }) => {
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
                     type="text"
                     ref={tags}
+                    disabled
                 />
             </div>
 
@@ -104,7 +110,9 @@ const CreateCard = ({ addNewCard, currentColumn }) => {
 
 CreateCard.propTypes = {
     addNewCard: propTypes.func,
-    currentColumn: propTypes.string
+    currentColumn: propTypes.string,
+    statusArr: propTypes.array,
+    tagsArr: propTypes.array
 };
 
 export default CreateCard;
