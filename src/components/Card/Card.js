@@ -30,8 +30,8 @@ const Card = ({ object, tagsArr }) => {
         let tempTagsArr = [];
         const card_tags = object.tags;
 
-        if (card_tags.length > 0) {
-            card_tags.map((id) => {
+        if (tagsArr && card_tags && card_tags.length > 0) {
+            card_tags?.map((id) => {
                 tagsArr.map((tag) => {
                     tag.id === id && tempTagsArr.push(tag);
                 });
@@ -70,12 +70,18 @@ const Card = ({ object, tagsArr }) => {
                     title={object.name}
                 />
                 <CardContent>
-                    <Stack direction="row" spacing={1}>
+                    <Stack
+                        direction="row"
+                        spacing={0}
+                        sx={{ flexWrap: 'wrap', gap: 1 }}
+                    >
                         {cardTags.length > 0 &&
                             cardTags.map(
                                 ({
                                     id,
                                     label,
+                                    size,
+                                    variant,
                                     textColor,
                                     bgColor,
                                     borderColor
@@ -83,6 +89,8 @@ const Card = ({ object, tagsArr }) => {
                                     <Chip
                                         key={id}
                                         label={label}
+                                        size={size}
+                                        variant={variant}
                                         sx={{
                                             color: textColor,
                                             backgroundColor: bgColor,
@@ -91,18 +99,6 @@ const Card = ({ object, tagsArr }) => {
                                     />
                                 )
                             )}
-                        <Chip
-                            label="primary"
-                            color="primary"
-                            variant="outlined"
-                            size="small"
-                        />
-                        <Chip
-                            size="small"
-                            label="success"
-                            color="success"
-                            variant="outlined"
-                        />
                     </Stack>
                 </CardContent>
             </MUICard>
