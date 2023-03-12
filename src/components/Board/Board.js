@@ -92,7 +92,6 @@ const Board = () => {
         destinationIsSubColumn,
         sourceIsSubColumn
     ) => {
-        console.log(result);
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
@@ -232,8 +231,6 @@ const Board = () => {
     ) => {
         const selected_column = findColumnById(items, source_column_id);
 
-        console.log(selected_column);
-
         const selected_subcolumn = findSubColumnById(
             selected_column,
             source_subcolumn_id
@@ -292,8 +289,6 @@ const Board = () => {
     };
 
     const handleOnDragEnd = (result) => {
-        // console.clear();
-        // console.log(result);
         if (!result.destination) return;
 
         const items = board_info;
@@ -313,22 +308,24 @@ const Board = () => {
             return;
         }
 
-        const source_column_name = result.source.droppableId;
-        const destination_column_name = result.destination.droppableId;
+        const source_column_id = result.source.droppableId;
+        const destination_column_id = result.destination.droppableId;
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
         const column_to_delete = items.columns.find(
-            (column) => column.name === source_column_name
+            (column) => column.id == source_column_id
         );
 
-        const removed_item = column_to_delete.data.splice(source_pos_id, 1);
+        const removed_item = column_to_delete.groups[0].cards.splice(source_pos_id, 1);        
 
         const column_to_add = items.columns.find(
-            (column) => column.name === destination_column_name
+            (column) => column.id == destination_column_id
         );
 
-        column_to_add.data.splice(destination_pos_id, 0, removed_item[0]);
+        console.log(column_to_add)
+
+        column_to_add.groups[0].cards.splice(destination_pos_id, 0, removed_item[0]);
 
         updateBoardInfo(items);
     };
@@ -365,7 +362,7 @@ const Board = () => {
         items.columns.push({
             id: items.nextColumnId,
             name: name,
-            groups: [{ id: items.nextGroupId, name: "Doing", cards: [] }]
+            groups: [{ id: items.nextGroupId, name: 'Doing', cards: [] }]
         });
 
         items.nextColumnId++;
@@ -384,7 +381,7 @@ const Board = () => {
 
         column_to_add.groups.push({
             id: items.nextGroupId,
-            name: "Done",
+            name: 'Done',
             cards: []
         });
         items.nextGroupId++;
@@ -393,7 +390,6 @@ const Board = () => {
         updateBoardInfo(items);
         toast('Subcoluna criada');
     };
-
 
     // #endregion
 
@@ -448,6 +444,7 @@ const Board = () => {
                                         columnId={column.id}
                                         title={column.name}
                                         groups={column.groups}
+                                        showSwinLanes={column.showSwinLanes}
                                         status={status}
                                         tags={tags}
                                         key={index}

@@ -28,13 +28,7 @@ export const TEST_DATA = {
                             name: 'Finalizar a documentação do novo projeto',
                             description: '',
                             tags: [2]
-                        }
-                    ]
-                },
-                {
-                    id: 1,
-                    name: 'Monolith',
-                    cards: [
+                        },
                         {
                             id: 3,
                             laneId: '',
@@ -59,7 +53,7 @@ export const TEST_DATA = {
                     ]
                 }
             ],
-            showSwinLanes: true
+            showSwinLanes: false
         },
         {
             id: 1,
@@ -70,7 +64,8 @@ export const TEST_DATA = {
                     name: 'Doing',
                     cards: []
                 }
-            ]
+            ],
+            showSwinLanes: true
         },
         {
             id: 2,
@@ -81,7 +76,8 @@ export const TEST_DATA = {
                     name: 'Doing',
                     cards: []
                 }
-            ]
+            ],
+            showSwinLanes: true
         }
     ],
     tags: [

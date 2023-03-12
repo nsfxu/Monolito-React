@@ -4,7 +4,15 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
-import { Stack, Button, Divider } from '@mui/material';
+import {
+    Stack,
+    Button,
+    Divider,
+    Accordion,
+    AccordionSummary,
+    Typography,
+    AccordionDetails
+} from '@mui/material';
 import { hasSubColumns } from '../../utils/column-utils';
 
 import ModalStyles from '../../constants/modal-styles';
@@ -19,12 +27,18 @@ const Column = ({
     columnId,
     title,
     groups,
+    showSwinLanes,
     status,
     tags,
     addNewCard,
     addNewSubColumn
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [expanded, setExpanded] = useState('panel1');
+
+    const handleChange = (panel) => {
+        setExpanded(panel);
+    };
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -79,7 +93,17 @@ const Column = ({
                 </div>
 
                 <div className="h-100">
-                    {/* if this component receive more than 1 groups of columns then create subcolumns */}
+                    {showSwinLanes && (
+                        <Accordion>
+                            <AccordionSummary>
+                                <Typography>SwinLane</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                Lorem impsumehdh
+                            </AccordionDetails>
+                        </Accordion>
+                    )}
+                    {/* Subcolumns */}
                     {hasSubColumns(groups) ? (
                         <div className="flex flex-row items-start justify-center h-100">
                             {groups?.map((group) => (
@@ -154,7 +178,8 @@ const Column = ({
 Column.propTypes = {
     columnId: propTypes.number,
     title: propTypes.string,
-    grousp: propTypes.any,
+    showSwinLanes: propTypes.bool,
+    groups: propTypes.any,
     status: propTypes.array,
     tags: propTypes.array,
     addNewCard: propTypes.func,
