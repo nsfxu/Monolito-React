@@ -365,7 +365,7 @@ const Board = () => {
         items.columns.push({
             id: items.nextColumnId,
             name: name,
-            groups: [{ id: items.nextGroupId, name: name, cards: [] }]
+            groups: [{ id: items.nextGroupId, name: "Doing", cards: [] }]
         });
 
         items.nextColumnId++;
@@ -375,33 +375,25 @@ const Board = () => {
         toast('Coluna criada');
     };
 
-    const addNewSubColumn = (columnName) => {
+    const addNewSubColumn = (columnId) => {
         const items = board_info;
 
         const column_to_add = items.columns.find(
-            (column) => column.name === columnName
+            (column) => column.id == columnId
         );
 
         column_to_add.groups.push({
             id: items.nextGroupId,
-            name: columnName,
+            name: "Done",
             cards: []
         });
         items.nextGroupId++;
-
-        // assignAllCardsToSubColumn(column_to_add);
 
         forceUpdate();
         updateBoardInfo(items);
         toast('Subcoluna criada');
     };
 
-    // const assignAllCardsToSubColumn = (column_to_add) => {
-    //     column_to_add.groups[0].map((card) => {
-    //         column_to_add.subColumns[0].data.push(card);
-    //     });
-    //     column_to_add.data = [];
-    // };
 
     // #endregion
 

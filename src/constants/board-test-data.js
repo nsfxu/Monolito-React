@@ -2,7 +2,7 @@ export const TEST_DATA = {
     columns: [
         {
             id: 0,
-            name: 'To-Do',
+            name: 'Backlog',
             groups: [
                 {
                     id: 0,
@@ -58,15 +58,27 @@ export const TEST_DATA = {
                         }
                     ]
                 }
-            ]
+            ],
+            showSwinLanes: true
         },
         {
             id: 1,
-            name: 'dei',
+            name: 'Doing',
             groups: [
                 {
                     id: 2,
-                    name: 'dei',
+                    name: 'Doing',
+                    cards: []
+                }
+            ]
+        },
+        {
+            id: 2,
+            name: 'Done',
+            groups: [
+                {
+                    id: 3,
+                    name: 'Doing',
                     cards: []
                 }
             ]
@@ -101,7 +113,17 @@ export const TEST_DATA = {
             borderColor: 'none'
         }
     ],
+    swinlanes: [
+        {
+            id: 0,
+            name: 'Default'
+        },
+        {
+            id: 1,
+            name: 'Expedite'
+        }
+    ],
     nextCardId: 6,
-    nextGroupId: 3,
-    nextColumnId: 2
+    nextGroupId: 4,
+    nextColumnId: 3
 };

@@ -69,7 +69,7 @@ const Column = ({
                                 size="small"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    addNewSubColumn(title);
+                                    addNewSubColumn(columnId);
                                 }}
                             >
                                 Criar sub-coluna
