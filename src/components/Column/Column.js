@@ -34,22 +34,12 @@ const Column = ({
         setIsModalOpen(false);
     };
 
-    const returnMaxWidth = () => {
-        if (hasSubColumns(groups)) {
-            return '32rem';
-        }
-
-        return '20rem';
-    };
-
     return (
         <>
             <div
                 className="ba w-100"
                 style={{
-                    backgroundColor: '#1e272e',
-                    maxWidth: returnMaxWidth(),
-                    minWidth: returnMaxWidth()
+                    backgroundColor: '#1e272e'
                 }}
             >
                 <div className="bb flex flex-column justify-center items-center">
@@ -107,7 +97,10 @@ const Column = ({
                         <Droppable droppableId={`${columnId}`}>
                             {(provided) => (
                                 <ul
-                                    className="list pb2 h-100 w-100 flex flex-column items-start"
+                                    className="flex flex-column items-center list w-100 h-100 pl3 pr3"
+                                    style={{
+                                        minWidth: '240px'
+                                    }}
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >

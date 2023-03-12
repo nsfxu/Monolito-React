@@ -52,7 +52,7 @@ const Card = ({ object, tagsArr }) => {
     return (
         <>
             <MUICard
-                sx={{ maxWidth: 240, bgcolor: blueGrey[900] }}
+                sx={{ maxWidth: 240, minWidth: 240, bgcolor: blueGrey[900] }}
                 variant="outlined"
                 onClick={() => openModal()}
             >
