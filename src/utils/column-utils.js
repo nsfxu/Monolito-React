@@ -1,14 +1,23 @@
 /* eslint-disable */
 // eslint-disable-next-line
-const findSubColumnByName = (object, subColumnName) =>
-    object.subColumns.find((sub_column) => sub_column.name === subColumnName);
+const findColumnById = (object, columnId) =>
+    object.columns.find((column) => column.id == columnId);
 
-const findColumnByName = (object, columnName) =>
-    object.columns.find((column) => column.name === columnName);
+const findSubColumnById = (object, subColumnId) =>
+    object.groups.find((sub_column) => sub_column.id == subColumnId);
 
-const removeObjectByPosition = (object, pos) => object.data.splice(pos, 1);
+const removeObjectByPosition = (object, pos) => object.cards.splice(pos, 1);
 
 const addObjectIntoPosition = (object, pos, item) =>
-    object.data.splice(pos, 0, item);
+    object.cards.splice(pos, 0, item);
 
-export { findColumnByName, findSubColumnByName, removeObjectByPosition, addObjectIntoPosition };
+const hasSubColumns = (groups) => 
+    groups.length > 1;
+
+export {
+    findColumnById,
+    findSubColumnById,
+    removeObjectByPosition,
+    addObjectIntoPosition,
+    hasSubColumns
+};

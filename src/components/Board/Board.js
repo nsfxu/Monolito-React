@@ -14,8 +14,8 @@ import ModalStyles from '../../constants/modal-styles';
 import { TEST_DATA } from '../../constants/board-test-data';
 
 import {
-    findColumnByName,
-    findSubColumnByName,
+    findColumnById,
+    findSubColumnById,
     removeObjectByPosition,
     addObjectIntoPosition
 } from '../../utils/column-utils';
@@ -46,21 +46,22 @@ const Board = () => {
     useEffect(() => {
         getAllColumns();
         getAllTags();
-    }, [data]);
+    }, [board_info]);
 
     //#region functions
 
     const getAllTags = () => {
-        setTags(data.tags);
+        setTags(board_info.tags);
     };
 
     const getAllColumns = () => {
-        let tempArray = [];
-        data.columns.map(({ name }) => {
-            tempArray.push(name);
+        let columnInfo = [];
+
+        board_info.columns.map((column) => {
+            columnInfo.push({ id: column.id, name: column.name });
         });
 
-        setStatus(tempArray);
+        setStatus(columnInfo);
     };
 
     const openCustomModal = (modal) => {
@@ -91,30 +92,31 @@ const Board = () => {
         destinationIsSubColumn,
         sourceIsSubColumn
     ) => {
+        console.log(result);
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
-        const destination_subcolumn = destinationIsSubColumn
-            ? result.destination.droppableId.split(';')[0]
-            : null;
-        const destination_column = destinationIsSubColumn
+        const destination_subcolumn_id = destinationIsSubColumn
             ? result.destination.droppableId.split(';')[1]
+            : null;
+        const destination_column_id = destinationIsSubColumn
+            ? result.destination.droppableId.split(';')[0]
             : result.destination.droppableId;
 
-        const source_subcolumn = sourceIsSubColumn
-            ? result.source.droppableId.split(';')[0]
-            : null;
-        const source_column = sourceIsSubColumn
+        const source_subcolumn_id = sourceIsSubColumn
             ? result.source.droppableId.split(';')[1]
+            : null;
+        const source_column_id = sourceIsSubColumn
+            ? result.source.droppableId.split(';')[0]
             : result.source.droppableId;
 
         if (destinationIsSubColumn && sourceIsSubColumn) {
-            if (source_column === destination_column) {
+            if (source_column_id === destination_column_id) {
                 handleWhenSourceIsDestination(
                     items,
-                    source_column,
-                    source_subcolumn,
-                    destination_subcolumn,
+                    source_column_id,
+                    source_subcolumn_id,
+                    destination_subcolumn_id,
                     destination_pos_id,
                     source_pos_id
                 );
@@ -124,10 +126,10 @@ const Board = () => {
 
             handleWhenSourceIsntDestination(
                 items,
-                source_column,
-                source_subcolumn,
-                destination_column,
-                destination_subcolumn,
+                source_column_id,
+                source_subcolumn_id,
+                destination_column_id,
+                destination_subcolumn_id,
                 source_pos_id,
                 destination_pos_id
             );
@@ -138,9 +140,9 @@ const Board = () => {
         if (sourceIsSubColumn) {
             handleWhenSourceIsSubColumn(
                 items,
-                source_column,
-                source_subcolumn,
-                destination_column,
+                source_column_id,
+                source_subcolumn_id,
+                destination_column_id,
                 source_pos_id,
                 destination_pos_id
             );
@@ -151,9 +153,9 @@ const Board = () => {
         if (destinationIsSubColumn) {
             handleWhenDestinationIsSubColumn(
                 items,
-                source_column,
-                destination_column,
-                destination_subcolumn,
+                source_column_id,
+                destination_column_id,
+                destination_subcolumn_id,
                 destination_pos_id,
                 source_pos_id
             );
@@ -164,30 +166,28 @@ const Board = () => {
 
     const handleWhenSourceIsSubColumn = (
         items,
-        source_column,
-        source_subcolumn,
-        destination_column,
+        source_column_id,
+        source_subcolumn_id,
+        destination_column_id,
         source_pos_id,
         destination_pos_id
     ) => {
-        const column_to_delete = findColumnByName(items, source_column);
+        const column_to_delete = findColumnById(items, source_column_id);
 
-        const subcolumn_to_delete = findSubColumnByName(
+        const subcolumn_to_delete = findSubColumnById(
             column_to_delete,
-            source_subcolumn
+            source_subcolumn_id
         );
 
-        column_to_delete.count--;
         const removed_item = removeObjectByPosition(
             subcolumn_to_delete,
             source_pos_id
         );
 
-        const column_to_add = findColumnByName(items, destination_column);
+        const column_to_add = findColumnById(items, destination_column_id);
 
-        column_to_add.count++;
         addObjectIntoPosition(
-            column_to_add,
+            column_to_add.groups[0],
             destination_pos_id,
             removed_item[0]
         );
@@ -195,28 +195,26 @@ const Board = () => {
 
     const handleWhenDestinationIsSubColumn = (
         items,
-        source_column,
-        destination_column,
-        destination_subcolumn,
+        source_column_id,
+        destination_column_id,
+        destination_subcolumn_id,
         destination_pos_id,
         source_pos_id
     ) => {
-        const column_to_delete = findColumnByName(items, source_column);
+        const column_to_delete = findColumnById(items, source_column_id);
 
-        column_to_delete.count--;
         const removed_item = removeObjectByPosition(
-            column_to_delete,
+            column_to_delete.groups[0],
             source_pos_id
         );
 
-        const column_to_add = findColumnByName(items, destination_column);
+        const column_to_add = findColumnById(items, destination_column_id);
 
-        const subcolumn_to_add = findSubColumnByName(
+        const subcolumn_to_add = findSubColumnById(
             column_to_add,
-            destination_subcolumn
+            destination_subcolumn_id
         );
 
-        column_to_add.count++;
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
@@ -226,17 +224,19 @@ const Board = () => {
 
     const handleWhenSourceIsDestination = (
         items,
-        source_column,
-        source_subcolumn,
-        destination_subcolumn,
+        source_column_id,
+        source_subcolumn_id,
+        destination_subcolumn_id,
         destination_pos_id,
         source_pos_id
     ) => {
-        const selected_column = findColumnByName(items, source_column);
+        const selected_column = findColumnById(items, source_column_id);
 
-        const selected_subcolumn = findSubColumnByName(
+        console.log(selected_column);
+
+        const selected_subcolumn = findSubColumnById(
             selected_column,
-            source_subcolumn
+            source_subcolumn_id
         );
 
         const removed_item = removeObjectByPosition(
@@ -244,9 +244,9 @@ const Board = () => {
             source_pos_id
         );
 
-        const subcolumn_to_add = findSubColumnByName(
+        const subcolumn_to_add = findSubColumnById(
             selected_column,
-            destination_subcolumn
+            destination_subcolumn_id
         );
 
         addObjectIntoPosition(
@@ -258,34 +258,32 @@ const Board = () => {
 
     const handleWhenSourceIsntDestination = (
         items,
-        source_column,
-        source_subcolumn,
-        destination_column,
-        destination_subcolumn,
+        source_column_id,
+        source_subcolumn_id,
+        destination_column_id,
+        destination_subcolumn_id,
         source_pos_id,
         destination_pos_id
     ) => {
-        const column_to_delete = findColumnByName(items, source_column);
+        const column_to_delete = findColumnById(items, source_column_id);
 
-        const subcolumn_to_delete = findSubColumnByName(
+        const subcolumn_to_delete = findSubColumnById(
             column_to_delete,
-            source_subcolumn
+            source_subcolumn_id
         );
 
-        column_to_delete.count--;
         const removed_item = removeObjectByPosition(
             subcolumn_to_delete,
             source_pos_id
         );
 
-        const column_to_add = findColumnByName(items, destination_column);
+        const column_to_add = findColumnById(items, destination_column_id);
 
-        const subcolumn_to_add = findSubColumnByName(
+        const subcolumn_to_add = findSubColumnById(
             column_to_add,
-            destination_subcolumn
+            destination_subcolumn_id
         );
 
-        column_to_add.count++;
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
@@ -294,8 +292,8 @@ const Board = () => {
     };
 
     const handleOnDragEnd = (result) => {
-        console.clear();
-        console.log(result);
+        // console.clear();
+        // console.log(result);
         if (!result.destination) return;
 
         const items = board_info;
@@ -324,14 +322,12 @@ const Board = () => {
             (column) => column.name === source_column_name
         );
 
-        column_to_delete.count--;
         const removed_item = column_to_delete.data.splice(source_pos_id, 1);
 
         const column_to_add = items.columns.find(
             (column) => column.name === destination_column_name
         );
 
-        column_to_add.count++;
         column_to_add.data.splice(destination_pos_id, 0, removed_item[0]);
 
         updateBoardInfo(items);
@@ -348,34 +344,35 @@ const Board = () => {
         const items = board_info;
 
         const card_object = {
-            id: items.nextId,
+            id: items.nextCardId,
             name: title,
             description: description
         };
 
-        const column_to_add = findColumnByName(items, status);
-        column_to_add.count++;
+        const column_to_add = findColumnById(items, status);
 
-        if (column_to_add.subColumns.length > 0) {
-            const subcolumn_to_add = column_to_add.subColumns[0];
-
-            addObjectIntoPosition(subcolumn_to_add, 0, card_object);
-        } else {
-            addObjectIntoPosition(column_to_add, 0, card_object);
-        }
-        items.nextId++;
+        addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
+        items.nextCardId++;
 
         forceUpdate();
-        toast('Default notis!');
+        toast('Card adicionado');
         updateBoardInfo(items);
     };
 
     const addNewColumn = (name) => {
         const items = board_info;
 
-        items.columns.push({ name: name, count: 0, data: [], subColumns: [] });
+        items.columns.push({
+            id: items.nextColumnId,
+            name: name,
+            groups: [{ id: items.nextGroupId, name: name, cards: [] }]
+        });
+
+        items.nextColumnId++;
+        items.nextGroupId++;
+
         updateBoardInfo(items);
-        toast('Default notis!');
+        toast('Coluna criada');
     };
 
     const addNewSubColumn = (columnName) => {
@@ -385,22 +382,26 @@ const Board = () => {
             (column) => column.name === columnName
         );
 
-        column_to_add.subColumns = [
-            { id: 0, name: 'Commited', data: [] },
-            { id: 1, name: 'Done', data: [] }
-        ];
+        column_to_add.groups.push({
+            id: items.nextGroupId,
+            name: columnName,
+            cards: []
+        });
+        items.nextGroupId++;
 
-        assignAllCardsToSubColumn(column_to_add);
+        // assignAllCardsToSubColumn(column_to_add);
 
         forceUpdate();
+        updateBoardInfo(items);
+        toast('Subcoluna criada');
     };
 
-    const assignAllCardsToSubColumn = (column_to_add) => {
-        column_to_add.data.map((card) => {
-            column_to_add.subColumns[0].data.push(card);
-        });
-        column_to_add.data = [];
-    };
+    // const assignAllCardsToSubColumn = (column_to_add) => {
+    //     column_to_add.groups[0].map((card) => {
+    //         column_to_add.subColumns[0].data.push(card);
+    //     });
+    //     column_to_add.data = [];
+    // };
 
     // #endregion
 
@@ -433,6 +434,16 @@ const Board = () => {
                         >
                             Criar raias
                         </Button>
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            onClick={(e) => {
+                                console.log(board_info);
+                                e.preventDefault();
+                            }}
+                        >
+                            DEBUG
+                        </Button>
                     </Stack>
                 </div>
 
@@ -442,9 +453,9 @@ const Board = () => {
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 {board_info.columns.map((column, index) => (
                                     <Column
+                                        columnId={column.id}
                                         title={column.name}
-                                        data={column.data}
-                                        subColumns={column.subColumns}
+                                        groups={column.groups}
                                         status={status}
                                         tags={tags}
                                         key={index}

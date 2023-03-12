@@ -5,6 +5,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import propTypes from 'prop-types';
 
 import { Stack, Button, Divider } from '@mui/material';
+import { hasSubColumns } from '../../utils/column-utils';
 
 import ModalStyles from '../../constants/modal-styles';
 
@@ -15,9 +16,9 @@ import SubColumn from '../SubColumn';
 /* eslint-disable */
 // eslint-disable-next-line
 const Column = ({
+    columnId,
     title,
-    data,
-    subColumns,
+    groups,
     status,
     tags,
     addNewCard,
@@ -34,7 +35,7 @@ const Column = ({
     };
 
     const returnMaxWidth = () => {
-        if (subColumns.length > 0) {
+        if (hasSubColumns(groups)) {
             return '32rem';
         }
 
@@ -88,31 +89,33 @@ const Column = ({
                 </div>
 
                 <div className="h-100">
-                    {subColumns.length > 0 ? (
+                    {/* if this component receive more than 1 groups of columns then create subcolumns */}
+                    {hasSubColumns(groups) ? (
                         <div className="flex flex-row items-start justify-center h-100">
-                            {subColumns?.map((obj) => (
+                            {groups?.map((group) => (
                                 <SubColumn
-                                    title={obj.name}
-                                    parentColumn={title}
-                                    key={obj.id}
-                                    data={obj.data}
+                                    parentColumnId={columnId}
+                                    title={group.name}
+                                    cardId={group.id}
+                                    key={group.id}
+                                    data={group.cards}
                                     tagsArr={tags}
                                 />
                             ))}
                         </div>
                     ) : (
-                        <Droppable droppableId={title}>
+                        <Droppable droppableId={`${columnId}`}>
                             {(provided) => (
                                 <ul
                                     className="list pb2 h-100 w-100 flex flex-column items-start"
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
                                 >
-                                    {data.map((obj, index) => {
+                                    {groups[0].cards.map((card, index) => {
                                         return (
                                             <Draggable
-                                                key={`${index}${obj.id}`}
-                                                draggableId={`${obj.id}`}
+                                                key={`${index}${card.id}`}
+                                                draggableId={`${card.id}`}
                                                 index={index}
                                             >
                                                 {(provided) => (
@@ -123,7 +126,7 @@ const Column = ({
                                                         className="bw1 mt3"
                                                     >
                                                         <Card
-                                                            object={obj}
+                                                            object={card}
                                                             tagsArr={tags}
                                                         />
                                                     </li>
@@ -156,11 +159,11 @@ const Column = ({
 };
 
 Column.propTypes = {
+    columnId: propTypes.number,
     title: propTypes.string,
-    data: propTypes.any,
+    grousp: propTypes.any,
     status: propTypes.array,
     tags: propTypes.array,
-    subColumns: propTypes.array,
     addNewCard: propTypes.func,
     addNewSubColumn: propTypes.func
 };

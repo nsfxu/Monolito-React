@@ -73,8 +73,8 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
                     defaultValue={currentColumn}
                 >
                     {statusArr?.map((status, index) => (
-                        <option value={status} key={index}>
-                            {status}
+                        <option value={status.id} key={index}>
+                            {status.name}
                         </option>
                     ))}
                 </select>

@@ -39,7 +39,6 @@ const Card = ({ object, tagsArr }) => {
         }
 
         setCardTags(tempTagsArr);
-        console.log(tempTagsArr);
     };
 
     const openModal = () => {

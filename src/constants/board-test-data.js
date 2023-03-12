@@ -1,126 +1,76 @@
 export const TEST_DATA = {
     columns: [
         {
+            id: 0,
             name: 'To-Do',
-            count: 3,
-            data: [
+            groups: [
                 {
                     id: 0,
-                    laneId: '',
-                    name: 'Estudar para as provas do mês',
-                    description: '',
-                    tags: [2]
-                },
-                {
-                    id: 1,
-                    laneId: '',
-                    name: 'Apontar as horas de trabalho',
-                    description: '',
-                    tags: [0, 1, 2]
-                },
-                {
-                    id: 2,
-                    laneId: '',
-                    name: 'Finalizar a documentação do novo projeto',
-                    description: '',
-                    tags: [2]
-                }
-            ],
-            subColumns: []
-        },
-        {
-            name: 'A Fazer',
-            count: 5,
-            data: [],
-            subColumns: [
-                {
-                    id: 0,
-                    name: 'Fazendo',
-                    data: [
+                    name: 'Loner',
+                    cards: [
                         {
-                            id: 3,
+                            id: 0,
                             laneId: '',
-                            name: 'Terminar a documentação do TCC',
+                            name: 'Estudar para as provas do mês',
                             description: '',
-                            tags: [1]
+                            tags: [2]
                         },
                         {
-                            id: 4,
+                            id: 1,
                             laneId: '',
-                            name: 'Estudar para a prova de LP',
-                            description: '',
-                            tags: [0]
-                        },
-                        {
-                            id: 5,
-                            laneId: '',
-                            name: 'Finalizar o protótipo do TCC',
+                            name: 'Apontar as horas de trabalho',
                             description: '',
                             tags: [0, 1, 2]
                         },
                         {
-                            id: 11,
+                            id: 2,
                             laneId: '',
-                            name: 'Criar o PPT do PIT',
+                            name: 'Finalizar a documentação do novo projeto',
                             description: '',
-                            tags: [0, 1, 2]
+                            tags: [2]
                         }
                     ]
                 },
                 {
                     id: 1,
-                    name: 'Feito',
-                    data: [
+                    name: 'Monolith',
+                    cards: [
                         {
-                            id: 6,
+                            id: 3,
                             laneId: '',
-                            name: 'Tirar as dúvidas com o Hayala',
+                            name: 'Estudar para as provas do mês',
                             description: '',
-                            tags: [0, 1]
+                            tags: [2]
                         },
                         {
-                            id: 7,
+                            id: 4,
                             laneId: '',
-                            name: 'Apresentar os seminários',
+                            name: 'Apontar as horas de trabalho',
                             description: '',
-                            tags: [0, 1]
+                            tags: [0, 1, 2]
+                        },
+                        {
+                            id: 5,
+                            laneId: '',
+                            name: 'Finalizar a documentação do novo projeto',
+                            description: '',
+                            tags: [2]
                         }
                     ]
                 }
             ]
         },
         {
-            name: 'Done',
-            count: 3,
-            data: [
+            id: 1,
+            name: 'dei',
+            groups: [
                 {
-                    id: 8,
-                    laneId: '',
-                    name: 'Terminar a primeira parte da documentação',
-                    description: '',
-                    tags: [1, 2]
-                },
-                {
-                    id: 9,
-                    laneId: '',
-                    name: 'Criar a base do projeto do TCC',
-                    description: '',
-                    tags: [1, 2]
-                },
-                {
-                    id: 10,
-                    laneId: '',
-                    name: 'Tirar dúvidas sobre o Kanban com AM',
-                    description: '',
-                    tags: [0, 1, 2]
+                    id: 2,
+                    name: 'dei',
+                    cards: []
                 }
-            ],
-            subColumns: []
+            ]
         }
-    ],
-    lanes: [
-        { id: 1, name: 'Oi' },
-        { id: 2, name: 'eae' }
     ],
     tags: [
         {
@@ -151,5 +101,7 @@ export const TEST_DATA = {
             borderColor: 'none'
         }
     ],
-    nextId: 12
+    nextCardId: 6,
+    nextGroupId: 3,
+    nextColumnId: 2
 };
