@@ -43,12 +43,32 @@ const Board = () => {
     const [status, setStatus] = useState([]);
     const [tags, setTags] = useState([{}]);
 
+    const [normal_columns, setNormalColumns] = useState([]);
+    const [swinlane_columns, setSwinlaneColumns] = useState([]);
+
     useEffect(() => {
         getAllColumns();
         getAllTags();
+        separateColumns();
     }, [board_info]);
 
     //#region functions
+
+    const separateColumns = () => {
+        const temp_swinlane_columns = [];
+        const temp_normal_columns = [];
+
+        if (board_info.columns.length > 0) {
+            board_info.columns.map((column) => {
+                column.showSwinLanes
+                    ? temp_swinlane_columns.push(column)
+                    : temp_normal_columns.push(column);
+            });
+        }
+
+        setNormalColumns(temp_normal_columns);
+        setSwinlaneColumns(temp_swinlane_columns);
+    };
 
     const getAllTags = () => {
         setTags(board_info.tags);
@@ -317,15 +337,22 @@ const Board = () => {
             (column) => column.id == source_column_id
         );
 
-        const removed_item = column_to_delete.groups[0].cards.splice(source_pos_id, 1);        
+        const removed_item = column_to_delete.groups[0].cards.splice(
+            source_pos_id,
+            1
+        );
 
         const column_to_add = items.columns.find(
             (column) => column.id == destination_column_id
         );
 
-        console.log(column_to_add)
+        console.log(column_to_add);
 
-        column_to_add.groups[0].cards.splice(destination_pos_id, 0, removed_item[0]);
+        column_to_add.groups[0].cards.splice(
+            destination_pos_id,
+            0,
+            removed_item[0]
+        );
 
         updateBoardInfo(items);
     };
@@ -436,15 +463,14 @@ const Board = () => {
                 </div>
 
                 <div className="w-100 h-100">
-                    {board_info && (
+                    {board_info && normal_columns && (
                         <div className="flex flex-row w-100">
                             <DragDropContext onDragEnd={handleOnDragEnd}>
-                                {board_info.columns.map((column, index) => (
+                                {normal_columns.map((column, index) => (
                                     <Column
                                         columnId={column.id}
                                         title={column.name}
                                         groups={column.groups}
-                                        showSwinLanes={column.showSwinLanes}
                                         status={status}
                                         tags={tags}
                                         key={index}

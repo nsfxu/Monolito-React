@@ -65,7 +65,7 @@ export const TEST_DATA = {
                     cards: []
                 }
             ],
-            showSwinLanes: true
+            showSwinLanes: false
         },
         {
             id: 2,
