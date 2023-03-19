@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
 
 /* eslint-disable */
@@ -9,6 +9,13 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
     const person = useRef();
     const status = useRef();
     const tags = useRef();
+
+    useEffect(() => {
+        if (!currentColumn) {
+            currentColumn = statusArr[0].id;
+        }
+        console.log(currentColumn);
+    }, [currentColumn]);
 
     const validateInputs = () => {
         addNewCard(
@@ -110,7 +117,7 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
 
 CreateCard.propTypes = {
     addNewCard: propTypes.func,
-    currentColumn: propTypes.string,
+    currentColumn: propTypes.number,
     statusArr: propTypes.array,
     tagsArr: propTypes.array
 };

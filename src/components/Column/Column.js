@@ -1,36 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
-import { Stack, Button, Divider } from '@mui/material';
-import { hasSubColumns } from '../../utils/column-utils';
-
 import ModalStyles from '../../constants/modal-styles';
 
-import Card from '../Card';
 import CreateCard from '../CreateCard';
-import SubColumn from '../SubColumn';
+import NormalColumn from '../NormalColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({
-    columnId,
-    title,
-    groups,
-    status,
-    tags,
-    addNewCard,
-    addNewSubColumn
-}) => {
+const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
+    const [normal_columns, setNormalColumns] = useState([]);
+    const [swinlane_columns, setSwinlaneColumns] = useState([]);
+    const [columnToAddCard, setColumnToAddCard] = useState(null);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        separateColumns();
+    }, [columns]);
+
+    useEffect(() => {
+        console.log(swinlane_columns);
+    }, [swinlane_columns]);
+
+    const separateColumns = () => {
+        const temp_swinlane_columns = [];
+        const temp_normal_columns = [];
+
+        if (columns.length > 0) {
+            columns.map((column) => {
+                column.showSwinLanes
+                    ? temp_swinlane_columns.push(column)
+                    : temp_normal_columns.push(column);
+            });
+        }
+
+        setNormalColumns(temp_normal_columns);
+        setSwinlaneColumns(temp_swinlane_columns);
+    };
 
     const handleChange = (panel) => {
         setExpanded(panel);
     };
 
-    const openModal = () => {
+    const openModal = (columnName) => {
+        setColumnToAddCard(columnName);
         setIsModalOpen(true);
     };
 
@@ -40,103 +56,15 @@ const Column = ({
 
     return (
         <>
-            <div
-                className="ba w-100"
-                style={{
-                    backgroundColor: '#1e272e'
-                }}
-            >
-                <div className="bb flex flex-column justify-center items-center">
-                    <div>
-                        <h3>{title}</h3>
-                    </div>
-                    <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
-                        <Stack
-                            direction="column"
-                            divider={
-                                <Divider orientation="vertical" flexItem />
-                            }
-                            spacing={1}
-                        >
-                            <Button
-                                variant="contained"
-                                size="small"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    openModal();
-                                }}
-                            >
-                                Criar
-                            </Button>
-                            <Button
-                                variant="contained"
-                                size="small"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    addNewSubColumn(columnId);
-                                }}
-                            >
-                                Criar sub-coluna
-                            </Button>
-                        </Stack>
-                    </div>
-                </div>
-
-                <div className="h-100">
-                    {hasSubColumns(groups) ? (
-                        <div className="flex flex-row items-start justify-center h-100">
-                            {groups?.map((group) => (
-                                <SubColumn
-                                    parentColumnId={columnId}
-                                    title={group.name}
-                                    cardId={group.id}
-                                    key={group.id}
-                                    data={group.cards}
-                                    tagsArr={tags}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <Droppable droppableId={`${columnId}`}>
-                            {(provided) => (
-                                <ul
-                                    className="flex flex-column items-center list w-100 h-100 pl3 pr3"
-                                    style={{
-                                        minWidth: '240px'
-                                    }}
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {groups[0].cards.map((card, index) => {
-                                        return (
-                                            <Draggable
-                                                key={`${index}${card.id}`}
-                                                draggableId={`${card.id}`}
-                                                index={index}
-                                            >
-                                                {(provided) => (
-                                                    <li
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="bw1 mt3"
-                                                    >
-                                                        <Card
-                                                            object={card}
-                                                            tagsArr={tags}
-                                                        />
-                                                    </li>
-                                                )}
-                                            </Draggable>
-                                        );
-                                    })}
-                                    {provided.placeholder}
-                                </ul>
-                            )}
-                        </Droppable>
-                    )}
-                </div>
-            </div>
+            {normal_columns.map((column, index) => (
+                <NormalColumn
+                    key={index}
+                    this_column={column}
+                    tags={tags}
+                    openModal={openModal}
+                    addNewSubColumn={addNewSubColumn}
+                />
+            ))}
 
             <Modal
                 isOpen={isModalOpen}
@@ -146,7 +74,7 @@ const Column = ({
             >
                 <CreateCard
                     addNewCard={addNewCard}
-                    currentColumn={title}
+                    currentColumn={columnToAddCard}
                     statusArr={status}
                     tagsArr={tags}
                 />
@@ -156,9 +84,7 @@ const Column = ({
 };
 
 Column.propTypes = {
-    columnId: propTypes.number,
-    title: propTypes.string,
-    groups: propTypes.any,
+    columns: propTypes.any,
     status: propTypes.array,
     tags: propTypes.array,
     addNewCard: propTypes.func,

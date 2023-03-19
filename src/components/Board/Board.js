@@ -43,32 +43,12 @@ const Board = () => {
     const [status, setStatus] = useState([]);
     const [tags, setTags] = useState([{}]);
 
-    const [normal_columns, setNormalColumns] = useState([]);
-    const [swinlane_columns, setSwinlaneColumns] = useState([]);
-
     useEffect(() => {
         getAllColumns();
         getAllTags();
-        separateColumns();
     }, [board_info]);
 
     //#region functions
-
-    const separateColumns = () => {
-        const temp_swinlane_columns = [];
-        const temp_normal_columns = [];
-
-        if (board_info.columns.length > 0) {
-            board_info.columns.map((column) => {
-                column.showSwinLanes
-                    ? temp_swinlane_columns.push(column)
-                    : temp_normal_columns.push(column);
-            });
-        }
-
-        setNormalColumns(temp_normal_columns);
-        setSwinlaneColumns(temp_swinlane_columns);
-    };
 
     const getAllTags = () => {
         setTags(board_info.tags);
@@ -462,22 +442,17 @@ const Board = () => {
                     </Stack>
                 </div>
 
-                <div className="w-100 h-100">
-                    {board_info && normal_columns && (
+                <div className="w-100 h-100 pl2 pr2">
+                    {board_info && (
                         <div className="flex flex-row w-100">
                             <DragDropContext onDragEnd={handleOnDragEnd}>
-                                {normal_columns.map((column, index) => (
-                                    <Column
-                                        columnId={column.id}
-                                        title={column.name}
-                                        groups={column.groups}
-                                        status={status}
-                                        tags={tags}
-                                        key={index}
-                                        addNewCard={addNewCard}
-                                        addNewSubColumn={addNewSubColumn}
-                                    />
-                                ))}
+                                <Column
+                                    columns={board_info.columns}
+                                    status={status}
+                                    tags={tags}
+                                    addNewCard={addNewCard}
+                                    addNewSubColumn={addNewSubColumn}
+                                />
                             </DragDropContext>
                         </div>
                     )}
