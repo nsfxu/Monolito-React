@@ -11,7 +11,15 @@ import SwinlaneColumns from '../SwinlaneColumns';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ columns, swinlanes, status, tags, addNewCard, addNewSubColumn, toggleSwinlane }) => {
+const Column = ({
+    columns,
+    swinlanes,
+    status,
+    tags,
+    addNewCard,
+    addNewSubColumn,
+    toggleSwinlane
+}) => {
     const [normal_columns, setNormalColumns] = useState([]);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
     const [columnToAddCard, setColumnToAddCard] = useState(null);
@@ -60,7 +68,14 @@ const Column = ({ columns, swinlanes, status, tags, addNewCard, addNewSubColumn,
             ))}
 
             {swinlane_columns && (
-                <SwinlaneColumns swinlane_columns={swinlane_columns} tags={tags} all_swinlanes={swinlanes} toggleSwinlane={toggleSwinlane} />
+                <SwinlaneColumns
+                    swinlane_columns={swinlane_columns}
+                    tags={tags}
+                    all_swinlanes={swinlanes}
+                    toggleSwinlane={toggleSwinlane}
+                    openModal={openModal}
+                    addNewSubColumn={addNewSubColumn}
+                />
             )}
 
             <Modal

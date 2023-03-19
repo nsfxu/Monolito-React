@@ -8,7 +8,7 @@ import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const SubColumn = ({ parentColumnId, cardId, title, data, tagsArr }) => {
+const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
             <header className="self-center">
@@ -16,7 +16,7 @@ const SubColumn = ({ parentColumnId, cardId, title, data, tagsArr }) => {
             </header>
             <section className="w-100 h-100">
                 {data && (
-                    <Droppable droppableId={`${parentColumnId};${cardId}`}>
+                    <Droppable droppableId={`${parentColumnId};${groupId}`}>
                         {(provided) => (
                             <ul
                                 className="list pl1 pr1 pb2 w-100 h-100 flex flex-column items-start"
@@ -61,7 +61,7 @@ const SubColumn = ({ parentColumnId, cardId, title, data, tagsArr }) => {
 
 SubColumn.propTypes = {
     parentColumnId: propTypes.number,
-    cardId: propTypes.number,
+    groupId: propTypes.number,
     title: propTypes.string,
     data: propTypes.any,
     tagsArr: propTypes.array

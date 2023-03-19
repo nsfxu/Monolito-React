@@ -78,6 +78,26 @@ export const TEST_DATA = {
                             tags: []
                         }
                     ]
+                },
+                {
+                    id: 4,
+                    name: 'Avone',
+                    cards: [
+                        {
+                            id: 1333,
+                            laneId: 0,
+                            name: 'Validar criação de cards no novo modelo',
+                            description: '',
+                            tags: [2]
+                        },
+                        {
+                            id: 1337,
+                            laneId: 1,
+                            name: 'Validar criação de colunas no novo modelo',
+                            description: '',
+                            tags: []
+                        }
+                    ]
                 }
             ],
             showSwinLanes: true
@@ -137,6 +157,6 @@ export const TEST_DATA = {
         }
     ],
     nextCardId: 8,
-    nextGroupId: 4,
+    nextGroupId: 5,
     nextColumnId: 3
 };

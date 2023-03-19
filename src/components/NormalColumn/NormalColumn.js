@@ -60,7 +60,7 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                             <SubColumn
                                 parentColumnId={this_column.id}
                                 title={group.name}
-                                cardId={group.id}
+                                groupId={group.id}
                                 key={group.id}
                                 data={group.cards}
                                 tagsArr={tags}
