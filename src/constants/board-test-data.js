@@ -133,7 +133,7 @@ export const TEST_DATA = {
         {
             id: 1,
             name: 'Expedite',
-            expanded: false
+            expanded: true
         }
     ],
     nextCardId: 8,

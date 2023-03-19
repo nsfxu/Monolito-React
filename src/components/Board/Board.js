@@ -46,12 +46,13 @@ const Board = () => {
     useEffect(() => {
         getAllColumns();
         getAllTags();
+
+        forceUpdate();
     }, [board_info]);
 
     //#region functions
 
     const toggleSwinlane = (swinlane_id) => {
-        console.log(swinlane_id)
         board_info.swinlanes.map((swinlane) => {
             if (swinlane.id == swinlane_id) {
                 swinlane.expanded = !swinlane.expanded;
@@ -308,19 +309,39 @@ const Board = () => {
             result.destination.droppableId.includes(';');
         const sourceIsSubColumn = result.source.droppableId.includes(';');
 
+        const destinationHasSwinlane =
+            result.destination.droppableId.includes('-');
+        const sourceHasSwinlane = result.source.droppableId.includes('-');
+
         if (destinationIsSubColumn || sourceIsSubColumn) {
             checkHowToHandle(
                 items,
                 result,
                 destinationIsSubColumn,
-                sourceIsSubColumn
+                sourceIsSubColumn,
+                destinationHasSwinlane,
+                sourceHasSwinlane
             );
 
             return;
         }
 
-        const source_column_id = result.source.droppableId;
-        const destination_column_id = result.destination.droppableId;
+        const source_column_id = sourceHasSwinlane
+            ? result.source.droppableId.split('-')[0]
+            : result.source.droppableId;
+
+        const sourceSwinlaneId = sourceHasSwinlane
+            ? result.source.droppableId.split('-')[1]
+            : null;
+
+        const destination_column_id = destinationHasSwinlane
+            ? result.destination.droppableId.split('-')[0]
+            : result.destination.droppableId;
+
+        const destinationSwinlaneId = destinationHasSwinlane
+            ? result.destination.droppableId.split('-')[1]
+            : null;
+
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
@@ -332,6 +353,10 @@ const Board = () => {
             source_pos_id,
             1
         );
+
+        if (destinationHasSwinlane) {
+            removed_item[0].laneId = parseInt(destinationSwinlaneId);
+        }
 
         const column_to_add = items.columns.find(
             (column) => column.id == destination_column_id
@@ -380,7 +405,8 @@ const Board = () => {
         items.columns.push({
             id: items.nextColumnId,
             name: name,
-            groups: [{ id: items.nextGroupId, name: 'Doing', cards: [] }]
+            groups: [{ id: items.nextGroupId, name: 'Doing', cards: [] }],
+            showSwinLanes: false
         });
 
         items.nextColumnId++;

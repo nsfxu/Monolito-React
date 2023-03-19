@@ -21,9 +21,10 @@ const SwinlaneHeader = ({ columns, all_swinlanes, tags, toggleSwinlane }) => {
             <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
                 {(provided) => (
                     <ul
-                        className="flex flex-column items-center list w-100 h-auto pl3 pr3"
+                        className="flex flex-column items-center list w-100 h-auto pl3 pr3 pb3"
                         style={{
                             minWidth: '240px',
+                            minHeight: '170px',
                             backgroundColor: 'red'
                         }}
                         {...provided.droppableProps}
@@ -60,80 +61,80 @@ const SwinlaneHeader = ({ columns, all_swinlanes, tags, toggleSwinlane }) => {
         );
     };
 
+    let is_first_column = true;
+
     return (
         <>
             {columns.map((this_column, index) => (
-                <>
-                    <div
-                        key={index}
-                        className="ba w-100"
-                        style={{
-                            backgroundColor: '#1e272e',
-                            minWidth: '240px'
-                        }}
-                    >
-                        <div className="bb flex flex-column justify-center items-center">
-                            <h3>{this_column.name}</h3>
-                            <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
-                                <Stack
-                                    direction="column"
-                                    divider={
-                                        <Divider
-                                            orientation="vertical"
-                                            flexItem
-                                        />
-                                    }
-                                    spacing={1}
+                <div
+                    key={index}
+                    className="ba w-100"
+                    style={{
+                        backgroundColor: '#1e272e',
+                        minWidth: '240px'
+                    }}
+                >
+                    <div className="bb flex flex-column justify-center items-center">
+                        <h3>{this_column.name}</h3>
+                        <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
+                            <Stack
+                                direction="column"
+                                divider={
+                                    <Divider orientation="vertical" flexItem />
+                                }
+                                spacing={1}
+                            >
+                                <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        // openModal(this_column.id);
+                                    }}
                                 >
-                                    <Button
-                                        variant="contained"
-                                        size="small"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            // openModal(this_column.id);
-                                        }}
-                                    >
-                                        Criar card
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        size="small"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            // addNewSubColumn(this_column.id);
-                                        }}
-                                    >
-                                        Criar sub-coluna
-                                    </Button>
-                                </Stack>
-                            </div>
+                                    Criar card
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        // addNewSubColumn(this_column.id);
+                                    }}
+                                >
+                                    Criar sub-coluna
+                                </Button>
+                            </Stack>
                         </div>
+                    </div>
 
-                        <div className="h-100">
-                            {all_swinlanes.map((swinlane, index) => (
-                                <>
-                                    <ListItemButton
-                                        key={index}
-                                        sx={{ backgroundColor: 'cyan' }}
-                                        onClick={() => {
-                                            toggleSwinlane(swinlane.id);
-                                        }}
-                                    >
+                    <div className="h-100">
+                        {all_swinlanes.map((swinlane, index) => (
+                            <div key={index}>
+                                <ListItemButton
+                                    sx={{ backgroundColor: 'cyan' }}
+                                    style={{ minHeight: '3em' }}
+                                    onClick={() => {
+                                        toggleSwinlane(swinlane.id);
+                                    }}
+                                >
+                                    {is_first_column && (
                                         <ListItemText
                                             primary={swinlane.name}
                                         ></ListItemText>
-                                    </ListItemButton>
-                                    <Collapse in={swinlane.expanded}>
-                                        {renderSwinlane(
-                                            this_column,
-                                            swinlane.id
-                                        )}
-                                    </Collapse>
-                                </>
-                            ))}
-                        </div>
+                                    )}
+                                </ListItemButton>
+                                <Collapse in={swinlane.expanded}>
+                                    {renderSwinlane(this_column, swinlane.id)}
+                                </Collapse>
+                            </div>
+                        ))}
                     </div>
-                </>
+
+                    {is_first_column
+                        ? (is_first_column = false)
+                        : is_first_column}
+                </div>
             ))}
         </>
     );

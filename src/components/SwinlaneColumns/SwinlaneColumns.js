@@ -6,11 +6,12 @@ import SwinlaneHeader from '../SwinlaneHeader';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const SwinlaneColumns = ({ swinlane_columns, tags, all_swinlanes, toggleSwinlane }) => {
-
-    console.log(all_swinlanes);
-    console.log(swinlane_columns);
-
+const SwinlaneColumns = ({
+    swinlane_columns,
+    tags,
+    all_swinlanes,
+    toggleSwinlane
+}) => {
     return (
         <>
             {
