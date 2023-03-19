@@ -62,10 +62,25 @@ export const TEST_DATA = {
                 {
                     id: 2,
                     name: 'Doing',
-                    cards: []
+                    cards: [
+                        {
+                            id: 6,
+                            laneId: 0,
+                            name: 'Terminar swinlanes',
+                            description: '',
+                            tags: [2]
+                        },
+                        {
+                            id: 7,
+                            laneId: 1,
+                            name: 'Fazer demais controles',
+                            description: '',
+                            tags: []
+                        }
+                    ]
                 }
             ],
-            showSwinLanes: false
+            showSwinLanes: true
         },
         {
             id: 2,
@@ -112,14 +127,16 @@ export const TEST_DATA = {
     swinlanes: [
         {
             id: 0,
-            name: 'Default'
+            name: 'Default',
+            expanded: true
         },
         {
             id: 1,
-            name: 'Expedite'
+            name: 'Expedite',
+            expanded: false
         }
     ],
-    nextCardId: 6,
+    nextCardId: 8,
     nextGroupId: 4,
     nextColumnId: 3
 };

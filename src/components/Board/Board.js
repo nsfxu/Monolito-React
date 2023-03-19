@@ -50,6 +50,17 @@ const Board = () => {
 
     //#region functions
 
+    const toggleSwinlane = (swinlane_id) => {
+        console.log(swinlane_id)
+        board_info.swinlanes.map((swinlane) => {
+            if (swinlane.id == swinlane_id) {
+                swinlane.expanded = !swinlane.expanded;
+            }
+        });
+
+        forceUpdate();
+    };
+
     const getAllTags = () => {
         setTags(board_info.tags);
     };
@@ -448,10 +459,12 @@ const Board = () => {
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Column
                                     columns={board_info.columns}
+                                    swinlanes={board_info.swinlanes}
                                     status={status}
                                     tags={tags}
                                     addNewCard={addNewCard}
                                     addNewSubColumn={addNewSubColumn}
+                                    toggleSwinlane={toggleSwinlane}
                                 />
                             </DragDropContext>
                         </div>

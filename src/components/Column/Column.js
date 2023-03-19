@@ -7,10 +7,11 @@ import ModalStyles from '../../constants/modal-styles';
 
 import CreateCard from '../CreateCard';
 import NormalColumn from '../NormalColumn';
+import SwinlaneColumns from '../SwinlaneColumns';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
+const Column = ({ columns, swinlanes, status, tags, addNewCard, addNewSubColumn, toggleSwinlane }) => {
     const [normal_columns, setNormalColumns] = useState([]);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
     const [columnToAddCard, setColumnToAddCard] = useState(null);
@@ -20,10 +21,6 @@ const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
     useEffect(() => {
         separateColumns();
     }, [columns]);
-
-    useEffect(() => {
-        console.log(swinlane_columns);
-    }, [swinlane_columns]);
 
     const separateColumns = () => {
         const temp_swinlane_columns = [];
@@ -39,10 +36,6 @@ const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
 
         setNormalColumns(temp_normal_columns);
         setSwinlaneColumns(temp_swinlane_columns);
-    };
-
-    const handleChange = (panel) => {
-        setExpanded(panel);
     };
 
     const openModal = (columnName) => {
@@ -66,6 +59,10 @@ const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
                 />
             ))}
 
+            {swinlane_columns && (
+                <SwinlaneColumns swinlane_columns={swinlane_columns} tags={tags} all_swinlanes={swinlanes} toggleSwinlane={toggleSwinlane} />
+            )}
+
             <Modal
                 isOpen={isModalOpen}
                 style={ModalStyles.create}
@@ -84,11 +81,13 @@ const Column = ({ columns, status, tags, addNewCard, addNewSubColumn }) => {
 };
 
 Column.propTypes = {
-    columns: propTypes.any,
+    columns: propTypes.array,
+    swinlanes: propTypes.array,
     status: propTypes.array,
     tags: propTypes.array,
     addNewCard: propTypes.func,
-    addNewSubColumn: propTypes.func
+    addNewSubColumn: propTypes.func,
+    toggleSwinlane: propTypes.func
 };
 
 export default Column;

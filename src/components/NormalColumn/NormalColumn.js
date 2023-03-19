@@ -73,7 +73,9 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                             <ul
                                 className="flex flex-column items-center list w-100 h-100 pl3 pr3"
                                 style={{
-                                    minWidth: '240px'
+                                    minWidth: '240px',
+                                    backgroundColor: 'red'
+
                                 }}
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
