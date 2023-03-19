@@ -19,7 +19,10 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                 backgroundColor: '#1e272e'
             }}
         >
-            <div className="bb flex flex-column justify-center items-center">
+            <div
+                className="bb flex flex-column justify-center items-center"
+                style={{ minHeight: '13.3em' }}
+            >
                 <div>
                     <h3>{this_column.name}</h3>
                 </div>
@@ -56,9 +59,7 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                         <div className="flex">
                             {this_column.groups?.map((current_group) => (
                                 <header className="flex justify-center w-50">
-                                    <h3 className="">
-                                        {current_group.name}
-                                    </h3>
+                                    <h3 className="">{current_group.name}</h3>
                                 </header>
                             ))}
                         </div>
