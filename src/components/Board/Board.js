@@ -109,32 +109,42 @@ const Board = () => {
         const source_pos_id = result.source.index;
         const destination_pos_id = result.destination.index;
 
-        const destination_subcolumn_id = destinationIsSubColumn
+        let destination_subcolumn_id = destinationIsSubColumn
             ? result.destination.droppableId.split(';')[1]
             : null;
+
+        destination_subcolumn_id =
+            destination_subcolumn_id && destinationHasSwinlane
+                ? destination_subcolumn_id.split('-')[0]
+                : destination_subcolumn_id;
 
         let destination_column_id = destinationIsSubColumn
             ? result.destination.droppableId.split(';')[0]
             : result.destination.droppableId;
 
-        const destinationSwinlaneId = destinationHasSwinlane
-            ? destination_column_id.split('-')[1]
+        const destination_swinlane_id = destinationHasSwinlane
+            ? result.destination.droppableId.split('-')[1]
             : null;
 
         destination_column_id = destinationHasSwinlane
             ? destination_column_id.split('-')[0]
             : destination_column_id;
 
-        const source_subcolumn_id = sourceIsSubColumn
+        let source_subcolumn_id = sourceIsSubColumn
             ? result.source.droppableId.split(';')[1]
             : null;
+
+        source_subcolumn_id =
+            source_subcolumn_id && sourceHasSwinlane
+                ? source_subcolumn_id.split('-')[0]
+                : source_subcolumn_id;
 
         let source_column_id = sourceIsSubColumn
             ? result.source.droppableId.split(';')[0]
             : result.source.droppableId;
 
-        const sourceSwinlaneId = sourceHasSwinlane
-            ? source_column_id.split('-')[1]
+        const source_swinlane_id = sourceHasSwinlane
+            ? result.source.droppableId.split('-')[1]
             : null;
 
         source_column_id = sourceHasSwinlane
@@ -176,8 +186,10 @@ const Board = () => {
                 destination_column_id,
                 source_pos_id,
                 destination_pos_id,
-                destinationSwinlaneId,
-                destinationHasSwinlane
+                destination_swinlane_id,
+                destinationHasSwinlane,
+                source_swinlane_id,
+                sourceHasSwinlane
             );
 
             return;
@@ -191,6 +203,7 @@ const Board = () => {
                 destination_subcolumn_id,
                 destination_pos_id,
                 source_pos_id,
+                destination_swinlane_id,
                 destinationHasSwinlane,
                 sourceHasSwinlane
             );
@@ -206,8 +219,10 @@ const Board = () => {
         destination_column_id,
         source_pos_id,
         destination_pos_id,
-        destinationSwinlaneId,
-        destinationHasSwinlane
+        destination_swinlane_id,
+        destinationHasSwinlane,
+        source_swinlane_id,
+        sourceHasSwinlane
     ) => {
         const column_to_delete = findColumnById(items, source_column_id);
 
@@ -221,8 +236,8 @@ const Board = () => {
             source_pos_id
         );
 
-        if(destinationHasSwinlane){
-            removed_item[0].laneId = parseInt(destinationSwinlaneId)
+        if (destinationHasSwinlane) {
+            removed_item[0].laneId = parseInt(destination_swinlane_id);
         }
 
         const column_to_add = findColumnById(items, destination_column_id);
@@ -241,10 +256,13 @@ const Board = () => {
         destination_subcolumn_id,
         destination_pos_id,
         source_pos_id,
+        destination_swinlane_id,
         destinationHasSwinlane,
         sourceHasSwinlane
     ) => {
         const column_to_delete = findColumnById(items, source_column_id);
+
+        console.log(destination_swinlane_id);
 
         const removed_item = removeObjectByPosition(
             column_to_delete.groups[0],
@@ -255,12 +273,18 @@ const Board = () => {
             removed_item[0].laneId = null;
         }
 
+        if (destinationHasSwinlane) {
+            removed_item[0].laneId = parseInt(destination_swinlane_id);
+        }
+
         const column_to_add = findColumnById(items, destination_column_id);
 
         const subcolumn_to_add = findSubColumnById(
             column_to_add,
             destination_subcolumn_id
         );
+
+        console.log(destination_subcolumn_id);
 
         addObjectIntoPosition(
             subcolumn_to_add,
@@ -374,7 +398,7 @@ const Board = () => {
             ? result.destination.droppableId.split('-')[0]
             : result.destination.droppableId;
 
-        const destinationSwinlaneId = destinationHasSwinlane
+        const destination_swinlane_id = destinationHasSwinlane
             ? result.destination.droppableId.split('-')[1]
             : null;
 
@@ -391,7 +415,7 @@ const Board = () => {
         );
 
         if (destinationHasSwinlane) {
-            removed_item[0].laneId = parseInt(destinationSwinlaneId);
+            removed_item[0].laneId = parseInt(destination_swinlane_id);
         }
 
         if (!destinationHasSwinlane && sourceHasSwinlane) {

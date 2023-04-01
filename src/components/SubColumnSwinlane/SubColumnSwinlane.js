@@ -17,8 +17,11 @@ const SubColumnSwinlane = ({
     toggleSwinlane
 }) => {
     const renderSubColumn = (swinlane_id) => {
-        return all_groups?.map((current_group) => (
-            <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
+        return all_groups?.map((current_group, index) => (
+            <div
+                className="w-100 h-100 flex flex-column items-start justify-center ma3"
+                key={index}
+            >
                 <header className="self-center">
                     <h3 className="ma0 pa0">{current_group.name}</h3>
                 </header>
@@ -37,7 +40,6 @@ const SubColumnSwinlane = ({
                                     ref={provided.innerRef}
                                 >
                                     {current_group.cards.map((card, index) => {
-                                        console.log(card.laneId, swinlane_id);
                                         if (card.laneId == swinlane_id)
                                             return (
                                                 <Draggable
