@@ -16,6 +16,8 @@ const SubColumnSwinlane = ({
     is_first_column,
     toggleSwinlane
 }) => {
+    let is_first_group = true;
+
     const renderDroppable = (current_group, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
             return (
@@ -93,9 +95,11 @@ const SubColumnSwinlane = ({
                 className="w-100 h-auto flex flex-column items-start justify-center ma3"
                 key={index}
             >
-                <header className="self-center">
-                    <h3 className="ma0 pa0">{current_group.name}</h3>
-                </header>
+                {is_first_group && (
+                    <header className="self-center">
+                        <h3 className="ma0 pa0">{current_group.name}</h3>
+                    </header>
+                )}
                 <section>
                     {renderDroppable(
                         current_group,
@@ -126,6 +130,7 @@ const SubColumnSwinlane = ({
                     {renderSubColumn(swinlane.id, swinlane.expanded)}
                 </div>
             </Collapse>
+            {is_first_column ? (is_first_group = false) : is_first_group}
         </div>
     ));
 };
