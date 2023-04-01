@@ -82,15 +82,16 @@ const SwinlaneHeader = ({
                     key={index}
                     className="ba w-100"
                     style={{
-                        backgroundColor: '#1e272e',
-                        minWidth: '240px'
+                        backgroundColor: '#1e272e'
                     }}
                 >
                     <div
                         className="bb flex flex-column justify-center items-center"
                         style={{ minHeight: '13.3em' }}
                     >
-                        <h3>{this_column.name}</h3>
+                        <div>
+                            <h3>{this_column.name}</h3>
+                        </div>
                         <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
                             <Stack
                                 direction="column"
@@ -123,7 +124,7 @@ const SwinlaneHeader = ({
                         </div>
                     </div>
 
-                    <div className="h-100 w-100">
+                    <div>
                         {hasSubColumns(this_column.groups) ? (
                             <SubColumnSwinlane
                                 parentColumnId={this_column.id}

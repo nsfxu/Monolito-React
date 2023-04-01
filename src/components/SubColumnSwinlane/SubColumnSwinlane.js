@@ -2,9 +2,9 @@ import React from 'react';
 
 import propTypes from 'prop-types';
 import { Collapse, ListItemButton, ListItemText } from '@mui/material';
-// import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
-// import Card from '../Card';
+import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -22,7 +22,7 @@ const SubColumnSwinlane = ({
                 <header className="self-center">
                     <h3 className="ma0 pa0">{current_group.name}</h3>
                 </header>
-                {/* <section>
+                <section>
                     {current_group.cards && (
                         <Droppable
                             droppableId={`${parentColumnId};${current_group.id}-${swinlane_id}`}
@@ -70,7 +70,7 @@ const SubColumnSwinlane = ({
                             )}
                         </Droppable>
                     )}
-                </section> */}
+                </section>
             </div>
         ));
     };
@@ -89,7 +89,7 @@ const SubColumnSwinlane = ({
                     <ListItemText primary={swinlane.name}></ListItemText>
                 )}
             </ListItemButton>
-            <Collapse in={swinlane.expanded}>
+            <Collapse in={swinlane.expanded} className="w-100">
                 <div className="flex flex-row items-start justify-center">
                     {renderSubColumn(swinlane.id)}
                 </div>
