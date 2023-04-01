@@ -29,7 +29,7 @@ const SwinlaneHeader = ({
                             className="flex flex-column items-center list w-100 h-auto pl3 pr3 pb3"
                             style={{
                                 minWidth: '240px',
-                                minHeight: '170px',
+                                minHeight: '13.5em',
                                 backgroundColor: 'red'
                             }}
                             {...provided.droppableProps}
@@ -89,7 +89,7 @@ const SwinlaneHeader = ({
     const renderColumn = (swinlane, this_column, swinlane_id) => {
         return (
             <Collapse in={swinlane.expanded} className="w-100">
-                {renderDroppable(this_column, swinlane.id, swinlane.expanded)}
+                {renderDroppable(this_column, swinlane_id, swinlane.expanded)}
             </Collapse>
         );
     };
