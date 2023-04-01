@@ -26,7 +26,7 @@ const SwinlaneHeader = ({
     openModal,
     addNewSubColumn
 }) => {
-    const renderSwinlane = (swinlane, this_column, swinlane_id) => {
+    const renderColumn = (swinlane, this_column, swinlane_id) => {
         return (
             <Collapse in={swinlane.expanded} className="w-100">
                 <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
@@ -151,7 +151,7 @@ const SwinlaneHeader = ({
                                             ></ListItemText>
                                         )}
                                     </ListItemButton>
-                                    {renderSwinlane(
+                                    {renderColumn(
                                         swinlane,
                                         this_column,
                                         swinlane.id
