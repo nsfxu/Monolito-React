@@ -11,6 +11,9 @@ import Card from '../Card';
 const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
+            <header className="self-center">
+                <h3 className="ma0 pa0">{title}</h3>
+            </header>
             <section className="w-100 h-100">
                 {data && (
                     <Droppable droppableId={`${parentColumnId};${groupId}`}>

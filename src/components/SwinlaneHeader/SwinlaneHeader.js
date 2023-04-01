@@ -14,7 +14,7 @@ import {
 import { hasSubColumns } from '../../utils/column-utils';
 
 import Card from '../Card';
-// import SubColumnSwinlane from '../SubColumnSwinlane/SubColumnSwinlane';
+import SubColumnSwinlane from '../SubColumnSwinlane/SubColumnSwinlane';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -121,38 +121,20 @@ const SwinlaneHeader = ({
                                 </Button>
                             </Stack>
                         </div>
-                        <div className="w-100">
-                            {hasSubColumns(this_column.groups) && (
-                                <div className="flex">
-                                    {this_column.groups?.map(
-                                        (current_group) => (
-                                            <header className="flex justify-center w-50">
-                                                <h3 className="">
-                                                    {current_group.name}
-                                                </h3>
-                                            </header>
-                                        )
-                                    )}
-                                </div>
-                            )}
-                        </div>
                     </div>
 
                     <div className="h-100">
                         {hasSubColumns(this_column.groups) ? (
-                            <div className="flex flex-row items-start justify-center">
-                                {/* <SubColumnSwinlane
+                            <>
+                                <SubColumnSwinlane
                                     parentColumnId={this_column.id}
                                     all_swinlanes={all_swinlanes}
                                     all_groups={this_column.groups}
-                                    title={group.name}
-                                    groupId={group.id}
-                                    key={group.id}
-                                    data={group.cards}
                                     tagsArr={tags}
-                                /> */}
-                                e
-                            </div>
+                                    is_first_column={is_first_column}
+                                    toggleSwinlane={toggleSwinlane}
+                                />
+                            </>
                         ) : (
                             all_swinlanes.map((swinlane, index) => (
                                 <div key={index}>

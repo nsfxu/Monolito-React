@@ -53,18 +53,7 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                             Criar sub-coluna
                         </Button>
                     </Stack>
-                </div>
-                <div className="w-100">
-                    {hasSubColumns(this_column.groups) && (
-                        <div className="flex">
-                            {this_column.groups?.map((current_group) => (
-                                <header className="flex justify-center w-50">
-                                    <h3 className="">{current_group.name}</h3>
-                                </header>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                </div>                
             </div>
 
             <div className="h-100">

@@ -3,6 +3,7 @@ import React from 'react';
 // import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
+import { ListItemButton, ListItemText } from '@mui/material';
 
 // import Card from '../Card';
 
@@ -12,75 +13,35 @@ const SubColumnSwinlane = ({
     parentColumnId,
     all_swinlanes,
     all_groups,
-    swinlane_id,
-    groupId,
-    title,
-    data,
-    tagsArr
+    tagsArr,
+    is_first_column,
+    toggleSwinlane
 }) => {
-    return (
-        <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
-            <header className="self-center">
-                <h3 className="ma0 pa0">{title}</h3>
-            </header>
-            {/* <section className="w-100 h-100">
-                {data && (
-                    <Droppable
-                        droppableId={`${parentColumnId};${groupId}-${swinlane_id}`}
-                    >
-                        {(provided) => (
-                            <ul
-                                className="list pl1 pr1 pb2 w-100 h-100 flex flex-column items-start"
-                                style={{
-                                    minWidth: '240px'
-                                }}
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {data.map((card, index) => {
-                                    console.log(card.laneId, swinlane_id)
-                                    if (card.laneId == swinlane_id)
-                                        return (
-                                            <Draggable
-                                                key={card.id}
-                                                draggableId={`${card.id}`}
-                                                index={index}
-                                            >
-                                                {(provided) => (
-                                                    <li
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="bw1 mt3"
-                                                    >
-                                                        <Card
-                                                            object={card}
-                                                            tagsArr={tagsArr}
-                                                        />
-                                                    </li>
-                                                )}
-                                            </Draggable>
-                                        );
-                                })}
-                                {provided.placeholder}
-                            </ul>
-                        )}
-                    </Droppable>
+
+    return all_swinlanes.map((swinlane, index) => (
+        <div key={index}>
+            <ListItemButton
+                sx={{ backgroundColor: 'cyan' }}
+                style={{ minHeight: '3em' }}
+                onClick={() => {
+                    toggleSwinlane(swinlane.id);
+                }}
+            >
+                {is_first_column && (
+                    <ListItemText primary={swinlane.name}></ListItemText>
                 )}
-            </section> */}
+            </ListItemButton>
         </div>
-    );
+    ));
 };
 
 SubColumnSwinlane.propTypes = {
     parentColumnId: propTypes.number,
     all_swinlanes: propTypes.any,
-    all_groups: propTypes.any,
-    swinlane_id: propTypes.number,
-    groupId: propTypes.number,
     title: propTypes.string,
-    data: propTypes.any,
-    tagsArr: propTypes.array
+    tagsArr: propTypes.array,
+    is_first_column: propTypes.bool,
+    toggleSwinlane: propTypes.func
 };
 
 export default SubColumnSwinlane;
