@@ -7,7 +7,7 @@ import ModalStyles from '../../constants/modal-styles';
 
 import CreateCard from '../CreateCard';
 import NormalColumn from '../NormalColumn';
-import SwinlaneColumns from '../SwinlaneColumns';
+import SwinlaneHeader from '../SwinlaneHeader';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -68,12 +68,12 @@ const Column = ({
             ))}
 
             {swinlane_columns && (
-                <SwinlaneColumns
-                    swinlane_columns={swinlane_columns}
-                    tags={tags}
+                <SwinlaneHeader
+                    columns={swinlane_columns}
                     all_swinlanes={swinlanes}
-                    toggleSwinlane={toggleSwinlane}
+                    tags={tags}
                     openModal={openModal}
+                    toggleSwinlane={toggleSwinlane}
                     addNewSubColumn={addNewSubColumn}
                 />
             )}

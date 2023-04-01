@@ -6,7 +6,7 @@ import { Stack, Button, Divider } from '@mui/material';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const ColumnHeader = ({ this_column }) => {
+const ColumnHeader = ({ this_column, openModal, addNewSubColumn }) => {
     return (
         <div
             className="bb flex flex-column justify-center items-center"
@@ -48,7 +48,9 @@ const ColumnHeader = ({ this_column }) => {
 };
 
 ColumnHeader.propTypes = {
-    this_column: propTypes.any
+    this_column: propTypes.any,
+    openModal: propTypes.func,
+    addNewSubColumn: propTypes.func
 };
 
 export default ColumnHeader;
