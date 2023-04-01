@@ -159,7 +159,9 @@ const Board = () => {
                     source_subcolumn_id,
                     destination_subcolumn_id,
                     destination_pos_id,
-                    source_pos_id
+                    source_pos_id,
+                    destinationHasSwinlane,
+                    destination_swinlane_id
                 );
 
                 return;
@@ -172,7 +174,9 @@ const Board = () => {
                 destination_column_id,
                 destination_subcolumn_id,
                 source_pos_id,
-                destination_pos_id
+                destination_pos_id,
+                destinationHasSwinlane,
+                destination_swinlane_id
             );
 
             return;
@@ -262,8 +266,6 @@ const Board = () => {
     ) => {
         const column_to_delete = findColumnById(items, source_column_id);
 
-        console.log(destination_swinlane_id);
-
         const removed_item = removeObjectByPosition(
             column_to_delete.groups[0],
             source_pos_id
@@ -284,8 +286,6 @@ const Board = () => {
             destination_subcolumn_id
         );
 
-        console.log(destination_subcolumn_id);
-
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
@@ -299,7 +299,9 @@ const Board = () => {
         source_subcolumn_id,
         destination_subcolumn_id,
         destination_pos_id,
-        source_pos_id
+        source_pos_id,
+        destinationHasSwinlane,
+        destination_swinlane_id
     ) => {
         const selected_column = findColumnById(items, source_column_id);
 
@@ -312,6 +314,10 @@ const Board = () => {
             selected_subcolumn,
             source_pos_id
         );
+
+        if (destinationHasSwinlane) {
+            removed_item[0].laneId = parseInt(destination_swinlane_id);
+        }
 
         const subcolumn_to_add = findSubColumnById(
             selected_column,
@@ -332,7 +338,9 @@ const Board = () => {
         destination_column_id,
         destination_subcolumn_id,
         source_pos_id,
-        destination_pos_id
+        destination_pos_id,
+        destinationHasSwinlane,
+        destination_swinlane_id
     ) => {
         const column_to_delete = findColumnById(items, source_column_id);
 
@@ -345,6 +353,10 @@ const Board = () => {
             subcolumn_to_delete,
             source_pos_id
         );
+
+        if (destinationHasSwinlane) {
+            removed_item[0].laneId = parseInt(destination_swinlane_id);
+        }
 
         const column_to_add = findColumnById(items, destination_column_id);
 
@@ -425,8 +437,6 @@ const Board = () => {
         const column_to_add = items.columns.find(
             (column) => column.id == destination_column_id
         );
-
-        console.log(column_to_add);
 
         column_to_add.groups[0].cards.splice(
             destination_pos_id,

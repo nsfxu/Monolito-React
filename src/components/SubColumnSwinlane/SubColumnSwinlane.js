@@ -34,7 +34,9 @@ const SubColumnSwinlane = ({
                                 <ul
                                     className="list pl1 pr1 pb2 w-100 h-100 flex flex-column items-start"
                                     style={{
-                                        minWidth: '240px'
+                                        minWidth: '240px',
+                                        minHeight: '10em',
+                                        backgroundColor: 'red'
                                     }}
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}
