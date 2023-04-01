@@ -20,9 +20,9 @@ const SwinlaneHeader = ({
     openModal,
     addNewSubColumn
 }) => {
-    const renderColumn = (swinlane, this_column, swinlane_id) => {
-        return (
-            <Collapse in={swinlane.expanded} className="w-100">
+    const renderDroppable = (this_column, swinlane_id, swinlane_expanded) => {
+        if (swinlane_expanded) {
+            return (
                 <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
                     {(provided) => (
                         <ul
@@ -63,6 +63,33 @@ const SwinlaneHeader = ({
                         </ul>
                     )}
                 </Droppable>
+            );
+        }
+
+        return (
+            <ul
+                className="flex flex-column items-center list w-100 h-auto pl3 pr3 pb3"
+                style={{
+                    minWidth: '240px',
+                    minHeight: '170px'
+                }}
+            >
+                {this_column.groups[0].cards.map((card, index) => {
+                    if (card.laneId == swinlane_id)
+                        return (
+                            <li className="bw1 mt3" key={index}>
+                                <Card object={card} tagsArr={tags} />
+                            </li>
+                        );
+                })}
+            </ul>
+        );
+    };
+
+    const renderColumn = (swinlane, this_column, swinlane_id) => {
+        return (
+            <Collapse in={swinlane.expanded} className="w-100">
+                {renderDroppable(this_column, swinlane.id, swinlane.expanded)}
             </Collapse>
         );
     };
@@ -79,7 +106,11 @@ const SwinlaneHeader = ({
                         backgroundColor: '#1e272e'
                     }}
                 >
-                    <ColumnHeader this_column={this_column} openModal={openModal} addNewSubColumn={addNewSubColumn} />
+                    <ColumnHeader
+                        this_column={this_column}
+                        openModal={openModal}
+                        addNewSubColumn={addNewSubColumn}
+                    />
 
                     <div>
                         {hasSubColumns(this_column.groups) ? (
