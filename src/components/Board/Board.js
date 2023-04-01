@@ -224,9 +224,7 @@ const Board = () => {
         source_pos_id,
         destination_pos_id,
         destination_swinlane_id,
-        destinationHasSwinlane,
-        source_swinlane_id,
-        sourceHasSwinlane
+        destinationHasSwinlane
     ) => {
         const column_to_delete = findColumnById(items, source_column_id);
 

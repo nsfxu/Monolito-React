@@ -16,63 +16,91 @@ const SubColumnSwinlane = ({
     is_first_column,
     toggleSwinlane
 }) => {
-    const renderSubColumn = (swinlane_id) => {
+    const renderDroppable = (current_group, swinlane_id, swinlane_expanded) => {
+        if (swinlane_expanded) {
+            return (
+                current_group.cards && (
+                    <Droppable
+                        droppableId={`${parentColumnId};${current_group.id}-${swinlane_id}`}
+                    >
+                        {(provided) => (
+                            <ul
+                                className="list pl1 pr1 pb2 w-100 h-auto flex flex-column items-start"
+                                style={{
+                                    minWidth: '240px',
+                                    minHeight: '10em',
+                                    backgroundColor: 'red'
+                                }}
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                {current_group.cards.map((card, index) => {
+                                    if (card.laneId == swinlane_id)
+                                        return (
+                                            <Draggable
+                                                key={card.id}
+                                                draggableId={`${card.id}`}
+                                                index={index}
+                                            >
+                                                {(provided) => (
+                                                    <li
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="bw1 mt3"
+                                                    >
+                                                        <Card
+                                                            object={card}
+                                                            tagsArr={tagsArr}
+                                                        />
+                                                    </li>
+                                                )}
+                                            </Draggable>
+                                        );
+                                })}
+                                {provided.placeholder}
+                            </ul>
+                        )}
+                    </Droppable>
+                )
+            );
+        }
+        return (
+            <ul
+                className="list pl1 pr1 pb2 w-100 h-auto flex flex-column items-start"
+                style={{
+                    minWidth: '240px',
+                    minHeight: '10em',
+                    backgroundColor: 'red'
+                }}
+            >
+                {current_group.cards.map((card, index) => {
+                    if (card.laneId == swinlane_id) {
+                        return (
+                            <li className="bw1 mt3" key={index}>
+                                <Card object={card} tagsArr={tagsArr} />
+                            </li>
+                        );
+                    }
+                })}
+            </ul>
+        );
+    };
+
+    const renderSubColumn = (swinlane_id, swinlane_expanded) => {
         return all_groups?.map((current_group, index) => (
             <div
-                className="w-100 h-100 flex flex-column items-start justify-center ma3"
+                className="w-100 h-auto flex flex-column items-start justify-center ma3"
                 key={index}
             >
                 <header className="self-center">
                     <h3 className="ma0 pa0">{current_group.name}</h3>
                 </header>
                 <section>
-                    {current_group.cards && (
-                        <Droppable
-                            droppableId={`${parentColumnId};${current_group.id}-${swinlane_id}`}
-                        >
-                            {(provided) => (
-                                <ul
-                                    className="list pl1 pr1 pb2 w-100 h-100 flex flex-column items-start"
-                                    style={{
-                                        minWidth: '240px',
-                                        minHeight: '10em',
-                                        backgroundColor: 'red'
-                                    }}
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {current_group.cards.map((card, index) => {
-                                        if (card.laneId == swinlane_id)
-                                            return (
-                                                <Draggable
-                                                    key={card.id}
-                                                    draggableId={`${card.id}`}
-                                                    index={index}
-                                                >
-                                                    {(provided) => (
-                                                        <li
-                                                            ref={
-                                                                provided.innerRef
-                                                            }
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className="bw1 mt3"
-                                                        >
-                                                            <Card
-                                                                object={card}
-                                                                tagsArr={
-                                                                    tagsArr
-                                                                }
-                                                            />
-                                                        </li>
-                                                    )}
-                                                </Draggable>
-                                            );
-                                    })}
-                                    {provided.placeholder}
-                                </ul>
-                            )}
-                        </Droppable>
+                    {renderDroppable(
+                        current_group,
+                        swinlane_id,
+                        swinlane_expanded
                     )}
                 </section>
             </div>
@@ -95,7 +123,7 @@ const SubColumnSwinlane = ({
             </ListItemButton>
             <Collapse in={swinlane.expanded} className="w-100">
                 <div className="flex flex-row items-start justify-center">
-                    {renderSubColumn(swinlane.id)}
+                    {renderSubColumn(swinlane.id, swinlane.expanded)}
                 </div>
             </Collapse>
         </div>
