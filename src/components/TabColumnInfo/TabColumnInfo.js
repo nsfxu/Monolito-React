@@ -9,7 +9,7 @@ import { findById } from '../../utils/column-utils';
 // eslint-disable-next-line
 const TabColumnInfo = ({ selected_column, board_columns }) => {
     const [current_column, setCurrentColumn] = useState(undefined);
-    const [has_unsaved_data, setHasUnsavedData] = useState(false);
+    const [has_unsaved_data, setHasUnsavedData] = useState(true);
 
     const name = useRef();
 
@@ -19,18 +19,22 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
     }, [selected_column]);
 
     const saveColumnInfo = () => {
-        console.log(name.current.value);
-        console.log(current_column);
+        const this_name = name.current.value;
+
+        current_column.name =
+            this_name && this_name != current_column.name
+                ? this_name
+                : current_column.name;
     };
 
     const updateHasUnsavedData = async () => {
         if (name.current.value != current_column.name) {
-            await setHasUnsavedData(true);
+            await setHasUnsavedData(false);
 
             return;
         }
 
-        await setHasUnsavedData(false);
+        await setHasUnsavedData(true);
     };
 
     return (
@@ -62,11 +66,7 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                             Salvar
                         </Button>
 
-                        <Button
-                            variant="outlined"
-                            color="error"
-                            disabled={has_unsaved_data}
-                        >
+                        <Button variant="outlined" color="error">
                             Cancelar
                         </Button>
                     </Stack>

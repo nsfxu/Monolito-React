@@ -50,6 +50,10 @@ const Board = () => {
 
     //#region functions
 
+    const updateWithNewBoardInfo = async (new_board_info) => {
+        await updateBoardInfo(new_board_info);
+    }
+
     const toggleSwinlane = (swinlane_id) => {
         board_info.swinlanes.map((swinlane) => {
             if (swinlane.id == swinlane_id) {
@@ -559,7 +563,7 @@ const Board = () => {
                 appElement={document.getElementById('root')}
             >
                 {modal_type === 'ConfigBoard' && (
-                    <ConfigBoardModal board_info={board_info} closeModal={closeModal} />
+                    <ConfigBoardModal board_info={board_info} closeModal={closeModal} updateWithNewBoardInfo={updateWithNewBoardInfo}/>
                 )}
             </Modal>
             <ToastContainer />

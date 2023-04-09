@@ -8,7 +8,7 @@ import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const ConfigBoardModal = ({ board_info, closeModal }) => {
+const ConfigBoardModal = ({ board_info, closeModal, updateWithNewBoardInfo }) => {
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -82,7 +82,8 @@ const ConfigBoardModal = ({ board_info, closeModal }) => {
 
 ConfigBoardModal.propTypes = {
     board_info: propTypes.object,
-    closeModal: propTypes.func
+    closeModal: propTypes.func,
+    updateWithNewBoardInfo: propTypes.func
 };
 
 export default ConfigBoardModal;
