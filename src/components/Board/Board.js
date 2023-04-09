@@ -559,7 +559,7 @@ const Board = () => {
                 appElement={document.getElementById('root')}
             >
                 {modal_type === 'ConfigBoard' && (
-                    <ConfigBoardModal closeModal={closeModal} />
+                    <ConfigBoardModal board_info={board_info} closeModal={closeModal} />
                 )}
             </Modal>
             <ToastContainer />
