@@ -104,6 +104,7 @@ const TabColumnConfig = ({ board_columns }) => {
                     </Droppable>
                 </DragDropContext>
             )}
+            <hr></hr>
             {selected_column ? (
                 <TabColumnInfo
                     selected_column={selected_column}

@@ -10,7 +10,7 @@ const TabPanel = (props) => {
         <div
             role="tabpanel"
             className='w-100 h-auto ml1 pt3'
-            style={{ backgroundColor: 'red' }}
+            style={{ backgroundColor: '#f1f1f1' }}
             hidden={value !== index}
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
