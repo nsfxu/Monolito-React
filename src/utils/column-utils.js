@@ -1,5 +1,8 @@
 /* eslint-disable */
 // eslint-disable-next-line
+const findById = (object, Id) =>
+    object.find((item) => item.id == Id);
+
 const findColumnById = (object, columnId) =>
     object.columns.find((column) => column.id == columnId);
 
@@ -15,6 +18,7 @@ const hasSubColumns = (groups) =>
     groups.length > 1;
 
 export {
+    findById,
     findColumnById,
     findSubColumnById,
     removeObjectByPosition,
