@@ -21,11 +21,9 @@ import {
 } from '../../utils/column-utils';
 
 import Column from '../Column/Column';
-import CreateColumn from '../CreateColumn/CreateColumn';
-import CreateLane from '../CreateLane';
+import ConfigBoardModal from '../ConfigBoardModal';
 
-const CREATE_COLUMN = 'CreateColumn';
-const CREATE_LANE = 'CreateLane';
+const CONFIG_BOARD = 'ConfigBoard';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -77,14 +75,9 @@ const Board = () => {
     };
 
     const openCustomModal = (modal) => {
-        if (modal === CREATE_COLUMN) {
+        if (modal === CONFIG_BOARD) {
             setModalType(modal);
-            setModalStyle(ModalStyles.createColumn);
-        }
-
-        if (modal === CREATE_LANE) {
-            setModalType(modal);
-            setModalStyle(ModalStyles.CreateLane);
+            setModalStyle(ModalStyles.configBoard);
         }
 
         openModal();
@@ -522,21 +515,11 @@ const Board = () => {
                             variant="contained"
                             size="medium"
                             onClick={(e) => {
-                                openCustomModal(CREATE_COLUMN);
+                                openCustomModal(CONFIG_BOARD);
                                 e.preventDefault();
                             }}
                         >
-                            Adicionar coluna
-                        </Button>
-                        <Button
-                            variant="contained"
-                            size="medium"
-                            onClick={(e) => {
-                                openCustomModal(CREATE_LANE);
-                                e.preventDefault();
-                            }}
-                        >
-                            Criar raias
+                            Configurar quadro
                         </Button>
                         <Button
                             variant="contained"
@@ -575,15 +558,8 @@ const Board = () => {
                 style={modal_style}
                 appElement={document.getElementById('root')}
             >
-                {modal_type === 'CreateColumn' && (
-                    <CreateColumn
-                        addNewColumn={addNewColumn}
-                        closeModal={closeModal}
-                    />
-                )}
-
-                {modal_type === 'CreateLane' && (
-                    <CreateLane current_lanes={data.lanes} />
+                {modal_type === 'ConfigBoard' && (
+                    <ConfigBoardModal closeModal={closeModal} />
                 )}
             </Modal>
             <ToastContainer />
