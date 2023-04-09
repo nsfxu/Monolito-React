@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
 
 import { Box, Button, Stack, TextField } from '@mui/material';
@@ -9,15 +9,29 @@ import { findById } from '../../utils/column-utils';
 // eslint-disable-next-line
 const TabColumnInfo = ({ selected_column, board_columns }) => {
     const [current_column, setCurrentColumn] = useState(undefined);
+    const [has_unsaved_data, setHasUnsavedData] = useState(false);
 
-    let has_unsaved_data = false;
+    const name = useRef();
 
     useEffect(async () => {
         await setCurrentColumn(undefined);
         setCurrentColumn(findById(board_columns, selected_column));
-
-        console.log(current_column);
     }, [selected_column]);
+
+    const saveColumnInfo = () => {
+        console.log(name.current.value);
+        console.log(current_column);
+    };
+
+    const updateHasUnsavedData = async () => {
+        if (name.current.value != current_column.name) {
+            await setHasUnsavedData(true);
+
+            return;
+        }
+
+        await setHasUnsavedData(false);
+    };
 
     return (
         <>
@@ -31,10 +45,11 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                     autoComplete="off"
                     className="flex flex-column"
                 >
-                    <p>{current_column.name}</p>
                     <TextField
                         label="Nome da coluna"
                         defaultValue={current_column.name}
+                        inputRef={name}
+                        onKeyUp={() => updateHasUnsavedData()}
                     />
 
                     <Stack direction="row" spacing={2} className="pl2">
@@ -42,6 +57,7 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                             variant="contained"
                             color="success"
                             disabled={has_unsaved_data}
+                            onClick={() => saveColumnInfo()}
                         >
                             Salvar
                         </Button>
