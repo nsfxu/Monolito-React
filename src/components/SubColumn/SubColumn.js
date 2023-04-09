@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
-import Card from '../Card';
+import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -18,39 +18,15 @@ const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
                 {data && (
                     <Droppable droppableId={`${parentColumnId};${groupId}`}>
                         {(provided) => (
-                            <ul
-                                className="list pl1 pr1 pb2 w-100 h-100 flex flex-column items-start"
-                                style={{
-                                    minWidth: '240px'
+                            <CardColumnList
+                                cards={data}
+                                tagsArr={tagsArr}
+                                provided={provided}
+                                swinlane={{
+                                    is_swinlane: false,
+                                    id: null
                                 }}
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {data.map((obj, index) => {
-                                    return (
-                                        <Draggable
-                                            key={obj.id}
-                                            draggableId={`${obj.id}`}
-                                            index={index}
-                                        >
-                                            {(provided) => (
-                                                <li
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    className="bw1 mt3"
-                                                >
-                                                    <Card
-                                                        object={obj}
-                                                        tagsArr={tagsArr}
-                                                    />
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    );
-                                })}
-                                {provided.placeholder}
-                            </ul>
+                            />
                         )}
                     </Droppable>
                 )}

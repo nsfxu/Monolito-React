@@ -2,9 +2,10 @@ import React from 'react';
 
 import propTypes from 'prop-types';
 import { Collapse, ListItemButton, ListItemText } from '@mui/material';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 import Card from '../Card';
+import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -16,8 +17,6 @@ const SubColumnSwinlane = ({
     is_first_column,
     toggleSwinlane
 }) => {
-    let is_first_group = true;
-
     const renderDroppable = (current_group, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
             return (
@@ -26,42 +25,15 @@ const SubColumnSwinlane = ({
                         droppableId={`${parentColumnId};${current_group.id}-${swinlane_id}`}
                     >
                         {(provided) => (
-                            <ul
-                                className="list pl1 pr1 pb2 w-100 h-auto flex flex-column items-start"
-                                style={{
-                                    minWidth: '240px',
-                                    minHeight: '10em',
-                                    backgroundColor: 'red'
+                            <CardColumnList
+                                cards={current_group.cards}
+                                tagsArr={tagsArr}
+                                provided={provided}
+                                swinlane={{
+                                    is_swinlane: true,
+                                    id: swinlane_id
                                 }}
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {current_group.cards.map((card, index) => {
-                                    if (card.laneId == swinlane_id)
-                                        return (
-                                            <Draggable
-                                                key={card.id}
-                                                draggableId={`${card.id}`}
-                                                index={index}
-                                            >
-                                                {(provided) => (
-                                                    <li
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="bw1 mt3"
-                                                    >
-                                                        <Card
-                                                            object={card}
-                                                            tagsArr={tagsArr}
-                                                        />
-                                                    </li>
-                                                )}
-                                            </Draggable>
-                                        );
-                                })}
-                                {provided.placeholder}
-                            </ul>
+                            />
                         )}
                     </Droppable>
                 )
@@ -95,11 +67,9 @@ const SubColumnSwinlane = ({
                 className="w-100 h-auto flex flex-column items-start justify-center ma3"
                 key={index}
             >
-                {is_first_group && (
-                    <header className="self-center">
-                        <h3 className="ma0 pa0">{current_group.name}</h3>
-                    </header>
-                )}
+                <header className="self-center">
+                    <h3 className="ma0 pa0">{current_group.name}</h3>
+                </header>
                 <section>
                     {renderDroppable(
                         current_group,
@@ -130,7 +100,6 @@ const SubColumnSwinlane = ({
                     {renderSubColumn(swinlane.id, swinlane.expanded)}
                 </div>
             </Collapse>
-            {is_first_column ? (is_first_group = false) : is_first_group}
         </div>
     ));
 };

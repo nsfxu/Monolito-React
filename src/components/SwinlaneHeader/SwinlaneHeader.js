@@ -1,5 +1,5 @@
 import React from 'react';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 import { Collapse, ListItemButton, ListItemText } from '@mui/material';
@@ -9,6 +9,7 @@ import { hasSubColumns } from '../../utils/column-utils';
 import Card from '../Card';
 import SubColumnSwinlane from '../SubColumnSwinlane/SubColumnSwinlane';
 import ColumnHeader from '../ColumnHeader/ColumnHeader';
+import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -25,42 +26,15 @@ const SwinlaneHeader = ({
             return (
                 <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
                     {(provided) => (
-                        <ul
-                            className="flex flex-column items-center list w-100 h-auto pl3 pr3 pb3"
-                            style={{
-                                minWidth: '240px',
-                                minHeight: '13.5em',
-                                backgroundColor: 'red'
+                        <CardColumnList
+                            cards={this_column.groups[0].cards}
+                            tagsArr={tags}
+                            provided={provided}
+                            swinlane={{
+                                is_swinlane: true,
+                                id: swinlane_id
                             }}
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                        >
-                            {this_column.groups[0].cards.map((card, index) => {
-                                if (card.laneId == swinlane_id)
-                                    return (
-                                        <Draggable
-                                            key={`${index}${card.id}`}
-                                            draggableId={`${card.id}`}
-                                            index={index}
-                                        >
-                                            {(provided) => (
-                                                <li
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    className="bw1 mt3"
-                                                >
-                                                    <Card
-                                                        object={card}
-                                                        tagsArr={tags}
-                                                    />
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    );
-                            })}
-                            {provided.placeholder}
-                        </ul>
+                        />
                     )}
                 </Droppable>
             );

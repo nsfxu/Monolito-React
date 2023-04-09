@@ -1,13 +1,13 @@
 import React from 'react';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
 import { hasSubColumns } from '../../utils/column-utils';
 
-import Card from '../Card';
 import SubColumn from '../SubColumn';
 import ColumnHeader from '../ColumnHeader/ColumnHeader';
+import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -19,7 +19,11 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                 backgroundColor: '#1e272e'
             }}
         >
-                    <ColumnHeader this_column={this_column} openModal={openModal} addNewSubColumn={addNewSubColumn} />
+            <ColumnHeader
+                this_column={this_column}
+                openModal={openModal}
+                addNewSubColumn={addNewSubColumn}
+            />
 
             <div className="h-100">
                 {hasSubColumns(this_column.groups) ? (
@@ -38,42 +42,15 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
                 ) : (
                     <Droppable droppableId={`${this_column.id}`}>
                         {(provided) => (
-                            <ul
-                                className="flex flex-column items-center list w-100 h-100 pl3 pr3"
-                                style={{
-                                    minWidth: '240px',
-                                    backgroundColor: 'red'
+                            <CardColumnList
+                                cards={this_column.groups[0].cards}
+                                tagsArr={tags}
+                                provided={provided}
+                                swinlane={{
+                                    is_swinlane: false,
+                                    id: null
                                 }}
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                {this_column.groups[0].cards.map(
-                                    (card, index) => {
-                                        return (
-                                            <Draggable
-                                                key={`${index}${card.id}`}
-                                                draggableId={`${card.id}`}
-                                                index={index}
-                                            >
-                                                {(provided) => (
-                                                    <li
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="bw1 mt3"
-                                                    >
-                                                        <Card
-                                                            object={card}
-                                                            tagsArr={tags}
-                                                        />
-                                                    </li>
-                                                )}
-                                            </Draggable>
-                                        );
-                                    }
-                                )}
-                                {provided.placeholder}
-                            </ul>
+                            />
                         )}
                     </Droppable>
                 )}
