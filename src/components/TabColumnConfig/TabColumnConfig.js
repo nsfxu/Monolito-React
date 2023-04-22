@@ -17,7 +17,6 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
     const [selected_column, setSelectedColumn] = useState(false);
-    let isSwinlaneGroupShown = false;
 
     const grid = 8;
 
@@ -34,7 +33,26 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
             });
         }
 
+        setTempColumns(createNewTempColumn());
         setSwinlaneColumns(temp_swinlane_columns);
+    };
+
+    const createNewTempColumn = () => {
+        let new_temp_column = [];
+        let hasAlreadySelected = false;
+
+        temp_columns.map((column, index) => {
+            if (column.showSwinLanes) {
+                if (!hasAlreadySelected) {
+                    new_temp_column.push('swinlane_group');
+                    hasAlreadySelected = true;
+                }
+            } else {
+                new_temp_column.push(column);
+            }
+        });
+
+        return new_temp_column;
     };
 
     const reorder = (list, startIndex, endIndex) => {
@@ -46,6 +64,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     };
 
     const onDragEnd = (result) => {
+        console.log(result);
         if (!result.destination) {
             return;
         }
@@ -55,6 +74,8 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
             result.source.index,
             result.destination.index
         );
+
+        console.log(temp_columns);
 
         setTempColumns(items);
     };
@@ -106,19 +127,16 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                                     {temp_columns &&
                                         temp_columns.map((column, index) => (
                                             <React.Fragment key={index}>
-                                                {column.showSwinLanes ? (
+                                                {column == 'swinlane_group' ? (
                                                     <>
-                                                        {!isSwinlaneGroupShown && (
-                                                            <>
-                                                                <TabSwinlaneGroup
-                                                                    all_columns={
-                                                                        temp_columns
-                                                                    }
-                                                                    index={index}
-                                                                />
-                                                                 {(isSwinlaneGroupShown = true)}
-                                                            </>
-                                                        )}
+                                                        <TabSwinlaneGroup
+                                                            all_columns={
+                                                                swinlane_columns
+                                                            }
+                                                            index={index}
+                                                            provided={provided}
+                                                            snapshot={snapshot}
+                                                        />
                                                     </>
                                                 ) : (
                                                     <TabColumnItem
