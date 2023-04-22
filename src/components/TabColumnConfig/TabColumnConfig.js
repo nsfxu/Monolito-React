@@ -24,6 +24,10 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
         separateColumns();
     }, [board_columns]);
 
+    const getResults = (result) => {
+        setSwinlaneColumns(result);
+    };
+
     const separateColumns = () => {
         const temp_swinlane_columns = [];
 
@@ -64,7 +68,6 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     };
 
     const onDragEnd = (result) => {
-        console.log(result);
         if (!result.destination) {
             return;
         }
@@ -74,8 +77,6 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
             result.source.index,
             result.destination.index
         );
-
-        console.log(temp_columns);
 
         setTempColumns(items);
     };
@@ -133,17 +134,16 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                                                             all_columns={
                                                                 swinlane_columns
                                                             }
+                                                            sendBackResult={
+                                                                getResults
+                                                            }
                                                             index={index}
-                                                            provided={provided}
-                                                            snapshot={snapshot}
                                                         />
                                                     </>
                                                 ) : (
                                                     <TabColumnItem
                                                         column={column}
                                                         index={index}
-                                                        provided={provided}
-                                                        snapshot={snapshot}
                                                         getItemStyle={
                                                             getItemStyle
                                                         }

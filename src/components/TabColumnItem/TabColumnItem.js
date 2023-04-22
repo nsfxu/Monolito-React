@@ -10,8 +10,6 @@ import TabColumn from '../TabColumn';
 const TabColumnItem = ({
     column,
     index,
-    provided,
-    snapshot,
     getItemStyle,
     setSelectedColumn
 }) => {

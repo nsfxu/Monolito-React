@@ -7,7 +7,7 @@ import TabColumn from '../TabColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabSwinlaneGroup = ({ all_columns, index, provided, snapshot }) => {
+const TabSwinlaneGroup = ({ all_columns, index, sendBackResult }) => {
     const grid = 8;
 
     const getItemGroupStyle = (isDragging, draggableStyle) => ({
@@ -44,8 +44,26 @@ const TabSwinlaneGroup = ({ all_columns, index, provided, snapshot }) => {
         overflow: 'auto'
     });
 
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
     const onDragEnd = (result) => {
-        console.log(result);
+        if (!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            all_columns,
+            result.source.index,
+            result.destination.index
+        );
+
+        sendBackResult(items);
     };
 
     return (
@@ -121,7 +139,9 @@ const TabSwinlaneGroup = ({ all_columns, index, provided, snapshot }) => {
 };
 
 TabSwinlaneGroup.propTypes = {
-    all_columns: propTypes.any
+    all_columns: propTypes.any,
+    index: propTypes.number,
+    sendBackResult: propTypes.func
 };
 
 export default TabSwinlaneGroup;
