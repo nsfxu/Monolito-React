@@ -5,7 +5,11 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 
-import { findById, hasSubColumns } from '../../utils/column-utils';
+import {
+    findById,
+    hasSubColumns,
+    validateIfArrAreEqual
+} from '../../utils/column-utils';
 
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
 
@@ -25,6 +29,10 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
 
     useEffect(async () => {
         await setCurrentColumn(undefined);
+        await setTempSubColumns([]);
+
+        updateHasUnsavedData();
+
         setCurrentColumn(findById(board_columns, selected_column));
     }, [selected_column]);
 
@@ -35,19 +43,53 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         setHasSubcolumn(hasSubColumns(current_column.groups));
     }, [current_column]);
 
-    const saveColumnInfo = () => {
+    useEffect(async () => {
+        if (!has_subcolumn) {
+            return;
+        }
+
+        await setTempSubColumns(current_column.groups);
+    }, [has_subcolumn]);
+
+    useEffect(async () => {
+        if (!temp_subcolumns && temp_subcolumns.length < 2) {
+            return;
+        }
+
+        updateHasUnsavedData();
+    }, [temp_subcolumns]);
+
+    const saveColumnInfo = async () => {
         const this_name = name.current.value;
 
         current_column.name =
             this_name && this_name != current_column.name
                 ? this_name
                 : current_column.name;
+
+        await setCurrentColumn(findById(board_columns, selected_column));
+        await updateHasUnsavedData();
     };
 
-
-
     const updateHasUnsavedData = async () => {
-        if (name.current.value != current_column.name) {
+        if (has_subcolumn) {
+            const current_selected_column_groups = findById(
+                board_columns,
+                selected_column
+            ).groups;
+
+            if (
+                !validateIfArrAreEqual(
+                    current_selected_column_groups,
+                    temp_subcolumns
+                )
+            ) {
+                await setHasUnsavedData(false);
+                return;
+            }
+        }
+
+        if (name.current && name.current.value != current_column.name) {
             await setHasUnsavedData(false);
 
             return;
@@ -76,8 +118,26 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         overflow: 'auto'
     });
 
-    const onDragEnd = (result) => {
-        console.log(result);
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
+    const onDragEnd = async (result) => {
+        if (!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            temp_subcolumns,
+            result.source.index,
+            result.destination.index
+        );
+
+        setTempSubColumns(items);
     };
 
     return (
@@ -105,8 +165,8 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                 Subcolunas
                             </Typography>
                         </div>
-                        {has_subcolumn && (
-                            <div className='pl2'>
+                        {has_subcolumn && temp_subcolumns && (
+                            <div className="pl2">
                                 <DragDropContext onDragEnd={onDragEnd}>
                                     <Droppable
                                         droppableId="subcolumnDroppable"
@@ -120,14 +180,18 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                                 )}
                                                 {...provided.droppableProps}
                                             >
-                                                {current_column.groups.map(
+                                                {temp_subcolumns.map(
                                                     (group, index) => (
                                                         <TabColumnItem
                                                             column={group}
                                                             index={index}
                                                             key={index}
-                                                            getItemStyle={getItemStyle}
-                                                            setSelectedColumn={setSelectedSubColumn}
+                                                            getItemStyle={
+                                                                getItemStyle
+                                                            }
+                                                            setSelectedColumn={
+                                                                setSelectedSubColumn
+                                                            }
                                                         />
                                                     )
                                                 )}
