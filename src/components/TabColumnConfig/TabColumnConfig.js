@@ -12,7 +12,7 @@ import { validateIfArrAreEqual } from '../../utils/column-utils';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
+const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns }) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
@@ -57,6 +57,10 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
 
         return result;
     };
+
+    const saveNewColumnOrder = () => {
+        updateNewBoardColumns(getFinalColumnResult());
+    }
 
     const separateColumns = () => {
         const temp_swinlane_columns = [];
@@ -138,7 +142,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                     <Stack direction="row" spacing={2}>
                         <Button variant="contained">Criar grupo de raia</Button>
                         <Button variant="contained">Criar coluna</Button>
-                        <Button variant="contained" disabled={has_unsaved_data}>
+                        <Button variant="contained" disabled={has_unsaved_data} onClick={() => saveNewColumnOrder()} >
                             Salvar
                         </Button>
                     </Stack>
@@ -210,7 +214,8 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
 
 TabColumnConfig.propTypes = {
     board_columns: propTypes.array,
-    board_swinlanes: propTypes.array
+    board_swinlanes: propTypes.array,
+    updateNewBoardColumns: propTypes.func
 };
 
 export default TabColumnConfig;

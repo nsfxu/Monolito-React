@@ -8,11 +8,20 @@ import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const ConfigBoardModal = ({ board_info, closeModal, updateWithNewBoardInfo }) => {
+const ConfigBoardModal = ({
+    board_info,
+    closeModal,
+    updateWithNewBoardInfo
+}) => {
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+
+    const updateNewBoardColumns = (new_board_columns) => {
+        console.log(new_board_columns);
+        board_info.columns = new_board_columns;
     };
 
     function a11yProps(index) {
@@ -55,7 +64,11 @@ const ConfigBoardModal = ({ board_info, closeModal, updateWithNewBoardInfo }) =>
                     <Tab label="Item Seven" {...a11yProps(6)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <TabColumnConfig board_columns={board_info.columns} board_swinlanes={board_info.swinlanes} />
+                    <TabColumnConfig
+                        board_columns={board_info.columns}
+                        board_swinlanes={board_info.swinlanes}
+                        updateNewBoardColumns={updateNewBoardColumns}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     Item Two
