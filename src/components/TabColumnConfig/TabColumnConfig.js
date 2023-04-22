@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import { Button, Stack } from '@mui/material';
 
-import TabColumn from '../TabColumn';
 import TabColumnInfo from '../TabColumnInfo';
+import TabColumnItem from '../TabColumnItem/TabColumnItem';
 
 /* eslint-disable */
 // eslint-disable-next-line
 const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
+    const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
     const [selected_column, setSelectedColumn] = useState(false);
+    let isSwinlaneGroupShown = false;
 
     const grid = 8;
+
+    useEffect(() => {
+        separateColumns();
+    }, [board_columns]);
+
+    const separateColumns = () => {
+        const temp_swinlane_columns = [];
+
+        if (board_columns.length > 0) {
+            board_columns.map((column) => {
+                column.showSwinLanes && temp_swinlane_columns.push(column);
+            });
+        }
+
+        setSwinlaneColumns(temp_swinlane_columns);
+    };
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -86,34 +104,22 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                                 >
                                     {temp_columns &&
                                         temp_columns.map((column, index) => (
-                                            <Draggable
-                                                key={column.id}
-                                                draggableId={`${column.id}`}
-                                                index={index}
-                                            >
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        style={getItemStyle(
-                                                            snapshot.isDragging,
-                                                            provided
-                                                                .draggableProps
-                                                                .style
-                                                        )}
-                                                        onClick={() => {
-                                                            setSelectedColumn(
-                                                                `${column.id}`
-                                                            );
-                                                        }}
-                                                    >
-                                                        <TabColumn
-                                                            column_info={column}
-                                                        />
-                                                    </div>
+                                            <React.Fragment key={index}>
+                                                {column.showSwinLanes ? (
+                                                    <>
+                                                        <h1>Swinlane Group</h1>
+                                                    </>
+                                                ) : (
+                                                    <TabColumnItem
+                                                        column={column}
+                                                        index={index}
+                                                        provided={provided}
+                                                        snapshot={snapshot}
+                                                        getItemStyle={getItemStyle}
+                                                        setSelectedColumn={setSelectedColumn}
+                                                    />
                                                 )}
-                                            </Draggable>
+                                            </React.Fragment>
                                         ))}
                                     {provided.placeholder}
                                 </div>
