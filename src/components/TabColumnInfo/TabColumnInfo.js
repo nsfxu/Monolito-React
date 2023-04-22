@@ -1,15 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
 
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { findById } from '../../utils/column-utils';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+
+import { findById, hasSubColumns } from '../../utils/column-utils';
+
+import TabColumnItem from '../TabColumnItem/TabColumnItem';
 
 /* eslint-disable */
 // eslint-disable-next-line
 const TabColumnInfo = ({ selected_column, board_columns }) => {
     const [current_column, setCurrentColumn] = useState(undefined);
+    const [has_subcolumn, setHasSubcolumn] = useState(false);
+    const [selected_subcolumn, setSelectedSubColumn] = useState(false);
+
+    const [temp_subcolumns, setTempSubColumns] = useState([]);
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
+
+    const grid = 8;
 
     const name = useRef();
 
@@ -17,6 +27,13 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         await setCurrentColumn(undefined);
         setCurrentColumn(findById(board_columns, selected_column));
     }, [selected_column]);
+
+    useEffect(() => {
+        if (!current_column) {
+            return;
+        }
+        setHasSubcolumn(hasSubColumns(current_column.groups));
+    }, [current_column]);
 
     const saveColumnInfo = () => {
         const this_name = name.current.value;
@@ -27,6 +44,8 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                 : current_column.name;
     };
 
+
+
     const updateHasUnsavedData = async () => {
         if (name.current.value != current_column.name) {
             await setHasUnsavedData(false);
@@ -35,6 +54,30 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         }
 
         await setHasUnsavedData(true);
+    };
+
+    const getItemStyle = (isDragging, draggableStyle) => ({
+        // some basic styles to make the items look a bit nicer
+        userSelect: 'none',
+        padding: grid * 2,
+        margin: `0 ${grid}px 0 0`,
+
+        // change background colour if dragging
+        background: isDragging ? 'lightgreen' : 'grey',
+
+        // styles we need to apply on draggables
+        ...draggableStyle
+    });
+
+    const getListStyle = (isDraggingOver) => ({
+        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        display: 'flex',
+        padding: grid,
+        overflow: 'auto'
+    });
+
+    const onDragEnd = (result) => {
+        console.log(result);
     };
 
     return (
@@ -56,7 +99,48 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                         onKeyUp={() => updateHasUnsavedData()}
                     />
 
-                    <Stack direction="row" spacing={2} className="pl2">
+                    <div className="flex flex-column">
+                        <div>
+                            <Typography variant="h6" className="pl2">
+                                Subcolunas
+                            </Typography>
+                        </div>
+                        {has_subcolumn && (
+                            <div className='pl2'>
+                                <DragDropContext onDragEnd={onDragEnd}>
+                                    <Droppable
+                                        droppableId="subcolumnDroppable"
+                                        direction="horizontal"
+                                    >
+                                        {(provided, snapshot) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                style={getListStyle(
+                                                    snapshot.isDraggingOver
+                                                )}
+                                                {...provided.droppableProps}
+                                            >
+                                                {current_column.groups.map(
+                                                    (group, index) => (
+                                                        <TabColumnItem
+                                                            column={group}
+                                                            index={index}
+                                                            key={index}
+                                                            getItemStyle={getItemStyle}
+                                                            setSelectedColumn={setSelectedSubColumn}
+                                                        />
+                                                    )
+                                                )}
+                                                {provided.placeholder}
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                            </div>
+                        )}
+                    </div>
+
+                    <Stack direction="row" spacing={2} className="pl2 pt3 pb3">
                         <Button
                             variant="contained"
                             color="success"
