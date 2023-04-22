@@ -55,7 +55,7 @@ const Column = ({
         <>
             {columns &&
                 columns.map((column, index) => (
-                    <>
+                    <React.Fragment key={index}>
                         {column.showSwinLanes ? (
                             <>
                                 {!isSwinlaneGroupShown && (
@@ -64,7 +64,6 @@ const Column = ({
                                             columns={swinlane_columns}
                                             all_swinlanes={swinlanes}
                                             tags={tags}
-                                            key={index}
                                             openModal={openModal}
                                             toggleSwinlane={toggleSwinlane}
                                             addNewSubColumn={addNewSubColumn}
@@ -82,7 +81,7 @@ const Column = ({
                                 addNewSubColumn={addNewSubColumn}
                             />
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
 
             <Modal
