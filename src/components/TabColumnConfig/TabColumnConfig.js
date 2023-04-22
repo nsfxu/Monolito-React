@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import propTypes from 'prop-types';
+
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+
+import { Button, Stack } from '@mui/material';
 
 import TabColumn from '../TabColumn';
 import TabColumnInfo from '../TabColumnInfo';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabColumnConfig = ({ board_columns }) => {
+const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
+    const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
+
     const [selected_column, setSelectedColumn] = useState(false);
 
     const grid = 8;
@@ -57,53 +62,67 @@ const TabColumnConfig = ({ board_columns }) => {
 
     return (
         <>
-            {temp_columns && (
-                <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable
-                        droppableId="columnConfigTab"
-                        direction="horizontal"
-                    >
-                        {(provided, snapshot) => (
-                            <div
-                                ref={provided.innerRef}
-                                style={getListStyle(snapshot.isDraggingOver)}
-                                {...provided.droppableProps}
-                            >
-                                {temp_columns.map((column, index) => (
-                                    <Draggable
-                                        key={column.id}
-                                        draggableId={`${column.id}`}
-                                        index={index}
-                                    >
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps
-                                                        .style
-                                                )}
-                                                onClick={() => {
-                                                    setSelectedColumn(
-                                                        `${column.id}`
-                                                    );
-                                                }}
+            <div className="flex flex-column pa2">
+                <div className="self-start pb3">
+                    <Stack direction="row" spacing={2}>
+                        <Button variant="contained">Criar grupo de raia</Button>
+                        <Button variant="contained">Criar coluna</Button>
+                    </Stack>
+                </div>
+
+                <div>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable
+                            droppableId="columnConfigTab"
+                            direction="horizontal"
+                        >
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    style={getListStyle(
+                                        snapshot.isDraggingOver
+                                    )}
+                                    {...provided.droppableProps}
+                                >
+                                    {temp_columns &&
+                                        temp_columns.map((column, index) => (
+                                            <Draggable
+                                                key={column.id}
+                                                draggableId={`${column.id}`}
+                                                index={index}
                                             >
-                                                <TabColumn
-                                                    column_info={column}
-                                                />
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            )}
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        style={getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided
+                                                                .draggableProps
+                                                                .style
+                                                        )}
+                                                        onClick={() => {
+                                                            setSelectedColumn(
+                                                                `${column.id}`
+                                                            );
+                                                        }}
+                                                    >
+                                                        <TabColumn
+                                                            column_info={column}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </div>
+            </div>
+
             <hr></hr>
             {selected_column ? (
                 <TabColumnInfo
@@ -111,14 +130,15 @@ const TabColumnConfig = ({ board_columns }) => {
                     board_columns={board_columns}
                 />
             ) : (
-                'Clique em uma coluna para alterar as configurações dela.'
+                'Clique em um item para editar suas propriedades.'
             )}
         </>
     );
 };
 
 TabColumnConfig.propTypes = {
-    board_columns: propTypes.array
+    board_columns: propTypes.array,
+    board_swinlanes: propTypes.array
 };
 
 export default TabColumnConfig;

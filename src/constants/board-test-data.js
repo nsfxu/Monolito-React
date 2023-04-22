@@ -104,6 +104,18 @@ export const TEST_DATA = {
         },
         {
             id: 2,
+            name: 'Analysis',
+            groups: [
+                {
+                    id: 5,
+                    name: 'Commited',
+                    cards: []
+                }
+            ],
+            showSwinLanes: true
+        },
+        {
+            id: 3,
             name: 'Done',
             groups: [
                 {
@@ -112,7 +124,7 @@ export const TEST_DATA = {
                     cards: []
                 }
             ],
-            showSwinLanes: true
+            showSwinLanes: false
         }
     ],
     tags: [
@@ -157,6 +169,6 @@ export const TEST_DATA = {
         }
     ],
     nextCardId: 8,
-    nextGroupId: 5,
-    nextColumnId: 3
+    nextGroupId: 6,
+    nextColumnId: 4
 };

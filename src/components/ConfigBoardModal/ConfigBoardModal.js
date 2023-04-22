@@ -55,7 +55,7 @@ const ConfigBoardModal = ({ board_info, closeModal, updateWithNewBoardInfo }) =>
                     <Tab label="Item Seven" {...a11yProps(6)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
-                    <TabColumnConfig board_columns={board_info.columns} />
+                    <TabColumnConfig board_columns={board_info.columns} board_swinlanes={board_info.swinlanes} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     Item Two

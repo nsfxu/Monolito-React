@@ -36,7 +36,7 @@ const CardColumnList = ({ cards, tagsArr, provided, swinlane }) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
         >
-            {cards.map((card, index) => {
+            {cards?.map((card, index) => {
                 if (swinlane.is_swinlane == false)
                     return renderDraggableCards(card, index);
 
