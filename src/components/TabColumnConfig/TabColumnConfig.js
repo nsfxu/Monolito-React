@@ -7,6 +7,7 @@ import { Button, Stack } from '@mui/material';
 
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
+import TabSwinlaneGroup from '../TabSwinlaneGroup/TabSwinlaneGroup';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -107,7 +108,17 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                                             <React.Fragment key={index}>
                                                 {column.showSwinLanes ? (
                                                     <>
-                                                        <h1>Swinlane Group</h1>
+                                                        {!isSwinlaneGroupShown && (
+                                                            <>
+                                                                <TabSwinlaneGroup
+                                                                    all_columns={
+                                                                        temp_columns
+                                                                    }
+                                                                    index={index}
+                                                                />
+                                                                 {(isSwinlaneGroupShown = true)}
+                                                            </>
+                                                        )}
                                                     </>
                                                 ) : (
                                                     <TabColumnItem
@@ -115,8 +126,12 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                                                         index={index}
                                                         provided={provided}
                                                         snapshot={snapshot}
-                                                        getItemStyle={getItemStyle}
-                                                        setSelectedColumn={setSelectedColumn}
+                                                        getItemStyle={
+                                                            getItemStyle
+                                                        }
+                                                        setSelectedColumn={
+                                                            setSelectedColumn
+                                                        }
                                                     />
                                                 )}
                                             </React.Fragment>
