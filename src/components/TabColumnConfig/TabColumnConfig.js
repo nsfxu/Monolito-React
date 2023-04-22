@@ -8,6 +8,7 @@ import { Button, Stack } from '@mui/material';
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
 import TabSwinlaneGroup from '../TabSwinlaneGroup/TabSwinlaneGroup';
+import { validateIfArrAreEqual } from '../../utils/column-utils';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -17,6 +18,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
     const [selected_column, setSelectedColumn] = useState(false);
+    const [has_unsaved_data, setHasUnsavedData] = useState(false);
 
     const grid = 8;
 
@@ -24,8 +26,36 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
         separateColumns();
     }, [board_columns]);
 
+    useEffect(() => {
+        updateHasUnsavedData();
+    }, [temp_columns, swinlane_columns]);
+
     const getResults = (result) => {
         setSwinlaneColumns(result);
+    };
+
+    const updateHasUnsavedData = async () => {
+        const current_result = getFinalColumnResult();
+
+        await setHasUnsavedData(
+            validateIfArrAreEqual(current_result, board_columns)
+        );
+    };
+
+    const getFinalColumnResult = () => {
+        let result = [];
+
+        temp_columns.map((column) => {
+            if (column == 'swinlane_group') {
+                swinlane_columns.map((column) => {
+                    result.push(column);
+                });
+            } else {
+                result.push(column);
+            }
+        });
+
+        return result;
     };
 
     const separateColumns = () => {
@@ -108,6 +138,9 @@ const TabColumnConfig = ({ board_columns, board_swinlanes }) => {
                     <Stack direction="row" spacing={2}>
                         <Button variant="contained">Criar grupo de raia</Button>
                         <Button variant="contained">Criar coluna</Button>
+                        <Button variant="contained" disabled={has_unsaved_data}>
+                            Salvar
+                        </Button>
                     </Stack>
                 </div>
 
