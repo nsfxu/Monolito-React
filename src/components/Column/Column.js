@@ -20,11 +20,11 @@ const Column = ({
     addNewSubColumn,
     toggleSwinlane
 }) => {
-    const [normal_columns, setNormalColumns] = useState([]);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
     const [columnToAddCard, setColumnToAddCard] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    let isSwinlaneGroupShown = false;
 
     useEffect(() => {
         separateColumns();
@@ -32,17 +32,13 @@ const Column = ({
 
     const separateColumns = () => {
         const temp_swinlane_columns = [];
-        const temp_normal_columns = [];
 
         if (columns.length > 0) {
             columns.map((column) => {
-                column.showSwinLanes
-                    ? temp_swinlane_columns.push(column)
-                    : temp_normal_columns.push(column);
+                column.showSwinLanes && temp_swinlane_columns.push(column);
             });
         }
 
-        setNormalColumns(temp_normal_columns);
         setSwinlaneColumns(temp_swinlane_columns);
     };
 
@@ -57,26 +53,37 @@ const Column = ({
 
     return (
         <>
-            {normal_columns.map((column, index) => (
-                <NormalColumn
-                    key={index}
-                    this_column={column}
-                    tags={tags}
-                    openModal={openModal}
-                    addNewSubColumn={addNewSubColumn}
-                />
-            ))}
-
-            {swinlane_columns && (
-                <SwinlaneHeader
-                    columns={swinlane_columns}
-                    all_swinlanes={swinlanes}
-                    tags={tags}
-                    openModal={openModal}
-                    toggleSwinlane={toggleSwinlane}
-                    addNewSubColumn={addNewSubColumn}
-                />
-            )}
+            {columns &&
+                columns.map((column, index) => (
+                    <>
+                        {column.showSwinLanes ? (
+                            <>
+                                {!isSwinlaneGroupShown && (
+                                    <>
+                                        <SwinlaneHeader
+                                            columns={swinlane_columns}
+                                            all_swinlanes={swinlanes}
+                                            tags={tags}
+                                            key={index}
+                                            openModal={openModal}
+                                            toggleSwinlane={toggleSwinlane}
+                                            addNewSubColumn={addNewSubColumn}
+                                        />
+                                        {(isSwinlaneGroupShown = true)}
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <NormalColumn
+                                key={index}
+                                this_column={column}
+                                tags={tags}
+                                openModal={openModal}
+                                addNewSubColumn={addNewSubColumn}
+                            />
+                        )}
+                    </>
+                ))}
 
             <Modal
                 isOpen={isModalOpen}
