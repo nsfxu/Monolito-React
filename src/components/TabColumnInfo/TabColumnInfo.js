@@ -33,6 +33,7 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
     useEffect(async () => {
         await setCurrentColumn(undefined);
         await setTempSubColumns([]);
+        await setSelectedSubColumn(false);
 
         updateHasUnsavedData();
 
@@ -111,7 +112,7 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         await setHasSubcolumn(hasSubColumns(current_column.groups));
 
         await setTempSubColumns([]);
-        await setTempSubColumns(current_column.groups)
+        await setTempSubColumns(current_column.groups);
     };
 
     const updateHasUnsavedData = async () => {
@@ -217,6 +218,29 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                 Subcolunas
                             </Typography>
                         </div>
+
+                        <Stack direction="row" spacing={2} className="pt3 pb3 pl3">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                className="w-25"
+                                onClick={() => console.log('oi')}
+                            >
+                                Adicionar subcoluna
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                className="w-25"
+                                disabled={!selected_subcolumn || !has_subcolumn}
+                                onClick={() =>
+                                    removeCurrentSubColumn(current_subcolumn)
+                                }
+                            >
+                                Remover subcoluna
+                            </Button>
+                        </Stack>
+
                         {has_subcolumn && temp_subcolumns && (
                             <div className="pl2">
                                 <DragDropContext onDragEnd={onDragEnd}>
@@ -265,19 +289,6 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                     inputRef={subcolumn_name}
                                     onKeyUp={() => updateHasUnsavedData()}
                                 />
-
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    className="w-25"
-                                    onClick={() =>
-                                        removeCurrentSubColumn(
-                                            current_subcolumn
-                                        )
-                                    }
-                                >
-                                    Remover subcoluna
-                                </Button>
                             </div>
                         )}
                     </div>
