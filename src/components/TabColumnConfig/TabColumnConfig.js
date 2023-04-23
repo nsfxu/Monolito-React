@@ -12,7 +12,12 @@ import { validateIfArrAreEqual } from '../../utils/column-utils';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns }) => {
+const TabColumnConfig = ({
+    board_columns,
+    board_swinlanes,
+    board_next_group_id,
+    updateNewBoardColumns
+}) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
@@ -60,7 +65,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns
 
     const saveNewColumnOrder = () => {
         updateNewBoardColumns(getFinalColumnResult());
-    }
+    };
 
     const separateColumns = () => {
         const temp_swinlane_columns = [];
@@ -142,7 +147,11 @@ const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns
                     <Stack direction="row" spacing={2}>
                         <Button variant="contained">Criar grupo de raia</Button>
                         <Button variant="contained">Criar coluna</Button>
-                        <Button variant="contained" disabled={has_unsaved_data} onClick={() => saveNewColumnOrder()} >
+                        <Button
+                            variant="contained"
+                            disabled={has_unsaved_data}
+                            onClick={() => saveNewColumnOrder()}
+                        >
                             Salvar
                         </Button>
                     </Stack>
@@ -204,6 +213,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns
                 <TabColumnInfo
                     selected_column={selected_column}
                     board_columns={board_columns}
+                    board_next_group_id={board_next_group_id}
                 />
             ) : (
                 'Clique em um item para editar suas propriedades.'
@@ -215,6 +225,7 @@ const TabColumnConfig = ({ board_columns, board_swinlanes, updateNewBoardColumns
 TabColumnConfig.propTypes = {
     board_columns: propTypes.array,
     board_swinlanes: propTypes.array,
+    board_next_group_id: propTypes.number,
     updateNewBoardColumns: propTypes.func
 };
 

@@ -13,6 +13,7 @@ const ConfigBoardModal = ({
     closeModal,
     updateWithNewBoardInfo
 }) => {
+
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
@@ -67,6 +68,7 @@ const ConfigBoardModal = ({
                     <TabColumnConfig
                         board_columns={board_info.columns}
                         board_swinlanes={board_info.swinlanes}
+                        board_next_group_id={board_info.nextGroupId}
                         updateNewBoardColumns={updateNewBoardColumns}
                     />
                 </TabPanel>

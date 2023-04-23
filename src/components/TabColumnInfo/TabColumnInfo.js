@@ -5,6 +5,9 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 
+import Modal from 'react-modal';
+import ModalStyles from '../../constants/modal-styles';
+
 import {
     findById,
     hasSubColumns,
@@ -12,10 +15,19 @@ import {
 } from '../../utils/column-utils';
 
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
+import CreateColumnSubColumn from '../CreateColumnSubColumn/CreateColumnSubColumn';
+
+const CREATE_SUBCOLUMN = 'CreateSubColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabColumnInfo = ({ selected_column, board_columns }) => {
+const TabColumnInfo = ({
+    selected_column,
+    board_columns,
+    board_next_group_id
+}) => {
+
+    console.log(board_next_group_id)
     const [current_column, setCurrentColumn] = useState(undefined);
     const [has_subcolumn, setHasSubcolumn] = useState(false);
 
@@ -24,6 +36,10 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
     const [temp_subcolumns, setTempSubColumns] = useState([]);
 
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modal_type, setModalType] = useState(null);
+    const [modal_style, setModalStyle] = useState(null);
 
     const grid = 8;
 
@@ -74,6 +90,27 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
 
         updateHasUnsavedData();
     }, [temp_subcolumns]);
+
+    //#region Modal stuff
+
+    const openCustomModal = (modal) => {
+        if (modal === CREATE_SUBCOLUMN) {
+            setModalType(modal);
+            setModalStyle(ModalStyles.createSubcolumn);
+        }
+
+        openModal();
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    //#endregion
 
     const saveColumnInfo = async () => {
         const this_name = name.current ? name.current.value : null;
@@ -193,6 +230,23 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         setTempSubColumns(items);
     };
 
+    const getModalResult = (result, modal_type) => {
+        switch (modal_type) {
+            case CREATE_SUBCOLUMN:
+                current_column.groups.push({
+                    id: board_next_group_id,
+                    name: result,
+                    cards: []
+                });
+
+                board_next_group_id++;
+                break;
+
+            default:
+                return;
+        }
+    };
+
     return (
         <>
             {current_column && (
@@ -219,12 +273,18 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                             </Typography>
                         </div>
 
-                        <Stack direction="row" spacing={2} className="pt3 pb3 pl3">
+                        <Stack
+                            direction="row"
+                            spacing={2}
+                            className="pt3 pb3 pl3"
+                        >
                             <Button
                                 variant="contained"
                                 color="success"
                                 className="w-25"
-                                onClick={() => console.log('oi')}
+                                onClick={() => {
+                                    openCustomModal(CREATE_SUBCOLUMN);
+                                }}
                             >
                                 Adicionar subcoluna
                             </Button>
@@ -282,7 +342,6 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                         {has_subcolumn && current_subcolumn && (
                             <div className="flex flex-column pt3 pl2">
                                 <hr></hr>
-                                {console.log(current_subcolumn)}
                                 <TextField
                                     label="Nome da subcoluna"
                                     defaultValue={current_subcolumn.name}
@@ -309,13 +368,28 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                     </Stack>
                 </Box>
             )}
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                style={modal_style}
+                appElement={document.getElementById('root')}
+            >
+                {modal_type === 'CreateSubColumn' && (
+                    <CreateColumnSubColumn
+                        returnResult={getModalResult}
+                        modal_type={modal_type}
+                        closeModal={closeModal}
+                    />
+                )}
+            </Modal>
         </>
     );
 };
 
 TabColumnInfo.propTypes = {
     selected_column: propTypes.string,
-    board_columns: propTypes.array
+    board_columns: propTypes.array,
+    board_next_group_id: propTypes.number
 };
 
 export default TabColumnInfo;
