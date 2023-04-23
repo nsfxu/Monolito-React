@@ -75,22 +75,29 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
     }, [temp_subcolumns]);
 
     const saveColumnInfo = async () => {
-        const this_name = name.current.value;
-        const this_subcolumn_name = subcolumn_name.current.value;
+        const this_name = name.current ? name.current.value : null;
+        const this_subcolumn_name = subcolumn_name.current
+            ? subcolumn_name.current.value
+            : null;
 
         current_column.name =
             this_name && this_name != current_column.name
                 ? this_name
                 : current_column.name;
 
-        current_subcolumn.name =
-            this_subcolumn_name && this_subcolumn_name != current_subcolumn.name
-                ? this_subcolumn_name
-                : current_subcolumn.name;
+        if (this_subcolumn_name) {
+            current_subcolumn.name =
+                this_subcolumn_name &&
+                this_subcolumn_name != current_subcolumn.name
+                    ? this_subcolumn_name
+                    : current_subcolumn.name;
+        }
 
-        current_column.groups = temp_subcolumns
-            ? temp_subcolumns
-            : current_column.groups;
+        if (has_subcolumn) {
+            current_column.groups = temp_subcolumns
+                ? temp_subcolumns
+                : current_column.groups;
+        }
 
         await setCurrentColumn(findById(board_columns, selected_column));
         await updateHasUnsavedData();
