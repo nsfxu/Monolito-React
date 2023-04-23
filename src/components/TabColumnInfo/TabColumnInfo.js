@@ -18,14 +18,17 @@ import TabColumnItem from '../TabColumnItem/TabColumnItem';
 const TabColumnInfo = ({ selected_column, board_columns }) => {
     const [current_column, setCurrentColumn] = useState(undefined);
     const [has_subcolumn, setHasSubcolumn] = useState(false);
-    const [selected_subcolumn, setSelectedSubColumn] = useState(false);
 
+    const [current_subcolumn, setCurrentSubColumn] = useState(undefined);
+    const [selected_subcolumn, setSelectedSubColumn] = useState(false);
     const [temp_subcolumns, setTempSubColumns] = useState([]);
+
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
 
     const grid = 8;
 
     const name = useRef();
+    const subcolumn_name = useRef();
 
     useEffect(async () => {
         await setCurrentColumn(undefined);
@@ -35,6 +38,18 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
 
         setCurrentColumn(findById(board_columns, selected_column));
     }, [selected_column]);
+
+    useEffect(async () => {
+        if (!selected_subcolumn) {
+            return;
+        }
+
+        await setCurrentSubColumn(undefined);
+
+        setCurrentSubColumn(
+            findById(current_column.groups, selected_subcolumn)
+        );
+    }, [selected_subcolumn]);
 
     useEffect(() => {
         if (!current_column) {
@@ -61,11 +76,17 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
 
     const saveColumnInfo = async () => {
         const this_name = name.current.value;
+        const this_subcolumn_name = subcolumn_name.current.value;
 
         current_column.name =
             this_name && this_name != current_column.name
                 ? this_name
                 : current_column.name;
+
+        current_subcolumn.name =
+            this_subcolumn_name && this_subcolumn_name != current_subcolumn.name
+                ? this_subcolumn_name
+                : current_subcolumn.name;
 
         current_column.groups = temp_subcolumns
             ? temp_subcolumns
@@ -94,6 +115,15 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         }
 
         if (name.current && name.current.value != current_column.name) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        if (
+            subcolumn_name.current &&
+            subcolumn_name.current.value != current_subcolumn.name
+        ) {
             await setHasUnsavedData(false);
 
             return;
@@ -204,6 +234,19 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                         )}
                                     </Droppable>
                                 </DragDropContext>
+                            </div>
+                        )}
+
+                        {has_subcolumn && current_subcolumn && (
+                            <div>
+                                <hr></hr>
+                                {console.log(current_subcolumn)}
+                                <TextField
+                                    label="Nome da subcoluna"
+                                    defaultValue={current_subcolumn.name}
+                                    inputRef={subcolumn_name}
+                                    onKeyUp={() => updateHasUnsavedData()}
+                                />
                             </div>
                         )}
                     </div>
