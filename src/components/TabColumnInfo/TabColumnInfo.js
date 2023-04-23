@@ -103,6 +103,17 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
         await updateHasUnsavedData();
     };
 
+    const removeCurrentSubColumn = async (obj) => {
+        const pos = current_column.groups.indexOf(obj);
+
+        current_column.groups.splice(pos, 1);
+
+        await setHasSubcolumn(hasSubColumns(current_column.groups));
+
+        await setTempSubColumns([]);
+        await setTempSubColumns(current_column.groups)
+    };
+
     const updateHasUnsavedData = async () => {
         if (has_subcolumn) {
             const current_selected_column_groups = findById(
@@ -245,7 +256,7 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                         )}
 
                         {has_subcolumn && current_subcolumn && (
-                            <div>
+                            <div className="flex flex-column pt3 pl2">
                                 <hr></hr>
                                 {console.log(current_subcolumn)}
                                 <TextField
@@ -254,6 +265,19 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                                     inputRef={subcolumn_name}
                                     onKeyUp={() => updateHasUnsavedData()}
                                 />
+
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    className="w-25"
+                                    onClick={() =>
+                                        removeCurrentSubColumn(
+                                            current_subcolumn
+                                        )
+                                    }
+                                >
+                                    Remover subcoluna
+                                </Button>
                             </div>
                         )}
                     </div>
