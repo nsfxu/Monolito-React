@@ -67,6 +67,10 @@ const TabColumnInfo = ({ selected_column, board_columns }) => {
                 ? this_name
                 : current_column.name;
 
+        current_column.groups = temp_subcolumns
+            ? temp_subcolumns
+            : current_column.groups;
+
         await setCurrentColumn(findById(board_columns, selected_column));
         await updateHasUnsavedData();
     };
