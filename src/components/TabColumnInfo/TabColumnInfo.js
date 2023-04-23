@@ -24,10 +24,9 @@ const CREATE_SUBCOLUMN = 'CreateSubColumn';
 const TabColumnInfo = ({
     selected_column,
     board_columns,
-    board_next_group_id
+    board_next_group_id,
+    returnNextGroupId
 }) => {
-
-    console.log(board_next_group_id)
     const [current_column, setCurrentColumn] = useState(undefined);
     const [has_subcolumn, setHasSubcolumn] = useState(false);
 
@@ -147,7 +146,6 @@ const TabColumnInfo = ({
         current_column.groups.splice(pos, 1);
 
         await setHasSubcolumn(hasSubColumns(current_column.groups));
-
         await setTempSubColumns([]);
         await setTempSubColumns(current_column.groups);
     };
@@ -230,7 +228,7 @@ const TabColumnInfo = ({
         setTempSubColumns(items);
     };
 
-    const getModalResult = (result, modal_type) => {
+    const getModalResult = async (result, modal_type) => {
         switch (modal_type) {
             case CREATE_SUBCOLUMN:
                 current_column.groups.push({
@@ -239,7 +237,10 @@ const TabColumnInfo = ({
                     cards: []
                 });
 
-                board_next_group_id++;
+                returnNextGroupId(board_next_group_id);
+                await setHasSubcolumn(hasSubColumns(current_column.groups));
+                await setTempSubColumns([]);
+                await setTempSubColumns(current_column.groups);
                 break;
 
             default:
@@ -389,7 +390,8 @@ const TabColumnInfo = ({
 TabColumnInfo.propTypes = {
     selected_column: propTypes.string,
     board_columns: propTypes.array,
-    board_next_group_id: propTypes.number
+    board_next_group_id: propTypes.number,
+    returnNextGroupId: propTypes.func
 };
 
 export default TabColumnInfo;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import propTypes from 'prop-types';
 
 import { Tab, Tabs, Box } from '@mui/material';
@@ -13,8 +13,9 @@ const ConfigBoardModal = ({
     closeModal,
     updateWithNewBoardInfo
 }) => {
-
     const [value, setValue] = useState(0);
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -23,6 +24,12 @@ const ConfigBoardModal = ({
     const updateNewBoardColumns = (new_board_columns) => {
         console.log(new_board_columns);
         board_info.columns = new_board_columns;
+    };
+
+    const getNextGroupId = (new_id) => {
+        board_info.nextGroupId = parseInt(new_id) + 1;
+        forceUpdate();
+
     };
 
     function a11yProps(index) {
@@ -70,6 +77,7 @@ const ConfigBoardModal = ({
                         board_swinlanes={board_info.swinlanes}
                         board_next_group_id={board_info.nextGroupId}
                         updateNewBoardColumns={updateNewBoardColumns}
+                        returnNextGroupId={getNextGroupId}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>

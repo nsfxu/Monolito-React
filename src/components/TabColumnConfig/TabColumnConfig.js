@@ -16,7 +16,8 @@ const TabColumnConfig = ({
     board_columns,
     board_swinlanes,
     board_next_group_id,
-    updateNewBoardColumns
+    updateNewBoardColumns,
+    returnNextGroupId
 }) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
@@ -214,6 +215,7 @@ const TabColumnConfig = ({
                     selected_column={selected_column}
                     board_columns={board_columns}
                     board_next_group_id={board_next_group_id}
+                    returnNextGroupId={returnNextGroupId}
                 />
             ) : (
                 'Clique em um item para editar suas propriedades.'
@@ -226,7 +228,8 @@ TabColumnConfig.propTypes = {
     board_columns: propTypes.array,
     board_swinlanes: propTypes.array,
     board_next_group_id: propTypes.number,
-    updateNewBoardColumns: propTypes.func
+    updateNewBoardColumns: propTypes.func,
+    returnNextGroupId: propTypes.func
 };
 
 export default TabColumnConfig;
