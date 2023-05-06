@@ -153,7 +153,7 @@ const TabColumnConfig = ({
                             disabled={has_unsaved_data}
                             onClick={() => saveNewColumnOrder()}
                         >
-                            Salvar
+                            Salvar ordem
                         </Button>
                     </Stack>
                 </div>
@@ -167,9 +167,7 @@ const TabColumnConfig = ({
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
-                                    style={getListStyle(
-                                        snapshot.isDraggingOver
-                                    )}
+                                    style={getListStyle(snapshot.isDraggingOver)}
                                     {...provided.droppableProps}
                                 >
                                     {temp_columns &&
@@ -178,25 +176,18 @@ const TabColumnConfig = ({
                                                 {column == 'swinlane_group' ? (
                                                     <>
                                                         <TabSwinlaneGroup
-                                                            all_columns={
-                                                                swinlane_columns
-                                                            }
-                                                            sendBackResult={
-                                                                getResults
-                                                            }
+                                                            all_columns={swinlane_columns}
                                                             index={index}
+                                                            sendBackResult={getResults}
+                                                            setSelectedColumn={setSelectedColumn}
                                                         />
                                                     </>
                                                 ) : (
                                                     <TabColumnItem
                                                         column={column}
                                                         index={index}
-                                                        getItemStyle={
-                                                            getItemStyle
-                                                        }
-                                                        setSelectedColumn={
-                                                            setSelectedColumn
-                                                        }
+                                                        getItemStyle={getItemStyle}
+                                                        setSelectedColumn={setSelectedColumn}
                                                     />
                                                 )}
                                             </React.Fragment>

@@ -3,7 +3,15 @@ import propTypes from 'prop-types';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormControlLabel,
+    Stack,
+    TextField,
+    Typography
+} from '@mui/material';
 
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
@@ -44,6 +52,7 @@ const TabColumnInfo = ({
 
     const name = useRef();
     const subcolumn_name = useRef();
+    const show_swin_lane = useRef();
 
     useEffect(async () => {
         await setCurrentColumn(undefined);
@@ -71,6 +80,7 @@ const TabColumnInfo = ({
         if (!current_column) {
             return;
         }
+
         setHasSubcolumn(hasSubColumns(current_column.groups));
     }, [current_column]);
 
@@ -121,6 +131,12 @@ const TabColumnInfo = ({
             this_name && this_name != current_column.name
                 ? this_name
                 : current_column.name;
+
+        current_column.showSwinLanes =
+            show_swin_lane.current &&
+            show_swin_lane.current.checked != current_column.showSwinLanes
+                ? show_swin_lane.current.checked
+                : current_column.showSwinLanes;
 
         if (this_subcolumn_name) {
             current_subcolumn.name =
@@ -177,6 +193,15 @@ const TabColumnInfo = ({
         if (
             subcolumn_name.current &&
             subcolumn_name.current.value != current_subcolumn.name
+        ) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        if (
+            show_swin_lane.current &&
+            show_swin_lane.current.checked != current_column.showSwinLanes
         ) {
             await setHasUnsavedData(false);
 
@@ -258,13 +283,25 @@ const TabColumnInfo = ({
                     }}
                     noValidate
                     autoComplete="off"
-                    className="flex flex-column"
+                    className="flex flex-column pl3 pt2"
                 >
                     <TextField
                         label="Nome da coluna"
                         defaultValue={current_column.name}
                         inputRef={name}
                         onKeyUp={() => updateHasUnsavedData()}
+                    />
+
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                inputRef={show_swin_lane}
+                                defaultChecked={current_column.showSwinLanes}
+                                onClick={() => updateHasUnsavedData()}
+                            />
+                        }
+                        label="Mostrar com raias (se existir)"
+                        className="pl2"
                     />
 
                     <div className="flex flex-column">
@@ -277,7 +314,7 @@ const TabColumnInfo = ({
                         <Stack
                             direction="row"
                             spacing={2}
-                            className="pt3 pb3 pl3"
+                            className="pt3 pb3 pl2"
                         >
                             <Button
                                 variant="contained"
@@ -353,7 +390,7 @@ const TabColumnInfo = ({
                         )}
                     </div>
 
-                    <Stack direction="row" spacing={2} className="pl2 pt3 pb3">
+                    <Stack direction="row" spacing={2} className="pt3 pb3">
                         <Button
                             variant="contained"
                             color="success"

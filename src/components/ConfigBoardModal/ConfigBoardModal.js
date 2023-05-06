@@ -28,7 +28,6 @@ const ConfigBoardModal = ({
     const getNextGroupId = (new_id) => {
         board_info.nextGroupId = parseInt(new_id) + 1;
         forceUpdate();
-
     };
 
     function a11yProps(index) {

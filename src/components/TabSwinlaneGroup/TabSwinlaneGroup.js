@@ -7,7 +7,12 @@ import TabColumn from '../TabColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabSwinlaneGroup = ({ all_columns, index, sendBackResult }) => {
+const TabSwinlaneGroup = ({
+    all_columns,
+    index,
+    sendBackResult,
+    setSelectedColumn
+}) => {
     const grid = 8;
 
     const getItemGroupStyle = (isDragging, draggableStyle) => ({
@@ -81,9 +86,6 @@ const TabSwinlaneGroup = ({ all_columns, index, sendBackResult }) => {
                         snapshot.isDragging,
                         provided.draggableProps.style
                     )}
-                    // onClick={() => {
-                    //     setSelectedColumn(`${column.id}`);
-                    // }}
                 >
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable
@@ -114,11 +116,11 @@ const TabSwinlaneGroup = ({ all_columns, index, sendBackResult }) => {
                                                         provided.draggableProps
                                                             .style
                                                     )}
-                                                    // onClick={() => {
-                                                    //     setSelectedColumn(
-                                                    //         `${column.id}`
-                                                    //     );
-                                                    // }}
+                                                    onClick={() => {
+                                                        setSelectedColumn(
+                                                            `${column.id}`
+                                                        );
+                                                    }}
                                                 >
                                                     <TabColumn
                                                         column_info={column}
@@ -141,7 +143,8 @@ const TabSwinlaneGroup = ({ all_columns, index, sendBackResult }) => {
 TabSwinlaneGroup.propTypes = {
     all_columns: propTypes.any,
     index: propTypes.number,
-    sendBackResult: propTypes.func
+    sendBackResult: propTypes.func,
+    setSelectedColumn: propTypes.func
 };
 
 export default TabSwinlaneGroup;
