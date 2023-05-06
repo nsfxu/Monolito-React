@@ -50,8 +50,8 @@ const Board = () => {
 
     //#region functions
 
-    const updateWithNewBoardInfo = async (new_board_info) => {
-        await updateBoardInfo(new_board_info);
+    const updateWithNewBoardInfo = async () => {
+        forceUpdate();
     }
 
     const toggleSwinlane = (swinlane_id) => {

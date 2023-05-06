@@ -30,6 +30,11 @@ const ConfigBoardModal = ({
         forceUpdate();
     };
 
+    const getNextColumnId = (new_id) => {
+        board_info.nextColumnId = parseInt(new_id) + 1;
+        forceUpdate();
+    };
+
     function a11yProps(index) {
         return {
             id: `vertical-tab-${index}`,
@@ -74,8 +79,10 @@ const ConfigBoardModal = ({
                         board_columns={board_info.columns}
                         board_swinlanes={board_info.swinlanes}
                         board_next_group_id={board_info.nextGroupId}
+                        board_next_column_id={board_info.nextColumnId}
                         updateNewBoardColumns={updateNewBoardColumns}
                         returnNextGroupId={getNextGroupId}
+                        returnNextColumnId={getNextColumnId}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>

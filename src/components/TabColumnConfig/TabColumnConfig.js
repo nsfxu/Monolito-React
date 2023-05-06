@@ -5,10 +5,17 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 import { Button, Stack } from '@mui/material';
 
+import Modal from 'react-modal';
+import ModalStyles from '../../constants/modal-styles';
+
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
 import TabSwinlaneGroup from '../TabSwinlaneGroup/TabSwinlaneGroup';
 import { validateIfArrAreEqual } from '../../utils/column-utils';
+
+import CreateColumnSubColumn from '../CreateColumnSubColumn/CreateColumnSubColumn';
+
+const CREATE_COLUMN = 'CreateColumn';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -16,15 +23,22 @@ const TabColumnConfig = ({
     board_columns,
     board_swinlanes,
     board_next_group_id,
+    board_next_column_id,
     updateNewBoardColumns,
-    returnNextGroupId
+    returnNextGroupId,
+    returnNextColumnId
 }) => {
+
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
     const [selected_column, setSelectedColumn] = useState(false);
     const [has_unsaved_data, setHasUnsavedData] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modal_type, setModalType] = useState(null);
+    const [modal_style, setModalStyle] = useState(null);
 
     const grid = 8;
 
@@ -35,6 +49,27 @@ const TabColumnConfig = ({
     useEffect(() => {
         updateHasUnsavedData();
     }, [temp_columns, swinlane_columns]);
+
+    //#region Modal stuff
+
+    const openCustomModal = (modal) => {
+        if (modal === CREATE_COLUMN) {
+            setModalType(modal);
+            setModalStyle(ModalStyles.createColumn);
+        }
+
+        openModal();
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    //#endregion
 
     const getResults = (result) => {
         setSwinlaneColumns(result);
@@ -51,7 +86,7 @@ const TabColumnConfig = ({
     const getFinalColumnResult = () => {
         let result = [];
 
-        temp_columns.map((column) => {
+        temp_columns?.map((column) => {
             if (column == 'swinlane_group') {
                 swinlane_columns.map((column) => {
                     result.push(column);
@@ -68,7 +103,7 @@ const TabColumnConfig = ({
         updateNewBoardColumns(getFinalColumnResult());
     };
 
-    const separateColumns = () => {
+    const separateColumns = async () => {
         const temp_swinlane_columns = [];
 
         if (board_columns.length > 0) {
@@ -77,15 +112,15 @@ const TabColumnConfig = ({
             });
         }
 
-        setTempColumns(createNewTempColumn());
-        setSwinlaneColumns(temp_swinlane_columns);
+        await setTempColumns(createNewTempColumn());
+        await setSwinlaneColumns(temp_swinlane_columns);
     };
 
     const createNewTempColumn = () => {
         let new_temp_column = [];
         let hasAlreadySelected = false;
 
-        temp_columns.map((column, index) => {
+        board_columns.map((column, index) => {
             if (column.showSwinLanes) {
                 if (!hasAlreadySelected) {
                     new_temp_column.push('swinlane_group');
@@ -141,13 +176,49 @@ const TabColumnConfig = ({
         overflow: 'auto'
     });
 
+    const getModalResult = async (result, modal_type) => {
+        switch (modal_type) {
+            case CREATE_COLUMN:
+                console.log(result);
+
+                const new_column = {
+                    id: board_next_column_id,
+                    name: result,
+                    groups: [{
+                        id: board_next_group_id,
+                        name: "Doing",
+                        cards: []
+                    }],
+                    showSwinLanes: false
+                };
+
+                board_columns.push(new_column);
+                returnNextGroupId(board_next_group_id);
+                returnNextColumnId(board_next_column_id);
+                
+                await updateNewBoardColumns(board_columns);
+                await separateColumns();
+                
+                break;
+
+            default:
+                return;
+        }
+    };
+
     return (
         <>
             <div className="flex flex-column pa2">
                 <div className="self-start pb3">
                     <Stack direction="row" spacing={2}>
-                        <Button variant="contained">Criar grupo de raia</Button>
-                        <Button variant="contained">Criar coluna</Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                openCustomModal(CREATE_COLUMN);
+                            }}
+                        >
+                            Criar coluna
+                        </Button>
                         <Button
                             variant="contained"
                             disabled={has_unsaved_data}
@@ -167,7 +238,9 @@ const TabColumnConfig = ({
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
-                                    style={getListStyle(snapshot.isDraggingOver)}
+                                    style={getListStyle(
+                                        snapshot.isDraggingOver
+                                    )}
                                     {...provided.droppableProps}
                                 >
                                     {temp_columns &&
@@ -176,18 +249,28 @@ const TabColumnConfig = ({
                                                 {column == 'swinlane_group' ? (
                                                     <>
                                                         <TabSwinlaneGroup
-                                                            all_columns={swinlane_columns}
+                                                            all_columns={
+                                                                swinlane_columns
+                                                            }
                                                             index={index}
-                                                            sendBackResult={getResults}
-                                                            setSelectedColumn={setSelectedColumn}
+                                                            sendBackResult={
+                                                                getResults
+                                                            }
+                                                            setSelectedColumn={
+                                                                setSelectedColumn
+                                                            }
                                                         />
                                                     </>
                                                 ) : (
                                                     <TabColumnItem
                                                         column={column}
                                                         index={index}
-                                                        getItemStyle={getItemStyle}
-                                                        setSelectedColumn={setSelectedColumn}
+                                                        getItemStyle={
+                                                            getItemStyle
+                                                        }
+                                                        setSelectedColumn={
+                                                            setSelectedColumn
+                                                        }
                                                     />
                                                 )}
                                             </React.Fragment>
@@ -201,6 +284,7 @@ const TabColumnConfig = ({
             </div>
 
             <hr></hr>
+
             {selected_column ? (
                 <TabColumnInfo
                     selected_column={selected_column}
@@ -211,6 +295,21 @@ const TabColumnConfig = ({
             ) : (
                 'Clique em um item para editar suas propriedades.'
             )}
+
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                style={modal_style}
+                appElement={document.getElementById('root')}
+            >
+                {modal_type === 'CreateColumn' && (
+                    <CreateColumnSubColumn
+                        returnResult={getModalResult}
+                        modal_type={modal_type}
+                        closeModal={closeModal}
+                    />
+                )}
+            </Modal>
         </>
     );
 };
