@@ -28,7 +28,6 @@ const TabColumnConfig = ({
     returnNextGroupId,
     returnNextColumnId
 }) => {
-
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
@@ -104,10 +103,10 @@ const TabColumnConfig = ({
     };
 
     const separateColumns = async () => {
-        const temp_swinlane_columns = [];
+        let temp_swinlane_columns = [];
 
-        if (board_columns.length > 0) {
-            board_columns.map((column) => {
+        if (board_columns?.length > 0) {
+            board_columns?.map((column) => {
                 column.showSwinLanes && temp_swinlane_columns.push(column);
             });
         }
@@ -120,7 +119,7 @@ const TabColumnConfig = ({
         let new_temp_column = [];
         let hasAlreadySelected = false;
 
-        board_columns.map((column, index) => {
+        board_columns?.map((column) => {
             if (column.showSwinLanes) {
                 if (!hasAlreadySelected) {
                     new_temp_column.push('swinlane_group');
@@ -184,26 +183,35 @@ const TabColumnConfig = ({
                 const new_column = {
                     id: board_next_column_id,
                     name: result,
-                    groups: [{
-                        id: board_next_group_id,
-                        name: "Doing",
-                        cards: []
-                    }],
+                    groups: [
+                        {
+                            id: board_next_group_id,
+                            name: 'Doing',
+                            cards: []
+                        }
+                    ],
                     showSwinLanes: false
                 };
 
                 board_columns.push(new_column);
                 returnNextGroupId(board_next_group_id);
                 returnNextColumnId(board_next_column_id);
-                
+
                 await updateNewBoardColumns(board_columns);
                 await separateColumns();
-                
+
                 break;
 
             default:
                 return;
         }
+    };
+
+    const deleteColumnByPos = async (pos) => {
+        board_columns.splice(pos, 1);
+
+        await updateNewBoardColumns(board_columns);
+        await separateColumns();
     };
 
     return (
@@ -288,6 +296,7 @@ const TabColumnConfig = ({
             {selected_column ? (
                 <TabColumnInfo
                     selected_column={selected_column}
+                    deleteColumnByPos={deleteColumnByPos}
                     board_columns={board_columns}
                     board_next_group_id={board_next_group_id}
                     returnNextGroupId={returnNextGroupId}

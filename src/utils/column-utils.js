@@ -13,7 +13,7 @@ const removeObjectByPosition = (object, pos) => object.cards.splice(pos, 1);
 const addObjectIntoPosition = (object, pos, item) =>
     object.cards.splice(pos, 0, item);
 
-const hasSubColumns = (groups) => groups.length > 1;
+const hasSubColumns = (groups) => groups?.length > 1;
 
 const validateIfArrAreEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) {

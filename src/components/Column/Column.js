@@ -30,12 +30,16 @@ const Column = ({
     }, [columns]);
 
     const separateColumns = () => {
-        const temp_swinlane_columns = [];
+        let temp_swinlane_columns = [];
 
-        if (columns.length > 0) {
-            columns.map((column) => {
-                column.showSwinLanes && temp_swinlane_columns.push(column);
-            });
+        try {
+            if (columns.length > 0) {
+                columns.map((column) => {
+                    column.showSwinLanes && temp_swinlane_columns.push(column);
+                });
+            }
+        } catch (error) {
+            temp_swinlane_columns = [{}];
         }
 
         setSwinlaneColumns(temp_swinlane_columns);

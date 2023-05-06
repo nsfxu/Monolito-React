@@ -50,9 +50,24 @@ const Board = () => {
 
     //#region functions
 
-    const updateWithNewBoardInfo = async () => {
+    const updateWithNewBoardInfo = async (board_info) => {
+        await updateBoardInfo({
+            columns: [],
+            tags: [],
+            swinlanes: [],
+            nextCardId: 0,
+            nextGroupId: 0,
+            nextColumnId: 0
+        });
+        await updateBoardInfo(board_info);
+
+        console.log(board_info);
+
+        await getAllColumns();
+        await getAllTags();
+
         forceUpdate();
-    }
+    };
 
     const toggleSwinlane = (swinlane_id) => {
         board_info.swinlanes.map((swinlane) => {
@@ -71,9 +86,13 @@ const Board = () => {
     const getAllColumns = () => {
         let columnInfo = [];
 
-        board_info.columns.map((column) => {
-            columnInfo.push({ id: column.id, name: column.name });
-        });
+        try {
+            board_info.columns.map((column) => {
+                columnInfo.push({ id: column.id, name: column.name });
+            });
+        } catch (error) {
+            columnInfo = [];
+        }
 
         setStatus(columnInfo);
     };
@@ -562,7 +581,11 @@ const Board = () => {
                 appElement={document.getElementById('root')}
             >
                 {modal_type === 'ConfigBoard' && (
-                    <ConfigBoardModal board_info={board_info} closeModal={closeModal} updateWithNewBoardInfo={updateWithNewBoardInfo}/>
+                    <ConfigBoardModal
+                        board_info={board_info}
+                        closeModal={closeModal}
+                        updateWithNewBoardInfo={updateWithNewBoardInfo}
+                    />
                 )}
             </Modal>
             <ToastContainer />

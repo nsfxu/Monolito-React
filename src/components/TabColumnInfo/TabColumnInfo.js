@@ -33,7 +33,8 @@ const TabColumnInfo = ({
     selected_column,
     board_columns,
     board_next_group_id,
-    returnNextGroupId
+    returnNextGroupId,
+    deleteColumnByPos
 }) => {
     const [current_column, setCurrentColumn] = useState(undefined);
     const [has_subcolumn, setHasSubcolumn] = useState(false);
@@ -273,6 +274,10 @@ const TabColumnInfo = ({
         }
     };
 
+    const deleteCurrentColumn = () => {
+        deleteColumnByPos(board_columns.indexOf(current_column));
+    };
+
     return (
         <>
             {current_column && (
@@ -303,6 +308,19 @@ const TabColumnInfo = ({
                         label="Mostrar com raias (se existir)"
                         className="pl2"
                     />
+
+                    <Stack direction="row" spacing={2} className="pb2 pt2 pl2">
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            className="w-20"
+                            onClick={() => {deleteCurrentColumn()}}
+                        >
+                            Deletar coluna
+                        </Button>
+                    </Stack>
+
+                    <hr></hr>
 
                     <div className="flex flex-column">
                         <div>
@@ -428,7 +446,8 @@ TabColumnInfo.propTypes = {
     selected_column: propTypes.string,
     board_columns: propTypes.array,
     board_next_group_id: propTypes.number,
-    returnNextGroupId: propTypes.func
+    returnNextGroupId: propTypes.func,
+    deleteColumnByPos: propTypes.func
 };
 
 export default TabColumnInfo;

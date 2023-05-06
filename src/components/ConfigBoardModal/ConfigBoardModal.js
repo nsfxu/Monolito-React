@@ -23,6 +23,7 @@ const ConfigBoardModal = ({
 
     const updateNewBoardColumns = (new_board_columns) => {
         board_info.columns = new_board_columns;
+        updateWithNewBoardInfo(board_info);
     };
 
     const getNextGroupId = (new_id) => {

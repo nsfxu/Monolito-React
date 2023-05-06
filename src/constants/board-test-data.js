@@ -159,13 +159,13 @@ export const TEST_DATA = {
     swinlanes: [
         {
             id: 0,
-            name: 'Expedite',
+            name: 'Prioritized',
             color: 'red',
             expanded: true
         },
         {
             id: 1,
-            name: 'Expedite',
+            name: 'Normal',
             color: 'gray',
             expanded: true
         }
