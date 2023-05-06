@@ -548,7 +548,6 @@ const Board = () => {
                                     status={status}
                                     tags={tags}
                                     addNewCard={addNewCard}
-                                    addNewSubColumn={addNewSubColumn}
                                     toggleSwinlane={toggleSwinlane}
                                 />
                             </DragDropContext>

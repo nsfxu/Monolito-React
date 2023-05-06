@@ -18,8 +18,7 @@ const SwinlaneHeader = ({
     all_swinlanes,
     tags,
     toggleSwinlane,
-    openModal,
-    addNewSubColumn
+    openModal
 }) => {
     const renderDroppable = (this_column, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
@@ -83,7 +82,6 @@ const SwinlaneHeader = ({
                     <ColumnHeader
                         this_column={this_column}
                         openModal={openModal}
-                        addNewSubColumn={addNewSubColumn}
                     />
 
                     <div>

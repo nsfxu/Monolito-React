@@ -11,7 +11,7 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
+const NormalColumn = ({ this_column, tags, openModal }) => {
     return (
         <div
             className="ba w-100"
@@ -22,7 +22,6 @@ const NormalColumn = ({ this_column, tags, openModal, addNewSubColumn }) => {
             <ColumnHeader
                 this_column={this_column}
                 openModal={openModal}
-                addNewSubColumn={addNewSubColumn}
             />
 
             <div className="h-100">

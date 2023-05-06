@@ -17,7 +17,6 @@ const Column = ({
     status,
     tags,
     addNewCard,
-    addNewSubColumn,
     toggleSwinlane
 }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
@@ -66,7 +65,6 @@ const Column = ({
                                             tags={tags}
                                             openModal={openModal}
                                             toggleSwinlane={toggleSwinlane}
-                                            addNewSubColumn={addNewSubColumn}
                                         />
                                         {(isSwinlaneGroupShown = true)}
                                     </>
@@ -78,7 +76,6 @@ const Column = ({
                                 this_column={column}
                                 tags={tags}
                                 openModal={openModal}
-                                addNewSubColumn={addNewSubColumn}
                             />
                         )}
                     </React.Fragment>
