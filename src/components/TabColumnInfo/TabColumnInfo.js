@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import propTypes from 'prop-types';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -36,6 +36,10 @@ const TabColumnInfo = ({
     returnNextGroupId,
     deleteColumnByPos
 }) => {
+
+    const [, updateState] = useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
+
     const [current_column, setCurrentColumn] = useState(undefined);
     const [has_subcolumn, setHasSubcolumn] = useState(false);
 
@@ -62,14 +66,13 @@ const TabColumnInfo = ({
 
         updateHasUnsavedData();
 
-        setCurrentColumn(findById(board_columns, selected_column));
+        await setCurrentColumn(findById(board_columns, selected_column));
     }, [selected_column]);
 
     useEffect(async () => {
         if (!selected_subcolumn) {
             return;
         }
-
         await setCurrentSubColumn(undefined);
 
         setCurrentSubColumn(
@@ -77,21 +80,19 @@ const TabColumnInfo = ({
         );
     }, [selected_subcolumn]);
 
-    useEffect(() => {
+    useEffect(async () => {
         if (!current_column) {
             return;
         }
 
-        setHasSubcolumn(hasSubColumns(current_column.groups));
-    }, [current_column]);
+        await setHasSubcolumn(hasSubColumns(current_column.groups));
 
-    useEffect(async () => {
-        if (!has_subcolumn) {
-            return;
+        if (hasSubColumns(current_column.groups)) {
+            await setTempSubColumns(current_column.groups);
+            forceUpdate();
         }
 
-        await setTempSubColumns(current_column.groups);
-    }, [has_subcolumn]);
+    }, [current_column]);
 
     useEffect(async () => {
         if (!temp_subcolumns && temp_subcolumns.length < 2) {
@@ -175,6 +176,7 @@ const TabColumnInfo = ({
             ).groups;
 
             if (
+                !temp_subcolumns ||
                 !validateIfArrAreEqual(
                     current_selected_column_groups,
                     temp_subcolumns
@@ -314,7 +316,9 @@ const TabColumnInfo = ({
                             variant="outlined"
                             color="error"
                             className="w-20"
-                            onClick={() => {deleteCurrentColumn()}}
+                            onClick={() => {
+                                deleteCurrentColumn();
+                            }}
                         >
                             Deletar coluna
                         </Button>

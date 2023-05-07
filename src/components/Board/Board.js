@@ -477,8 +477,6 @@ const Board = () => {
                 return group.id == new_card.groupId;
             });
 
-            console.log(groupIndex, new_card.groupId);
-
             addObjectIntoPosition(
                 column_to_add.groups[parseInt(groupIndex)],
                 0,
