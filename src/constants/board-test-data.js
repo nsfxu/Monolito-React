@@ -198,5 +198,6 @@ export const TEST_DATA = {
     ],
     nextCardId: 4,
     nextGroupId: 14,
+    nextSwinlaneId: 2,
     nextColumnId: 8
 };

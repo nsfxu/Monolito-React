@@ -5,6 +5,7 @@ import { Tab, Tabs, Box } from '@mui/material';
 
 import TabPanel from '../TabPanel';
 import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
+import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -33,6 +34,11 @@ const ConfigBoardModal = ({
 
     const getNextColumnId = (new_id) => {
         board_info.nextColumnId = parseInt(new_id) + 1;
+        forceUpdate();
+    };
+
+    const getNextSwinlaneId = (new_id) => {
+        board_info.nextSwinlaneId = parseInt(new_id) + 1;
         forceUpdate();
     };
 
@@ -87,7 +93,11 @@ const ConfigBoardModal = ({
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Item Two
+                    <TabSwinlaneConfig
+                        board_swinlanes={board_info.swinlanes}
+                        board_next_swinlane_id={board_info.nextSwinlaneId}
+                        returnNextColumnId={getNextSwinlaneId}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     Item Three
