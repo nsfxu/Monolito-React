@@ -70,12 +70,38 @@ export const TEST_DATA = {
                 {
                     id: 4,
                     name: 'Doing',
-                    cards: []
+                    cards: [
+                        {
+                            id: 2,
+                            name: 'Refatorar front-end do board',
+                            description: '',
+                            laneId: 0
+                        },
+                        {
+                            id: 1,
+                            name: 'Gerenciamento de tags',
+                            description: '',
+                            laneId: 0
+                        },
+                        {
+                            id: 0,
+                            name: 'Gerenciamento de Swinlanes',
+                            description: '',
+                            laneId: 0
+                        }
+                    ]
                 },
                 {
                     id: 11,
                     name: 'Done',
-                    cards: []
+                    cards: [
+                        {
+                            id: 3,
+                            name: 'eeee',
+                            description: '',
+                            laneId: 0
+                        }
+                    ]
                 }
             ],
             showSwinLanes: true
@@ -170,7 +196,7 @@ export const TEST_DATA = {
             expanded: true
         }
     ],
-    nextCardId: 0,
+    nextCardId: 4,
     nextGroupId: 14,
     nextColumnId: 8
 };

@@ -86,13 +86,9 @@ const Board = () => {
     const getAllColumns = () => {
         let columnInfo = [];
 
-        try {
-            board_info.columns.map((column) => {
-                columnInfo.push({ id: column.id, name: column.name });
-            });
-        } catch (error) {
-            columnInfo = [];
-        }
+        board_info.columns.map((column) => {
+            columnInfo.push({ id: column.id, name: column.name });
+        });
 
         setStatus(columnInfo);
     };
@@ -461,25 +457,37 @@ const Board = () => {
         updateBoardInfo(items);
     };
 
-    const addNewCard = (
-        columnName,
-        title,
-        description,
-        person,
-        status,
-        tags
-    ) => {
+    const addNewCard = (currentColumn, new_card) => {
         const items = board_info;
 
         const card_object = {
             id: items.nextCardId,
-            name: title,
-            description: description
+            name: new_card.title,
+            description: new_card.description
         };
 
-        const column_to_add = findColumnById(items, status);
+        if (currentColumn.showSwinLanes) {
+            card_object.laneId = new_card.laneId;
+        }
 
-        addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
+        const column_to_add = findColumnById(items, new_card.status);
+
+        if (new_card.groupId) {
+            const groupIndex = column_to_add.groups.findIndex((group) => {
+                return group.id == new_card.groupId;
+            });
+
+            console.log(groupIndex, new_card.groupId);
+
+            addObjectIntoPosition(
+                column_to_add.groups[parseInt(groupIndex)],
+                0,
+                card_object
+            );
+        } else {
+            addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
+        }
+
         items.nextCardId++;
 
         forceUpdate();

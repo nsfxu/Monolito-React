@@ -30,16 +30,12 @@ const Column = ({
     }, [columns]);
 
     const separateColumns = () => {
-        let temp_swinlane_columns = [];
+        const temp_swinlane_columns = [];
 
-        try {
-            if (columns.length > 0) {
-                columns.map((column) => {
-                    column.showSwinLanes && temp_swinlane_columns.push(column);
-                });
-            }
-        } catch (error) {
-            temp_swinlane_columns = [{}];
+        if (columns.length > 0) {
+            columns.map((column) => {
+                column.showSwinLanes && temp_swinlane_columns.push(column);
+            });
         }
 
         setSwinlaneColumns(temp_swinlane_columns);
@@ -96,6 +92,7 @@ const Column = ({
                     currentColumn={columnToAddCard}
                     statusArr={status}
                     tagsArr={tags}
+                    swinlanesArr={swinlanes}
                 />
             </Modal>
         </>

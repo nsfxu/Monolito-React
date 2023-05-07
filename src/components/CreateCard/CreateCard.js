@@ -1,31 +1,41 @@
 import React, { useEffect, useRef } from 'react';
 import propTypes from 'prop-types';
 
+import { hasSubColumns } from '../../utils/column-utils';
+
 /* eslint-disable */
 // eslint-disable-next-line
-const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
+const CreateCard = ({
+    addNewCard,
+    currentColumn,
+    statusArr,
+    tagsArr,
+    swinlanesArr
+}) => {
     const title = useRef();
     const description = useRef();
     const person = useRef();
     const status = useRef();
+    const subcolumn = useRef();
+    const swinlane = useRef();
     const tags = useRef();
 
     useEffect(() => {
         if (!currentColumn) {
-            currentColumn = statusArr[0].id;
-        }
-        console.log(currentColumn);
+            currentColumn.id = statusArr[0].id;
+        }        
     }, [currentColumn]);
 
     const validateInputs = () => {
-        addNewCard(
-            currentColumn,
-            title.current.value,
-            description.current.value,
-            person.current.value,
-            status.current.value,
-            tags.current.value
-        );
+        addNewCard(currentColumn, {
+            title: title.current.value,
+            description: description.current.value,
+            person: person.current.value,
+            status: status.current.value,
+            groupId: subcolumn.current ? subcolumn.current.value : null,
+            laneId: swinlane.current ? swinlane.current.value : null,
+            tags: tags.current.value
+        });
     };
 
     return (
@@ -77,7 +87,7 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
                 <select
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
                     ref={status}
-                    defaultValue={currentColumn}
+                    defaultValue={currentColumn.id}
                 >
                     {statusArr?.map((status, index) => (
                         <option value={status.id} key={index}>
@@ -86,6 +96,40 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
                     ))}
                 </select>
             </div>
+
+            {/* Subcolumns */}
+            {hasSubColumns(currentColumn.groups) && (
+                <div>
+                    <label className="f6 b db mb2">Subcoluna</label>
+                    <select
+                        className="input-reset ba b--black-20 pa2 mb2 db w-100"
+                        ref={subcolumn}
+                    >
+                        {currentColumn.groups?.map((group, index) => (
+                            <option value={group.id} key={index}>
+                                {group.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
+
+            {/* Swinlane */}
+            {currentColumn.showSwinLanes && (
+                <div>
+                    <label className="f6 b db mb2">Raia</label>
+                    <select
+                        className="input-reset ba b--black-20 pa2 mb2 db w-100"
+                        ref={swinlane}
+                    >
+                        {swinlanesArr?.map((this_swinlane, index) => (
+                            <option value={this_swinlane.id} key={index}>
+                                {this_swinlane.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             {/* Tags */}
             <div>
@@ -117,9 +161,10 @@ const CreateCard = ({ addNewCard, currentColumn, statusArr, tagsArr }) => {
 
 CreateCard.propTypes = {
     addNewCard: propTypes.func,
-    currentColumn: propTypes.number,
+    currentColumn: propTypes.object,
     statusArr: propTypes.array,
-    tagsArr: propTypes.array
+    tagsArr: propTypes.array,
+    swinlanes: propTypes.array
 };
 
 export default CreateCard;

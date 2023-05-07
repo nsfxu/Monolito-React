@@ -26,7 +26,7 @@ const SwinlaneHeader = ({
                 <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
                     {(provided) => (
                         <CardColumnList
-                            cards={this_column.groups[0]?.cards}
+                            cards={this_column.groups[0].cards}
                             tagsArr={tags}
                             provided={provided}
                             swinlane={{
@@ -71,7 +71,7 @@ const SwinlaneHeader = ({
 
     return (
         <>
-            {columns?.map((this_column, index) => (
+            {columns.map((this_column, index) => (
                 <div
                     key={index}
                     className="ba w-100"
