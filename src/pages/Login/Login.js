@@ -19,6 +19,8 @@ import {
 import { loginUser } from '../../services/user-service';
 
 const Login = () => {
+    const history = useHistory();
+
     const username = useRef();
     const password = useRef();
 
@@ -52,10 +54,11 @@ const Login = () => {
             return;
         }
 
-        if(response.result){
-            // redirecionar para dashboard
-        }
+        if (response.result) {
+            localStorage.setItem('user', JSON.stringify(response.result));
 
+            history.push('/dashboard');
+        }
     };
 
     return (
@@ -122,7 +125,9 @@ const Login = () => {
                     </Button>
                 </Box>
                 <Grid>
-                    <Link href="/register" underline="none">Registrar uma nova conta</Link>
+                    <Link href="/register" underline="none">
+                        Registrar uma nova conta
+                    </Link>
                 </Grid>
             </Box>
             <ToastContainer />
