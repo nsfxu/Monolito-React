@@ -15,11 +15,15 @@ import {
     Tooltip,
     MenuItem
 } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 
 // import { useHistory } from 'react-router';
 
 const Navbar = ({ userObject }) => {
     console.log(userObject);
+
+    const history = useHistory();
+
     const pages = ['HOME'];
     const settings = ['Minha conta', 'Sair'];
 
@@ -71,6 +75,23 @@ const Navbar = ({ userObject }) => {
             }`
         };
     }
+
+    const getClickedSetting = (setting) => {
+        if (!setting) {
+            return;
+        }
+
+        switch (setting) {
+            case 'Sair':
+                setTimeout(() => {
+                    history.push('/logout');
+                }, 1500);
+                break;
+
+            default:
+                break;
+        }
+    };
 
     return (
         <AppBar position="static">
@@ -157,7 +178,10 @@ const Navbar = ({ userObject }) => {
                             {settings.map((setting) => (
                                 <MenuItem
                                     key={setting}
-                                    onClick={handleCloseUserMenu}
+                                    onClick={() => {
+                                        handleCloseUserMenu();
+                                        getClickedSetting(setting);
+                                    }}
                                 >
                                     <Typography textAlign="center">
                                         {setting}
