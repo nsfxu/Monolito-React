@@ -20,8 +20,6 @@ import { useHistory } from 'react-router-dom';
 // import { useHistory } from 'react-router';
 
 const Navbar = ({ userObject }) => {
-    console.log(userObject);
-
     const history = useHistory();
 
     const pages = ['HOME'];
@@ -93,8 +91,23 @@ const Navbar = ({ userObject }) => {
         }
     };
 
+    const getPageClicked = (page) => {
+        if (!page) {
+            return;
+        }
+
+        switch (page) {
+            case 'HOME':
+                history.push('/dashboard');
+                break;
+
+            default:
+                break;
+        }
+    };
+
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{ backgroundColor: '#35393C' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Box
@@ -142,7 +155,10 @@ const Navbar = ({ userObject }) => {
                         {pages.map((page) => (
                             <Button
                                 key={page}
-                                onClick={handleCloseNavMenu}
+                                onClick={() => {
+                                    handleCloseNavMenu();
+                                    getPageClicked(page);
+                                }}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
                                 {page}

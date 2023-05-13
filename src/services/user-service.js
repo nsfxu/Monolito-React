@@ -18,4 +18,13 @@ const registerUser = async (userObject) => {
     }
 };
 
-export { loginUser, registerUser };
+const getUserBoards = async (id) => {
+    try {
+        const { data } = await api.get(`/user/boards/${id}`);
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+export { loginUser, registerUser, getUserBoards };

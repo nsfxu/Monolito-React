@@ -3,7 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
+import { Box } from '@mui/material';
+
 import Navbar from '../../components/Navbar/Navbar';
+import BoardList from '../../components/BoardList/BoardList';
 
 const Dashboard = () => {
     const history = useHistory();
@@ -26,7 +29,20 @@ const Dashboard = () => {
                     <div>
                         <Navbar userObject={user} />
                     </div>
-                    <h1>Dashboard</h1>
+                    <div className="pt5">
+                        <h1>Quadros</h1>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                backgroundColor: '#35393C'
+                            }}
+                            className="br2 pa5"
+                        >
+                            <BoardList userObject={user} />
+                        </Box>
+                    </div>
                 </>
             )}
         </div>
