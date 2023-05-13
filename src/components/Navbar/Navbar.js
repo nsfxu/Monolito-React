@@ -66,7 +66,9 @@ const Navbar = ({ userObject }) => {
             sx: {
                 bgcolor: stringToColor(name)
             },
-            children: `${name.toUpperCase().split(' ')[0][0]}${name.toUpperCase().split(' ')[1][0]}`
+            children: `${name.toUpperCase().split(' ')[0][0]}${
+                name.toUpperCase().split(' ')[1][0]
+            }`
         };
     }
 
@@ -128,7 +130,7 @@ const Navbar = ({ userObject }) => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip title="Configurações">
                             <IconButton
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}

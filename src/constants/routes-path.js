@@ -6,6 +6,8 @@ class RoutesPath {
     static REGISTER = { NAME: 'Register', PATH: '/register' };
 
     static DASHBOARD = { NAME: 'Dashboard', PATH: '/dashboard' };
+
+    static LOGOUT = { NAME: 'Logout', PATH: '/logout' };
 }
 
 export default RoutesPath;
