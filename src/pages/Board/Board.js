@@ -563,7 +563,7 @@ const Board = (props) => {
             {user && board_info && (
                 <>
                     <Navbar userObject={user} />
-                    <div className="ba bw mt6 flex flex-column items-center">
+                    <div className="flex flex-column items-center mt5 ml5 ba bw">
                         <div className="ma3 pl3 w-100">
                             <Stack
                                 direction="row"
