@@ -3,6 +3,8 @@ import Modal from 'react-modal';
 
 import propTypes from 'prop-types';
 
+import { Grid } from '@mui/material';
+
 import ModalStyles from '../../constants/modal-styles';
 
 import CreateCard from '../CreateCard';
@@ -52,35 +54,41 @@ const Column = ({
 
     return (
         <>
-            {columns &&
-                columns.map((column, index) => (
-                    <React.Fragment key={index}>
-                        {column.showSwinLanes ? (
-                            <>
-                                {!isSwinlaneGroupShown && (
-                                    <>
-                                        <SwinlaneHeader
-                                            columns={swinlane_columns}
-                                            all_swinlanes={swinlanes}
-                                            tags={tags}
-                                            openModal={openModal}
-                                            toggleSwinlane={toggleSwinlane}
-                                        />
-                                        {(isSwinlaneGroupShown = true)}
-                                    </>
-                                )}
-                            </>
-                        ) : (
-                            <NormalColumn
-                                key={index}
-                                this_column={column}
-                                tags={tags}
-                                openModal={openModal}
-                            />
-                        )}
-                    </React.Fragment>
-                ))}
-
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+            >
+                {columns &&
+                    columns.map((column, index) => (
+                        <Grid item key={index}>
+                            {column.showSwinLanes ? (
+                                <>
+                                    {!isSwinlaneGroupShown && (
+                                        <>
+                                            <SwinlaneHeader
+                                                columns={swinlane_columns}
+                                                all_swinlanes={swinlanes}
+                                                tags={tags}
+                                                openModal={openModal}
+                                                toggleSwinlane={toggleSwinlane}
+                                            />
+                                            {(isSwinlaneGroupShown = true)}
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <NormalColumn
+                                    key={index}
+                                    this_column={column}
+                                    tags={tags}
+                                    openModal={openModal}
+                                />
+                            )}
+                        </Grid>
+                    ))}
+            </Grid>
             <Modal
                 isOpen={isModalOpen}
                 style={ModalStyles.create}

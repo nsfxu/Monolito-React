@@ -595,24 +595,18 @@ const Board = (props) => {
                             </Stack>
                         </div>
 
-                        <div className="w-100 h-100 pl2 pr2">
-                            {board_info && (
-                                <div className="flex flex-row w-100">
-                                    <DragDropContext
-                                        onDragEnd={handleOnDragEnd}
-                                    >
-                                        <Column
-                                            columns={board_info.columns}
-                                            swinlanes={board_info.swinlanes}
-                                            status={status}
-                                            tags={tags}
-                                            addNewCard={addNewCard}
-                                            toggleSwinlane={toggleSwinlane}
-                                        />
-                                    </DragDropContext>
-                                </div>
-                            )}
-                        </div>
+                        {board_info && (
+                            <DragDropContext onDragEnd={handleOnDragEnd}>
+                                <Column
+                                    columns={board_info.columns}
+                                    swinlanes={board_info.swinlanes}
+                                    status={status}
+                                    tags={tags}
+                                    addNewCard={addNewCard}
+                                    toggleSwinlane={toggleSwinlane}
+                                />
+                            </DragDropContext>
+                        )}
                     </div>
                 </>
             )}
