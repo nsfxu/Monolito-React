@@ -3,6 +3,8 @@ import { Droppable } from 'react-beautiful-dnd';
 
 import propTypes from 'prop-types';
 
+import { Grid } from '@mui/material';
+
 import { hasSubColumns } from '../../utils/column-utils';
 
 import SubColumn from '../SubColumn';
@@ -11,20 +13,22 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const NormalColumn = ({ this_column, tags, openModal }) => {
+const NormalColumn = ({ this_column, tags }) => {
     return (
-        <div
-            className="ba w-100"
+        <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
             style={{
                 backgroundColor: '#1e272e'
             }}
         >
-            <ColumnHeader
-                this_column={this_column}
-                openModal={openModal}
-            />
+            <Grid item className="w-100 br">
+                <ColumnHeader this_column={this_column} />
+            </Grid>
 
-            <div className="h-100">
+            <Grid item className="h-100 br">
                 {hasSubColumns(this_column.groups) ? (
                     <div className="flex flex-row items-start justify-center h-100">
                         {this_column.groups?.map((group) => (
@@ -53,16 +57,14 @@ const NormalColumn = ({ this_column, tags, openModal }) => {
                         )}
                     </Droppable>
                 )}
-            </div>
-        </div>
+            </Grid>
+        </Grid>
     );
 };
 
 NormalColumn.propTypes = {
     this_column: propTypes.any,
-    tags: propTypes.array,
-    openModal: propTypes.func,
-    addNewSubColumn: propTypes.func
+    tags: propTypes.array
 };
 
 export default NormalColumn;

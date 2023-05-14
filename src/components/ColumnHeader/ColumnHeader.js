@@ -2,7 +2,7 @@ import React from 'react';
 
 import propTypes from 'prop-types';
 
-import { Stack, Button, Divider } from '@mui/material';
+import { Button } from '@mui/material';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -15,24 +15,16 @@ const ColumnHeader = ({ this_column, openModal }) => {
             <div>
                 <h3>{this_column.name}</h3>
             </div>
-            <div className="w-100 h-100 flex flex-row flex-wrap justify-center mb3">
-                <Stack
-                    direction="column"
-                    divider={<Divider orientation="vertical" flexItem />}
-                    spacing={1}
-                >
-                    <Button
-                        variant="contained"
-                        size="small"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            openModal(this_column);
-                        }}
-                    >
-                        Criar card
-                    </Button>
-                </Stack>
-            </div>
+            <Button
+                variant="contained"
+                size="small"
+                onClick={(e) => {
+                    e.preventDefault();
+                    openModal(this_column);
+                }}
+            >
+                Criar card
+            </Button>
         </div>
     );
 };
