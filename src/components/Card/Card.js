@@ -1,160 +1,121 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
 
-const Card = ({
-    title,
-    description,
-    image,
-    imageUrl,
-    imageType,
-    btn = {},
-    className,
-    children,
-    cardColor = 'white',
-    textAlign = 'tc',
-    linkable = false
-}) => {
-    const cardClasses = classNames({
-        [`bg-${cardColor}`]: !!cardColor,
-        pointer: linkable,
-        hoverable: linkable
-    });
+import {
+    Card as MUICard,
+    CardHeader,
+    CardContent,
+    Avatar,
+    Stack,
+    Chip
+} from '@mui/material';
 
-    const renderImage = () => {
-        let imageClasses = '';
+import { red, blueGrey } from '@mui/material/colors';
 
-        switch (imageType) {
-            case 'cover':
-                imageClasses = classNames('w-100', 'br--top', 'br2');
-                break;
-            case 'circle':
-                imageClasses = classNames(
-                    'br-100',
-                    'h3',
-                    'w3',
-                    'mt2',
-                    'mt3-ns'
-                );
-                break;
-            case 'double-ring':
-                imageClasses = classNames(
-                    'br-100',
-                    'h3',
-                    'w3',
-                    'pa1',
-                    'ba',
-                    'b--black-10',
-                    'mt2',
-                    'mt3-ns'
-                );
-                break;
-            case 'rounded-large':
-                imageClasses = classNames('br4', 'h3', 'w3', 'mt2', 'mt3-ns');
-                break;
-            case 'rounded':
-                imageClasses = classNames('br2', 'h3', 'w3', 'mt2', 'mt3-ns');
-                break;
-            default:
-                // square
-                imageClasses = classNames('h3', 'w3', 'mt2', 'mt3-ns');
-                break;
+import propTypes from 'prop-types';
+
+import Modal from 'react-modal';
+import ShowCard from '../ShowCard';
+
+/* eslint-disable */
+// eslint-disable-next-line
+const Card = ({ object, tagsArr }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cardTags, setCardTags] = useState([]);
+
+    useEffect(() => {
+        getAllCardTags();
+    }, [tagsArr]);
+
+    const getAllCardTags = () => {
+        let tempTagsArr = [];
+        const card_tags = object.tags;
+
+        if (tagsArr && card_tags && card_tags.length > 0) {
+            card_tags?.map((id) => {
+                tagsArr.map((tag) => {
+                    tag.id === id && tempTagsArr.push(tag);
+                });
+            });
         }
 
-        return (
-            <div className="center">
-                {imageUrl?.length ? (
-                    <img
-                        data-testid="card-url-img"
-                        src={imageUrl}
-                        className={`db ${imageClasses}`}
-                        alt="card avatar"
-                    />
-                ) : (
-                    <div
-                        data-testid="card-img"
-                        className={`db ${imageClasses}`}
-                    >
-                        {image}
-                    </div>
-                )}
-            </div>
-        );
+        setCardTags(tempTagsArr);
     };
 
-    const renderBody = () => (
-        <div className="pa2 pa3-ns min-h-3">
-            {!!title && (
-                <h6 className={`f6 b mb2 truncate ${textAlign}`} title={title}>
-                    {title}
-                </h6>
-            )}
-            {!!description && (
-                <p className={`f6 gray mt0 mv1 ${textAlign}`}>{description}</p>
-            )}
-            {!!children && children}
-        </div>
-    );
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
-    const renderFooterButton = () => {
-        const btnProps = {
-            bgColor: !!btn.bgColor ? btn.bgColor : 'white',
-            textColor: !!btn.textColor ? btn.textColor : 'blue'
-        };
-
-        const btnClassesDefault = classNames({
-            [`bg-${btnProps.bgColor}`]: true,
-            [`hover-${btnProps.bgColor}`]: true,
-            [`${btnProps.textColor}`]: true,
-            [`hover-bg-${btnProps.textColor}`]: true
-        });
-
-        const btnClassesActive = classNames({
-            [`bg-${btnProps.textColor}`]: true,
-            [`${btnProps.bgColor}`]: true
-        });
-
-        const btnClasses = classNames(
-            !!btn.active ? btnClassesActive : btnClassesDefault
-        );
-
-        return (
-            <div className="w-100 bt bp-bc-medium-wave">
-                <button
-                    data-testid="card-btn"
-                    type="button"
-                    className={`w-100 link pointer tc ph3 pv3 db f6 b bg-animate b--none br3 br--bottom ${btnClasses}`}
-                    onClick={!!btn.onClick ? btn.onClick : () => {}}
-                >
-                    {!!btn.text && btn.text}
-                </button>
-            </div>
-        );
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
-        <article
-            className={`w-100 flex flex-column ba b--black-10 br3 shadow-6 animated fade-in ${cardClasses} ${className}`}
-        >
-            {(!!image || !!imageUrl) && renderImage()}
-            {renderBody()}
-            {!!Object.keys(btn)?.length && renderFooterButton()}
-        </article>
+        <>
+            <MUICard
+                sx={{ maxWidth: 240, minWidth: 240, bgcolor: blueGrey[900] }}
+                variant="outlined"
+                onClick={() => openModal()}
+            >
+                <CardHeader
+                    sx={{ color: '#f9f9f9' }}
+                    avatar={
+                        <Avatar
+                            sx={{ bgcolor: red[500], width: 32, height: 32 }}
+                            aria-label="recipe"
+                        >
+                            GF
+                        </Avatar>
+                    }
+                    title={object.name}
+                />
+                <CardContent>
+                    <Stack
+                        direction="row"
+                        spacing={0}
+                        sx={{ flexWrap: 'wrap', gap: 1 }}
+                    >
+                        {cardTags.length > 0 &&
+                            cardTags.map(
+                                ({
+                                    id,
+                                    label,
+                                    size,
+                                    variant,
+                                    textColor,
+                                    bgColor,
+                                    borderColor
+                                }) => (
+                                    <Chip
+                                        key={id}
+                                        label={label}
+                                        size={size}
+                                        variant={variant}
+                                        sx={{
+                                            color: textColor,
+                                            backgroundColor: bgColor,
+                                            borderColor: borderColor
+                                        }}
+                                    />
+                                )
+                            )}
+                    </Stack>
+                </CardContent>
+            </MUICard>
+
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                appElement={document.getElementById('root')}
+            >
+                <ShowCard object={object} />
+            </Modal>
+        </>
     );
 };
 
 Card.propTypes = {
-    title: PropTypes.any,
-    description: PropTypes.string,
-    image: PropTypes.any,
-    imageUrl: PropTypes.string,
-    imageType: PropTypes.string,
-    btn: PropTypes.object,
-    className: PropTypes.string,
-    children: PropTypes.any,
-    cardColor: PropTypes.string,
-    textAlign: PropTypes.string,
-    linkable: PropTypes.bool
+    object: propTypes.object,
+    tagsArr: propTypes.array
 };
 
 export default Card;

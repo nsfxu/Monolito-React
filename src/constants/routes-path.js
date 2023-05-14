@@ -1,7 +1,15 @@
 class RoutesPath {
     static HOME = { NAME: 'Home', PATH: '/' };
 
-    static EXAMPLE_PAGE = { NAME: 'Example Page', PATH: '/example' };
+    static LOGIN = { NAME: 'Login', PATH: '/login' };
+
+    static REGISTER = { NAME: 'Register', PATH: '/register' };
+
+    static DASHBOARD = { NAME: 'Dashboard', PATH: '/dashboard' };
+
+    static LOGOUT = { NAME: 'Logout', PATH: '/logout' };
+
+    static BOARD = { NAME: 'Board', PATH: '/board' };
 }
 
 export default RoutesPath;
