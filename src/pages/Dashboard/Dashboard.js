@@ -23,13 +23,13 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div className="flex flex-column ph1 ph4-m ph5-ns pb5 w-100 h-100">
+        <div className="flex flex-column w-100 h-100">
             {user && (
                 <>
                     <div>
                         <Navbar userObject={user} />
                     </div>
-                    <div className="pt5">
+                    <div className="pt5 ph1 ph5-m ph6-ns pb6">
                         <h1>Quadros</h1>
                         <Box
                             sx={{

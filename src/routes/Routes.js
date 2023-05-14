@@ -7,6 +7,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import Logout from '../pages/Logout';
+import Board from '../pages/Board';
 
 const Routes = () => (
     <BrowserRouter>
@@ -16,6 +17,7 @@ const Routes = () => (
             <Route exact path={RoutesPath.REGISTER.PATH} component={Register} />
             <Route exact path={RoutesPath.DASHBOARD.PATH} component={Dashboard} />
             <Route exact path={RoutesPath.LOGOUT.PATH} component={Logout} />
+            <Route exact path={RoutesPath.BOARD.PATH} component={Board} />
         </Switch>
     </BrowserRouter>
 );

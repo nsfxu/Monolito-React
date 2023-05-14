@@ -1,4 +1,8 @@
+/* eslint-disable */
+// eslint-disable-next-line
 import React, { useState, useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,8 +15,6 @@ import Divider from '@mui/material/Divider';
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
-import { TEST_DATA } from '../../constants/board-test-data';
-
 import {
     findColumnById,
     findSubColumnById,
@@ -20,20 +22,19 @@ import {
     addObjectIntoPosition
 } from '../../utils/column-utils';
 
-import Column from '../Column/Column';
-import ConfigBoardModal from '../ConfigBoardModal';
+import Column from '../../components/Column';
+import ConfigBoardModal from '../../components/ConfigBoardModal';
+import Navbar from '../../components/Navbar/Navbar';
 
 const CONFIG_BOARD = 'ConfigBoard';
 
-/* eslint-disable */
-// eslint-disable-next-line
-const Board = () => {
-    const data = TEST_DATA;
+const Board = (props) => {
+    const history = useHistory();
 
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
-    const [board_info, updateBoardInfo] = useState(data);
+    const [board_info, updateBoardInfo] = useState(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
@@ -41,11 +42,37 @@ const Board = () => {
     const [status, setStatus] = useState([]);
     const [tags, setTags] = useState([{}]);
 
-    useEffect(() => {
-        getAllColumns();
-        getAllTags();
+    const [user, setUser] = useState(undefined);
 
-        forceUpdate();
+    useEffect(() => {
+        const loggedUser = localStorage.getItem('user');
+
+        if (!loggedUser) {
+            history.push('/login');
+        }
+
+        setUser(JSON.parse(loggedUser));
+    }, []);
+
+    useEffect(async () => {
+        if (props.location.state) {
+            await updateBoardInfo(props.location.state);
+
+            return;
+        }
+
+        history.push('/dashboard');
+    }, [props]);
+
+    useEffect(() => {
+        if (board_info) {
+            getAllColumns();
+            getAllTags();
+
+            forceUpdate();
+        }
+
+        console.log(board_info);
     }, [board_info]);
 
     //#region functions
@@ -533,53 +560,63 @@ const Board = () => {
 
     return (
         <>
-            <div className="ba bw mt6 flex flex-column items-center">
-                <div className="ma3 pl3 w-100">
-                    <Stack
-                        direction="row"
-                        divider={<Divider orientation="vertical" flexItem />}
-                        spacing={2}
-                    >
-                        <Button
-                            variant="contained"
-                            size="medium"
-                            onClick={(e) => {
-                                openCustomModal(CONFIG_BOARD);
-                                e.preventDefault();
-                            }}
-                        >
-                            Configurar quadro
-                        </Button>
-                        <Button
-                            variant="contained"
-                            size="medium"
-                            onClick={(e) => {
-                                console.log(board_info);
-                                e.preventDefault();
-                            }}
-                        >
-                            DEBUG
-                        </Button>
-                    </Stack>
-                </div>
-
-                <div className="w-100 h-100 pl2 pr2">
-                    {board_info && (
-                        <div className="flex flex-row w-100">
-                            <DragDropContext onDragEnd={handleOnDragEnd}>
-                                <Column
-                                    columns={board_info.columns}
-                                    swinlanes={board_info.swinlanes}
-                                    status={status}
-                                    tags={tags}
-                                    addNewCard={addNewCard}
-                                    toggleSwinlane={toggleSwinlane}
-                                />
-                            </DragDropContext>
+            {user && board_info && (
+                <>
+                    <Navbar userObject={user} />
+                    <div className="ba bw mt6 flex flex-column items-center">
+                        <div className="ma3 pl3 w-100">
+                            <Stack
+                                direction="row"
+                                divider={
+                                    <Divider orientation="vertical" flexItem />
+                                }
+                                spacing={2}
+                            >
+                                <Button
+                                    variant="contained"
+                                    size="medium"
+                                    onClick={(e) => {
+                                        openCustomModal(CONFIG_BOARD);
+                                        e.preventDefault();
+                                    }}
+                                >
+                                    Configurar quadro
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    size="medium"
+                                    onClick={(e) => {
+                                        console.log(board_info);
+                                        e.preventDefault();
+                                    }}
+                                >
+                                    DEBUG
+                                </Button>
+                            </Stack>
                         </div>
-                    )}
-                </div>
-            </div>
+
+                        <div className="w-100 h-100 pl2 pr2">
+                            {board_info && (
+                                <div className="flex flex-row w-100">
+                                    <DragDropContext
+                                        onDragEnd={handleOnDragEnd}
+                                    >
+                                        <Column
+                                            columns={board_info.columns}
+                                            swinlanes={board_info.swinlanes}
+                                            status={status}
+                                            tags={tags}
+                                            addNewCard={addNewCard}
+                                            toggleSwinlane={toggleSwinlane}
+                                        />
+                                    </DragDropContext>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </>
+            )}
+
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
