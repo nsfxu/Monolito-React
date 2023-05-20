@@ -25,6 +25,7 @@ import {
 import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
+import { updateCardGroup } from '../../services/card-service';
 
 const CONFIG_BOARD = 'ConfigBoard';
 
@@ -481,7 +482,33 @@ const Board = (props) => {
             removed_item[0]
         );
 
+        updateCurrentCardGroup(
+            removed_item[0].id,
+            destination_pos_id,
+            source_pos_id,
+            column_to_add.groups[0].id,
+            removed_item[0].laneId
+        );
+
         updateBoardInfo(items);
+    };
+
+    const updateCurrentCardGroup = async (
+        id_card,
+        new_order,
+        old_order,
+        id_group,
+        id_swinlane
+    ) => {
+        const response = await updateCardGroup(
+            id_card,
+            new_order,
+            old_order,
+            id_group,
+            id_swinlane
+        );
+
+        console.log(response);
     };
 
     const addNewCard = (currentColumn, new_card) => {
