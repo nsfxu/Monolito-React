@@ -31,25 +31,32 @@ const CreateCard = ({
 }) => {
     const title = useRef();
     const description = useRef();
-    const tags = useRef();
 
     const [personName, setPersonName] = useState(null);
     const [column, setColumn] = useState(null);
     const [subcolumn, setSubcolumn] = useState(null);
     const [swinlane, setSwinlane] = useState(null);
 
+    const [selected_tags, setSelectedTags] = useState(null);
     const [selected_column, setSelectedColumn] = useState([]);
 
-    const validateInputs = () => {
-        addNewCard({
-            title: title.current.value,
-            description: description.current.value,
-            person: personName,
-            status: column,
-            groupId: subcolumn.current ? subcolumn.current.value : null,
-            laneId: swinlane.current ? swinlane.current.value : null,
-            tags: tags.current.value
-        });
+    const validateInputs = async () => {
+        if (title.current.value && personName && column) {
+            let temp_subcolumn = subcolumn;
+
+            if (!hasSubColumns(selected_column.groups) || !subcolumn) {
+                temp_subcolumn = selected_column.groups[0].id;
+            }
+
+            addNewCard({
+                title: title.current.value,
+                description: description.current.value,
+                person: personName,
+                groupId: temp_subcolumn,
+                laneId: swinlane,
+                tags: selected_tags
+            });
+        }
     };
 
     useEffect(() => {
@@ -63,6 +70,14 @@ const CreateCard = ({
             }
         }
     }, [column]);
+
+    const updateTags = (tagsArr) => {
+        let temp_tags = [];
+
+        tagsArr?.map((tag) => temp_tags.push(tag.id_tag));
+
+        setSelectedTags([...temp_tags]);
+    };
 
     const handleChangeSwinlane = (event) => {
         const {
@@ -329,6 +344,7 @@ const CreateCard = ({
                         multiple
                         filterSelectedOptions
                         options={tagsArr}
+                        onChange={(event, value) => updateTags(value)}
                         getOptionLabel={(tag) => tag.name}
                         renderTags={(values, tagProps) =>
                             values.map((option, index) => (
@@ -346,7 +362,6 @@ const CreateCard = ({
                                 label="Tags"
                                 sx={inputTagStyle}
                                 variant="standard"
-                                inputRef={tags}
                                 InputLabelProps={{
                                     shrink: true
                                 }}
