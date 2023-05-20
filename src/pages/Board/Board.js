@@ -25,7 +25,7 @@ import {
 import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
-import { updateCardGroup } from '../../services/card-service';
+import { createCard, updateCardGroup } from '../../services/card-service';
 import {
     getBoardInfo,
     getBoardParticipants
@@ -571,20 +571,22 @@ const Board = (props) => {
         console.log(response);
     };
 
-    const addNewCard = (currentColumn, new_card) => {
+    const addNewCard = async (currentColumn, new_card) => {
         const items = board_info;
 
         const card_object = {
             id: items.nextCardId,
             name: new_card.title,
-            description: new_card.description
+            description: new_card.description,
+            tags: new_card.tags,
+            id_user: new_card.id_user
         };
 
         if (currentColumn.showSwinLanes) {
             card_object.laneId = new_card.laneId;
         }
 
-        const column_to_add = findColumnById(items, new_card.status);
+        const column_to_add = findColumnById(items, new_card.columnId);
 
         if (new_card.groupId) {
             const groupIndex = column_to_add.groups.findIndex((group) => {
@@ -601,6 +603,17 @@ const Board = (props) => {
         }
 
         items.nextCardId++;
+
+        const response = await createCard(
+            card_object.id,
+            new_card.title,
+            new_card.description,
+            new_card.groupId,
+            new_card.person,
+            new_card.laneId
+        );
+
+        console.log(response);
 
         forceUpdate();
         toast('Card adicionado');

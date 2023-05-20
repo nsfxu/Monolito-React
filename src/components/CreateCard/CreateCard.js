@@ -48,10 +48,11 @@ const CreateCard = ({
                 temp_subcolumn = selected_column.groups[0].id;
             }
 
-            addNewCard({
+            addNewCard(selected_column, {
                 title: title.current.value,
                 description: description.current.value,
                 person: personName,
+                columnId: column,
                 groupId: temp_subcolumn,
                 laneId: swinlane,
                 tags: selected_tags
