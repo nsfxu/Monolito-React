@@ -23,7 +23,6 @@ const Column = ({
     toggleSwinlane
 }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
-    const [columnToAddCard, setColumnToAddCard] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     let isSwinlaneGroupShown = false;
@@ -44,8 +43,7 @@ const Column = ({
         setSwinlaneColumns(temp_swinlane_columns);
     };
 
-    const openModal = (columnName) => {
-        setColumnToAddCard(columnName);
+    const openModal = () => {
         setIsModalOpen(true);
     };
 
@@ -98,11 +96,12 @@ const Column = ({
             >
                 <CreateCard
                     addNewCard={addNewCard}
-                    currentColumn={columnToAddCard}
+                    columns={columns}
                     participants={participants}
                     statusArr={status}
                     tagsArr={tags}
                     swinlanesArr={swinlanes}
+                    closeModal={closeModal}
                 />
             </Modal>
         </>

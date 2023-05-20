@@ -20,7 +20,7 @@ const ColumnHeader = ({ this_column, openModal }) => {
                 size="small"
                 onClick={(e) => {
                     e.preventDefault();
-                    openModal(this_column);
+                    openModal();
                 }}
             >
                 Criar card

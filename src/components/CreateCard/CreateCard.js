@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import propTypes from 'prop-types';
 
 import {
     Autocomplete,
     Box,
+    Button,
+    Chip,
     FormControl,
     InputLabel,
     MenuItem,
@@ -20,38 +22,86 @@ import { hasSubColumns } from '../../utils/column-utils';
 // eslint-disable-next-line
 const CreateCard = ({
     addNewCard,
-    currentColumn,
+    columns,
     participants,
     statusArr,
     tagsArr,
-    swinlanesArr
+    swinlanesArr,
+    closeModal
 }) => {
     const title = useRef();
     const description = useRef();
-    const person = useRef();
-    const status = useRef();
-    const subcolumn = useRef();
-    const swinlane = useRef();
     const tags = useRef();
 
-    console.log(tagsArr);
+    const [personName, setPersonName] = useState(null);
+    const [column, setColumn] = useState(null);
+    const [subcolumn, setSubcolumn] = useState(null);
+    const [swinlane, setSwinlane] = useState(null);
 
-    useEffect(() => {
-        if (!currentColumn) {
-            currentColumn.id = statusArr[0].id;
-        }
-    }, [currentColumn]);
+    const [selected_column, setSelectedColumn] = useState([]);
 
     const validateInputs = () => {
-        console.log(currentColumn, {
+        addNewCard({
             title: title.current.value,
             description: description.current.value,
-            person: person.current.value,
-            status: status.current.value,
+            person: personName,
+            status: column,
             groupId: subcolumn.current ? subcolumn.current.value : null,
             laneId: swinlane.current ? swinlane.current.value : null,
             tags: tags.current.value
         });
+    };
+
+    useEffect(() => {
+        if (columns) {
+            const found_column = columns.find(
+                (this_column) => this_column.id == column
+            );
+
+            if (found_column) {
+                setSelectedColumn(found_column);
+            }
+        }
+    }, [column]);
+
+    const handleChangeSwinlane = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setSwinlane(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        );
+    };
+
+    const handleChangeSubcolumn = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setSubcolumn(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        );
+    };
+
+    const handleChangeColumn = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setColumn(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        );
+    };
+
+    const handleChangePerson = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        );
     };
 
     const inputStyle = {
@@ -78,7 +128,7 @@ const CreateCard = ({
     };
 
     const inputTagStyle = {
-        input: { color: '#F2F7F2', height: '60px' },
+        input: { color: '#F2F7F2', height: '55px' },
         label: { color: 'grey', fontSize: '22px' },
         '& label.Mui-focused': {
             color: '#F0F0F0'
@@ -105,6 +155,15 @@ const CreateCard = ({
         }
     };
 
+    const inputSelectStyles = {
+        color: 'grey',
+        fontSize: '14px',
+        '&.Mui-focused': {
+            color: 'white',
+            fontSize: '16px'
+        }
+    };
+
     const MenuProps = {
         PaperProps: {
             style: {
@@ -114,6 +173,11 @@ const CreateCard = ({
                 backgroundColor: '#35393C'
             }
         }
+    };
+
+    const chipStyle = {
+        color: 'white',
+        backgroundColor: '#35393F'
     };
 
     return (
@@ -160,28 +224,19 @@ const CreateCard = ({
                 {/* Person */}
                 <div>
                     <FormControl sx={{ width: '100%' }}>
-                        <InputLabel
-                            sx={{
-                                color: 'grey',
-                                fontSize: '14px',
-                                '&.Mui-focused': {
-                                    color: 'white',
-                                    fontSize: '16px'
-                                }
-                            }}
-                        >
+                        <InputLabel sx={inputSelectStyles}>
                             Responsável
                         </InputLabel>
+
                         <Select
                             fullWidth
-                            multiple
                             sx={selectStyle}
-                            value={[]}
+                            value={personName ? personName : ''}
+                            onChange={handleChangePerson}
                             input={<OutlinedInput label="Responsável" />}
-                            inputRef={person}
                             MenuProps={MenuProps}
                         >
-                            {participants.map((participant, index) => (
+                            {participants?.map((participant, index) => (
                                 <MenuItem
                                     value={participant.id_user}
                                     key={index}
@@ -193,53 +248,78 @@ const CreateCard = ({
                     </FormControl>
                 </div>
 
-                {/* Status */}
+                {/* Column */}
                 <div>
-                    <label>Status</label>
-                    <select
-                        className="input-reset ba b--black-20 pa2 mb2 db w-100"
-                        ref={status}
-                        defaultValue={currentColumn.id}
-                    >
-                        {statusArr?.map((status, index) => (
-                            <option value={status.id} key={index}>
-                                {status.name}
-                            </option>
-                        ))}
-                    </select>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel sx={inputSelectStyles}>Coluna</InputLabel>
+
+                        <Select
+                            fullWidth
+                            sx={selectStyle}
+                            value={column ? column : ''}
+                            onChange={handleChangeColumn}
+                            defaultValue={0}
+                            input={<OutlinedInput label="Coluna" />}
+                            MenuProps={MenuProps}
+                        >
+                            {statusArr?.map((status, index) => (
+                                <MenuItem value={status.id} key={index}>
+                                    {status.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
 
                 {/* Subcolumns */}
-                {hasSubColumns(currentColumn.groups) && (
+                {selected_column && hasSubColumns(selected_column.groups) && (
                     <div>
-                        <label>Subcoluna</label>
-                        <select
-                            className="input-reset ba b--black-20 pa2 mb2 db w-100"
-                            ref={subcolumn}
-                        >
-                            {currentColumn.groups?.map((group, index) => (
-                                <option value={group.id} key={index}>
-                                    {group.name}
-                                </option>
-                            ))}
-                        </select>
+                        <FormControl sx={{ width: '100%' }}>
+                            <InputLabel sx={inputSelectStyles}>
+                                Subcoluna
+                            </InputLabel>
+
+                            <Select
+                                fullWidth
+                                sx={selectStyle}
+                                value={subcolumn ? subcolumn : ''}
+                                onChange={handleChangeSubcolumn}
+                                defaultValue={0}
+                                input={<OutlinedInput label="Subcoluna" />}
+                                MenuProps={MenuProps}
+                            >
+                                {selected_column.groups?.map((group, index) => (
+                                    <MenuItem value={group.id} key={index}>
+                                        {group.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </div>
                 )}
 
                 {/* Swinlane */}
-                {currentColumn.showSwinLanes && (
+                {selected_column && selected_column.showSwinLanes && (
                     <div>
-                        <label className="f6 b db mb2">Raia</label>
-                        <select
-                            className="input-reset ba b--black-20 pa2 mb2 db w-100"
-                            ref={swinlane}
-                        >
-                            {swinlanesArr?.map((this_swinlane, index) => (
-                                <option value={this_swinlane.id} key={index}>
-                                    {this_swinlane.name}
-                                </option>
-                            ))}
-                        </select>
+                        <FormControl sx={{ width: '100%' }}>
+                            <InputLabel sx={inputSelectStyles}>Raia</InputLabel>
+
+                            <Select
+                                fullWidth
+                                sx={selectStyle}
+                                value={swinlane ? swinlane : ''}
+                                onChange={handleChangeSwinlane}
+                                defaultValue={0}
+                                input={<OutlinedInput label="Raia" />}
+                                MenuProps={MenuProps}
+                            >
+                                {swinlanesArr?.map((swinlane, index) => (
+                                    <MenuItem value={swinlane.id} key={index}>
+                                        {swinlane.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </div>
                 )}
 
@@ -247,14 +327,23 @@ const CreateCard = ({
                 <div>
                     <Autocomplete
                         multiple
+                        filterSelectedOptions
                         options={tagsArr}
                         getOptionLabel={(tag) => tag.name}
-                        filterSelectedOptions
+                        renderTags={(values, tagProps) =>
+                            values.map((option, index) => (
+                                <Chip
+                                    sx={chipStyle}
+                                    variant="outlined"
+                                    label={option.name}
+                                    {...tagProps({ index })}
+                                />
+                            ))
+                        }
                         renderInput={(params) => (
                             <TextField
                                 {...params}
                                 label="Tags"
-                                placeholder="Tags"
                                 sx={inputTagStyle}
                                 variant="standard"
                                 inputRef={tags}
@@ -267,15 +356,25 @@ const CreateCard = ({
                 </div>
 
                 <div className="mt3">
-                    <input
-                        className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6"
-                        type="submit"
-                        value="Criar card"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            validateInputs();
-                        }}
-                    />
+                    <Stack direction="row" spacing={3}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                validateInputs();
+                            }}
+                        >
+                            Criar CARD
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => closeModal()}
+                        >
+                            Fechar
+                        </Button>
+                    </Stack>
                 </div>
             </Stack>
         </Box>
@@ -284,11 +383,12 @@ const CreateCard = ({
 
 CreateCard.propTypes = {
     addNewCard: propTypes.func,
-    currentColumn: propTypes.object,
+    columns: propTypes.array,
     participants: propTypes.array,
     statusArr: propTypes.array,
     tagsArr: propTypes.array,
-    swinlanes: propTypes.array
+    swinlanesArr: propTypes.array,
+    closeModal: propTypes.func
 };
 
 export default CreateCard;
