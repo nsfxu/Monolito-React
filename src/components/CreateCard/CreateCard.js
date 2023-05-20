@@ -8,6 +8,7 @@ import { hasSubColumns } from '../../utils/column-utils';
 const CreateCard = ({
     addNewCard,
     currentColumn,
+    participants,
     statusArr,
     tagsArr,
     swinlanesArr
@@ -23,11 +24,11 @@ const CreateCard = ({
     useEffect(() => {
         if (!currentColumn) {
             currentColumn.id = statusArr[0].id;
-        }        
+        }
     }, [currentColumn]);
 
     const validateInputs = () => {
-        addNewCard(currentColumn, {
+        console.log(currentColumn, {
             title: title.current.value,
             description: description.current.value,
             person: person.current.value,
@@ -72,12 +73,12 @@ const CreateCard = ({
                 <select
                     className="input-reset ba b--black-20 pa2 mb2 db w-100"
                     ref={person}
-                    disabled
                 >
-                    <option value="volvo">Você</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+                    {participants.map((participant, index) => (
+                        <option value={participant.id_user} key={index}>
+                            {participant.name}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -162,6 +163,7 @@ const CreateCard = ({
 CreateCard.propTypes = {
     addNewCard: propTypes.func,
     currentColumn: propTypes.object,
+    participants: propTypes.array,
     statusArr: propTypes.array,
     tagsArr: propTypes.array,
     swinlanes: propTypes.array

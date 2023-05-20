@@ -17,6 +17,7 @@ const Column = ({
     columns,
     swinlanes,
     status,
+    participants,
     tags,
     addNewCard,
     toggleSwinlane
@@ -98,6 +99,7 @@ const Column = ({
                 <CreateCard
                     addNewCard={addNewCard}
                     currentColumn={columnToAddCard}
+                    participants={participants}
                     statusArr={status}
                     tagsArr={tags}
                     swinlanesArr={swinlanes}
@@ -111,6 +113,7 @@ Column.propTypes = {
     columns: propTypes.array,
     swinlanes: propTypes.array,
     status: propTypes.array,
+    participants: propTypes.array,
     tags: propTypes.array,
     addNewCard: propTypes.func,
     addNewSubColumn: propTypes.func,

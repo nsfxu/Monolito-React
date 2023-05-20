@@ -26,7 +26,10 @@ import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
 import { updateCardGroup } from '../../services/card-service';
-import { getBoardInfo } from '../../services/board-service';
+import {
+    getBoardInfo,
+    getBoardParticipants
+} from '../../services/board-service';
 
 const CONFIG_BOARD = 'ConfigBoard';
 
@@ -36,11 +39,13 @@ const Board = (props) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
+    const [board_id, setBoardId] = useState(undefined);
     const [board_info, updateBoardInfo] = useState(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
 
+    const [participants, setParticipants] = useState([]);
     const [status, setStatus] = useState([]);
     const [tags, setTags] = useState([{}]);
 
@@ -57,10 +62,8 @@ const Board = (props) => {
     }, []);
 
     useEffect(async () => {
-        if (props.location.state) {
-            const db_board_data = await getBoardInfo(props.location.state);
-
-            await updateBoardInfo({ ...db_board_data.result });
+        if (props.location.state && !board_id) {
+            await setBoardId(props.location.state);
 
             return;
         }
@@ -68,16 +71,30 @@ const Board = (props) => {
         history.push('/dashboard');
     }, [props]);
 
+    useEffect(async () => {
+        if (board_id) {
+            const db_board_data = await getBoardInfo(board_id);
+
+            await updateBoardInfo({ ...db_board_data.result });
+            await getAllParticipants(board_id);
+        }
+    }, [board_id]);
+
     useEffect(() => {
         if (board_info) {
             getAllColumns();
             getAllTags();
-
             forceUpdate();
         }
 
         console.log(board_info);
     }, [board_info]);
+
+    useEffect(() => {
+        if (participants) {
+            console.log(participants);
+        }
+    }, [participants]);
 
     //#region functions
 
@@ -108,6 +125,14 @@ const Board = (props) => {
         });
 
         forceUpdate();
+    };
+
+    const getAllParticipants = async (id_board) => {
+        const response = await getBoardParticipants(id_board);
+
+        if (response.result) {
+            await setParticipants(response.result);
+        }
     };
 
     const getAllTags = () => {
@@ -657,11 +682,12 @@ const Board = (props) => {
                             </Stack>
                         </div>
 
-                        {board_info && (
+                        {board_info && participants && (
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Column
                                     columns={board_info.columns}
                                     swinlanes={board_info.swinlanes}
+                                    participants={participants}
                                     status={status}
                                     tags={tags}
                                     addNewCard={addNewCard}
