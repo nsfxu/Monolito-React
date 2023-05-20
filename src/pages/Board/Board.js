@@ -289,6 +289,14 @@ const Board = (props) => {
             destination_pos_id,
             removed_item[0]
         );
+
+        updateCardGroup(
+            removed_item[0].id,
+            destination_pos_id,
+            source_pos_id,
+            column_to_add.groups[0].id,
+            removed_item[0].laneId
+        );
     };
 
     const handleWhenDestinationIsSubColumn = (
@@ -329,6 +337,14 @@ const Board = (props) => {
             destination_pos_id,
             removed_item[0]
         );
+
+        updateCardGroup(
+            removed_item[0].id,
+            destination_pos_id,
+            source_pos_id,
+            subcolumn_to_add.id,
+            removed_item[0].laneId
+        );
     };
 
     const handleWhenSourceIsDestination = (
@@ -367,6 +383,14 @@ const Board = (props) => {
             destination_pos_id,
             removed_item[0]
         );
+
+        updateCardGroup(
+            removed_item[0].id,
+            destination_pos_id,
+            source_pos_id,
+            subcolumn_to_add.id,
+            removed_item[0].laneId
+        );
     };
 
     const handleWhenSourceIsntDestination = (
@@ -401,12 +425,20 @@ const Board = (props) => {
         const subcolumn_to_add = findSubColumnById(
             column_to_add,
             destination_subcolumn_id
-        );
+        );        
 
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
+        );
+
+        updateCardGroup(
+            removed_item[0].id,
+            destination_pos_id,
+            source_pos_id,
+            subcolumn_to_add.id,
+            removed_item[0].laneId
         );
     };
 
