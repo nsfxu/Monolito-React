@@ -6,7 +6,6 @@ import propTypes from 'prop-types';
 import { Card, CardContent, CardActions, Button, Grid } from '@mui/material';
 
 import { getUserBoards } from '../../services/user-service';
-import { getBoardInfo } from '../../services/board-service';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -26,14 +25,10 @@ const BoardList = ({ userObject }) => {
     }, []);
 
     const goToSelectedBoard = async (board_id) => {
-        const board_data = await getBoardInfo(board_id);
-
-        if (board_data) {
-            history.push({
-                pathname: '/board',
-                state: JSON.parse(JSON.stringify(board_data.result))
-            });
-        }
+        history.push({
+            pathname: '/board',
+            state: board_id
+        });
 
         return;
     };

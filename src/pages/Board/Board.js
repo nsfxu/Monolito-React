@@ -26,6 +26,7 @@ import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
 import { updateCardGroup } from '../../services/card-service';
+import { getBoardInfo } from '../../services/board-service';
 
 const CONFIG_BOARD = 'ConfigBoard';
 
@@ -57,7 +58,9 @@ const Board = (props) => {
 
     useEffect(async () => {
         if (props.location.state) {
-            await updateBoardInfo(props.location.state);
+            const db_board_data = await getBoardInfo(props.location.state);
+
+            await updateBoardInfo({ ...db_board_data.result });
 
             return;
         }
@@ -425,7 +428,7 @@ const Board = (props) => {
         const subcolumn_to_add = findSubColumnById(
             column_to_add,
             destination_subcolumn_id
-        );        
+        );
 
         addObjectIntoPosition(
             subcolumn_to_add,

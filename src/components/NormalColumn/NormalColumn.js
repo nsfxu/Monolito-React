@@ -13,7 +13,7 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const NormalColumn = ({ this_column, tags }) => {
+const NormalColumn = ({ this_column, tags, openModal }) => {
     return (
         <Grid
             container
@@ -25,7 +25,7 @@ const NormalColumn = ({ this_column, tags }) => {
             }}
         >
             <Grid item className="w-100 br">
-                <ColumnHeader this_column={this_column} />
+                <ColumnHeader this_column={this_column} openModal={openModal} />
             </Grid>
 
             <Grid item className="h-100 br">
@@ -64,6 +64,7 @@ const NormalColumn = ({ this_column, tags }) => {
 
 NormalColumn.propTypes = {
     this_column: propTypes.any,
+    openModal: propTypes.func,
     tags: propTypes.array
 };
 
