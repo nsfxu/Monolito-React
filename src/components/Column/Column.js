@@ -92,7 +92,7 @@ const Column = ({
             </Grid>
             <Modal
                 isOpen={isModalOpen}
-                style={ModalStyles.create}
+                style={ModalStyles.createCard}
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >

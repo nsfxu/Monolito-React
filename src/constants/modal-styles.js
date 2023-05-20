@@ -29,6 +29,17 @@ class ModalStyles {
             transform: 'translate(-50%, -50%)'
         }
     };
+
+    static createCard = {
+        content: {
+            top: '100px',
+            left: '100px',
+            right: '100px',
+            bottom: '100px',
+            backgroundColor: '#35393C',
+            color: 'white'
+        }
+    };
 }
 
 export default ModalStyles;
