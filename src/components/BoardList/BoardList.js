@@ -9,7 +9,7 @@ import { getUserBoards } from '../../services/user-service';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const BoardList = ({ userObject }) => {
+const BoardList = ({ userObject, openModal }) => {
     const [boards, setBoards] = useState(undefined);
     const history = useHistory();
 
@@ -34,35 +34,46 @@ const BoardList = ({ userObject }) => {
     };
 
     return (
-        <Grid container spacing={2} className="flex flex-row w-100 h-100">
-            {boards && boards.length > 0 ? (
-                boards.map((board) => (
-                    <Grid item xs={4} key={board.id_board}>
-                        <Card
-                            sx={{
-                                maxWidth: 500,
-                                backgroundColor: '#252627'
-                            }}
-                        >
-                            <CardContent>
-                                <h1>{board.name}</h1>
-                            </CardContent>
-                            <CardActions>
-                                <Button
-                                    size="medium"
-                                    onClick={() =>
-                                        goToSelectedBoard(board.id_board)
-                                    }
-                                >
-                                    Ver quadro
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))
-            ) : (
-                <h1>TEM NÃO</h1>
-            )}
+        <Grid container spacing={2}>
+            <div className="flex flex-wrap-reverse">
+                <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => openModal()}
+                >
+                    Criar um quadro
+                </Button>
+            </div>
+            <div className="flex flex-row w-100 h-100">
+                {boards && boards.length > 0 ? (
+                    boards.map((board) => (
+                        <Grid item xs={4} key={board.id_board}>
+                            <Card
+                                sx={{
+                                    maxWidth: 500,
+                                    backgroundColor: '#252627'
+                                }}
+                            >
+                                <CardContent>
+                                    <h1>{board.name}</h1>
+                                </CardContent>
+                                <CardActions>
+                                    <Button
+                                        size="medium"
+                                        onClick={() =>
+                                            goToSelectedBoard(board.id_board)
+                                        }
+                                    >
+                                        Ver quadro
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))
+                ) : (
+                    <h3>Sem quadros por enquanto.</h3>
+                )}
+            </div>
         </Grid>
     );
 };
