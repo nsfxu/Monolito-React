@@ -23,4 +23,16 @@ const createColumn = async (id_board, name) => {
     }
 };
 
-export { createColumn };
+const updateColumn = async (id_column, name, show_swinlane) => {
+    try {
+        const { data } = await api.put(`/column/${id_column}`, {
+            name: name,
+            show_swinlane: show_swinlane
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+export { createColumn, updateColumn };

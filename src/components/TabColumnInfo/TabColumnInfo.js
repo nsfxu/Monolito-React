@@ -16,6 +16,8 @@ import {
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
+import { updateColumn } from '../../services/column-service';
+
 import {
     findById,
     hasSubColumns,
@@ -36,7 +38,6 @@ const TabColumnInfo = ({
     returnNextGroupId,
     deleteColumnByPos
 }) => {
-
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
@@ -91,7 +92,6 @@ const TabColumnInfo = ({
             await setTempSubColumns(current_column.groups);
             forceUpdate();
         }
-
     }, [current_column]);
 
     useEffect(async () => {
@@ -153,6 +153,12 @@ const TabColumnInfo = ({
                 ? temp_subcolumns
                 : current_column.groups;
         }
+
+        await updateColumn(
+            selected_column,
+            current_column.name,
+            current_column.showSwinLanes
+        );
 
         await setCurrentColumn(findById(board_columns, selected_column));
         await updateHasUnsavedData();
