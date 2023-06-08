@@ -3,7 +3,14 @@ import { useHistory } from 'react-router-dom';
 
 import propTypes from 'prop-types';
 
-import { Card, CardContent, CardActions, Button, Grid } from '@mui/material';
+import {
+    Card,
+    CardContent,
+    CardActions,
+    Button,
+    Grid,
+    Typography
+} from '@mui/material';
 
 import { getUserBoards } from '../../services/user-service';
 
@@ -36,7 +43,7 @@ const BoardList = ({ userObject, openModal }) => {
     return (
         <>
             <div className="flex flex-column">
-                <div className='pb3'>
+                <div className="pb3">
                     <Button
                         variant="contained"
                         color="success"
@@ -52,15 +59,32 @@ const BoardList = ({ userObject, openModal }) => {
                 >
                     {boards && boards.length > 0 ? (
                         boards.map((board) => (
-                            <Grid item xs={5} key={board.id_board}>
+                            <Grid item xs={4} key={board.id_board}>
                                 <Card
                                     sx={{
-                                        maxWidth: 500,
+                                        minWidth: 400,
                                         backgroundColor: '#252627'
                                     }}
                                 >
                                     <CardContent>
-                                        <h1>{board.name}</h1>
+                                        <Typography
+                                            sx={{ color: 'white' }}
+                                            variant="h5"
+                                            component="div"
+                                        >
+                                            {board.name}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{ color: 'lightgrey' }}
+                                        >
+                                            {board.description.length > 150
+                                                ? board.description.slice(
+                                                      0,
+                                                      147
+                                                  ) + '...'
+                                                : board.description}
+                                        </Typography>
                                     </CardContent>
                                     <CardActions>
                                         <Button
