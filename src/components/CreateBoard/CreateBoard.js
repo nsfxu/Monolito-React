@@ -5,7 +5,7 @@ import { Box, Stack, TextField, Button } from '@mui/material';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const CreateBoard = ({ closeModal }) => {
+const CreateBoard = ({ closeModal, requestCreateBoard, toast }) => {
     const title = useRef();
     const description = useRef();
 
@@ -30,6 +30,19 @@ const CreateBoard = ({ closeModal }) => {
         '& .MuiInput-underline:after': {
             borderBottomColor: '#F0F0F0'
         }
+    };
+
+    const validateInputs = async () => {
+        if (!title.current.value) {
+            toast('Preencha o título do board!');
+
+            return;
+        }
+
+        await requestCreateBoard(
+            title.current.value,
+            description.current.value ? description.current.value : ''
+        );
     };
 
     return (
@@ -80,7 +93,7 @@ const CreateBoard = ({ closeModal }) => {
                             color="success"
                             onClick={(e) => {
                                 e.preventDefault();
-                                // validateInputs();
+                                validateInputs();
                             }}
                         >
                             Criar Board
@@ -100,7 +113,9 @@ const CreateBoard = ({ closeModal }) => {
 };
 
 CreateBoard.propTypes = {
-    closeModal: propTypes.func
+    closeModal: propTypes.func,
+    requestCreateBoard: propTypes.func,
+    toast: propTypes.func
 };
 
 export default CreateBoard;

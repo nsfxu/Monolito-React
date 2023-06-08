@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import Modal from 'react-modal';
+import { createBoard } from '../../services/board-service';
+
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { Box } from '@mui/material';
 
@@ -37,6 +41,14 @@ const Dashboard = () => {
         setIsModalOpen(false);
     };
 
+    const requestCreateBoard = async (name, description) => {
+        const response = await createBoard(user.id_user, name, description);
+
+        if (!response.error) {
+            window.location.reload(true);
+        }
+    };
+
     return (
         <>
             <div className="flex flex-column w-100 h-100">
@@ -56,7 +68,10 @@ const Dashboard = () => {
                                 }}
                                 className="br2 pa5"
                             >
-                                <BoardList userObject={user} openModal={openModal} />
+                                <BoardList
+                                    userObject={user}
+                                    openModal={openModal}
+                                />
                             </Box>
                         </div>
                     </>
@@ -68,8 +83,13 @@ const Dashboard = () => {
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >
-                <CreateBoard closeModal={closeModal} />
+                <CreateBoard
+                    closeModal={closeModal}
+                    requestCreateBoard={requestCreateBoard}
+                    toast={toast}
+                />
             </Modal>
+            <ToastContainer />
         </>
     );
 };
