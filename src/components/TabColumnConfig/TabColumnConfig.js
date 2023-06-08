@@ -8,6 +8,8 @@ import { Button, Stack } from '@mui/material';
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
+import { createColumn } from '../../services/column-service';
+
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
 import TabSwinlaneGroup from '../TabSwinlaneGroup/TabSwinlaneGroup';
@@ -20,6 +22,7 @@ const CREATE_COLUMN = 'CreateColumn';
 /* eslint-disable */
 // eslint-disable-next-line
 const TabColumnConfig = ({
+    board_id,
     board_columns,
     board_swinlanes,
     board_next_group_id,
@@ -178,14 +181,18 @@ const TabColumnConfig = ({
     const getModalResult = async (result, modal_type) => {
         switch (modal_type) {
             case CREATE_COLUMN:
-                console.log(result);
+                const column_response = await createColumn(board_id, result);
+
+                if (column_response.error) {
+                    return;
+                }
 
                 const new_column = {
-                    id: board_next_column_id,
+                    id: column_response.result.id_column,
                     name: result,
                     groups: [
                         {
-                            id: board_next_group_id,
+                            id: column_response.result.id_group,
                             name: 'Doing',
                             cards: []
                         }
@@ -194,8 +201,6 @@ const TabColumnConfig = ({
                 };
 
                 board_columns.push(new_column);
-                returnNextGroupId(board_next_group_id);
-                returnNextColumnId(board_next_column_id);
 
                 await updateNewBoardColumns(board_columns);
                 await separateColumns();
@@ -324,6 +329,7 @@ const TabColumnConfig = ({
 };
 
 TabColumnConfig.propTypes = {
+    board_id: propTypes.number,
     board_columns: propTypes.array,
     board_swinlanes: propTypes.array,
     board_next_group_id: propTypes.number,

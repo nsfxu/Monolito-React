@@ -10,6 +10,7 @@ import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 /* eslint-disable */
 // eslint-disable-next-line
 const ConfigBoardModal = ({
+    board_id,
     board_info,
     closeModal,
     updateWithNewBoardInfo
@@ -76,13 +77,14 @@ const ConfigBoardModal = ({
                     <Tab label="Colunas/Subcolunas" {...a11yProps(0)} />
                     <Tab label="Raias" {...a11yProps(1)} />
                     <Tab label="Etiquetas" {...a11yProps(2)} />
-                    <Tab label="Item Four" {...a11yProps(3)} />
-                    <Tab label="Item Five" {...a11yProps(4)} />
+                    <Tab label="Membros" {...a11yProps(3)} />
+                    <Tab label="Quadro" {...a11yProps(4)} />
                     <Tab label="Item Six" {...a11yProps(5)} />
                     <Tab label="Item Seven" {...a11yProps(6)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
                     <TabColumnConfig
+                        board_id={board_id}
                         board_columns={board_info.columns}
                         board_swinlanes={board_info.swinlanes}
                         board_next_group_id={board_info.nextGroupId}
@@ -100,10 +102,10 @@ const ConfigBoardModal = ({
                     />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    Item Three
+                    Membros
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                    Item Four
+                    Board
                 </TabPanel>
                 <TabPanel value={value} index={4}>
                     Item Five
@@ -120,6 +122,7 @@ const ConfigBoardModal = ({
 };
 
 ConfigBoardModal.propTypes = {
+    board_id: propTypes.number,
     board_info: propTypes.object,
     closeModal: propTypes.func,
     updateWithNewBoardInfo: propTypes.func

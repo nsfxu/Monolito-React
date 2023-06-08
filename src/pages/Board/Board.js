@@ -720,6 +720,7 @@ const Board = (props) => {
             >
                 {modal_type === 'ConfigBoard' && (
                     <ConfigBoardModal
+                        board_id={board_id}
                         board_info={board_info}
                         closeModal={closeModal}
                         updateWithNewBoardInfo={updateWithNewBoardInfo}
