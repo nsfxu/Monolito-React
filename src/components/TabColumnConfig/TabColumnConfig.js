@@ -8,7 +8,7 @@ import { Button, Stack } from '@mui/material';
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
-import { createColumn } from '../../services/column-service';
+import { createColumn, updateOrder } from '../../services/column-service';
 
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
@@ -85,6 +85,26 @@ const TabColumnConfig = ({
         );
     };
 
+    const getNewOrderForApi = () => {
+        let result = [];
+
+        temp_columns?.map((column) => {
+            if (column == 'swinlane_group') {
+                swinlane_columns.map((column) => {
+                    result.push({
+                        id: column.id,
+                        name: column.name,
+                        swinlane: 'swinlane'
+                    });
+                });
+            } else {
+                result.push({ id: column.id, name: column.name });
+            }
+        });
+
+        return result;
+    };
+
     const getFinalColumnResult = () => {
         let result = [];
 
@@ -101,8 +121,12 @@ const TabColumnConfig = ({
         return result;
     };
 
-    const saveNewColumnOrder = () => {
-        updateNewBoardColumns(getFinalColumnResult());
+    const saveNewColumnOrder = async () => {
+        const new_order = getNewOrderForApi();
+        const new_order_board = getFinalColumnResult();
+
+        await updateOrder(board_id, new_order);
+        updateNewBoardColumns(new_order_board);
     };
 
     const separateColumns = async () => {

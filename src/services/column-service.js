@@ -35,4 +35,15 @@ const updateColumn = async (id_column, name, show_swinlane) => {
     }
 };
 
-export { createColumn, updateColumn };
+const updateOrder = async (id_board, columns) => {
+    try {
+        const { data } = await api.put(`/column/order/${id_board}`, {
+            columns: columns
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+export { createColumn, updateColumn, updateOrder };
