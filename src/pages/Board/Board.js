@@ -85,13 +85,12 @@ const Board = (props) => {
             getAllColumns();
             getAllTags();
             forceUpdate();
+            console.log(board_info);
         }
-
-        console.log(board_info);
     }, [board_info]);
 
     useEffect(() => {
-        if (participants) {
+        if (participants.length > 0) {
             console.log(participants);
         }
     }, [participants]);
@@ -574,8 +573,23 @@ const Board = (props) => {
     const addNewCard = async (currentColumn, new_card) => {
         const items = board_info;
 
+        const response = await createCard(
+            new_card.title,
+            new_card.description,
+            new_card.groupId,
+            new_card.person,
+            new_card.laneId
+        );
+
+        if (response.error) {
+            toast('Aconteceu algum erro ao adicionar o card');
+            console.log(response);
+
+            return;
+        }
+
         const card_object = {
-            id: items.nextCardId,
+            id: response.result.id_card,
             name: new_card.title,
             description: new_card.description,
             tags: new_card.tags,
@@ -602,21 +616,8 @@ const Board = (props) => {
             addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
         }
 
-        items.nextCardId++;
-
-        const response = await createCard(
-            card_object.id,
-            new_card.title,
-            new_card.description,
-            new_card.groupId,
-            new_card.person,
-            new_card.laneId
-        );
-
-        console.log(response);
-
         forceUpdate();
-        toast('Card adicionado');
+        toast('Card criado com sucesso.');
         updateBoardInfo(items);
     };
 
