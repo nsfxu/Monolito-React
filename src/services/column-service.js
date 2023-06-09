@@ -23,6 +23,15 @@ const createColumn = async (id_board, name) => {
     }
 };
 
+const deleteColumn = async (id_column) => {
+    try {
+        const { data } = await api.delete(`/column/${id_column}`);
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const updateColumn = async (id_column, name, show_swinlane) => {
     try {
         const { data } = await api.put(`/column/${id_column}`, {
@@ -46,4 +55,4 @@ const updateOrder = async (id_board, columns) => {
     }
 };
 
-export { createColumn, updateColumn, updateOrder };
+export { createColumn, deleteColumn, updateColumn, updateOrder };

@@ -8,7 +8,11 @@ import { Button, Stack } from '@mui/material';
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
-import { createColumn, updateOrder } from '../../services/column-service';
+import {
+    createColumn,
+    deleteColumn,
+    updateOrder
+} from '../../services/column-service';
 
 import TabColumnInfo from '../TabColumnInfo';
 import TabColumnItem from '../TabColumnItem/TabColumnItem';
@@ -238,10 +242,10 @@ const TabColumnConfig = ({
 
     const deleteColumnByPos = async (pos) => {
         const removed_column = board_columns.splice(pos, 1);
+        await deleteColumn(removed_column[0].id);
 
-        console.log(removed_column);
-        // await updateNewBoardColumns(board_columns);
-        // await separateColumns();
+        await updateNewBoardColumns(board_columns);
+        await separateColumns();
     };
 
     return (

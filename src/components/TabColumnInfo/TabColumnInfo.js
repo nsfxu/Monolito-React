@@ -325,9 +325,9 @@ const TabColumnInfo = ({
                     }}
                     noValidate
                     autoComplete="off"
-                    className="flex flex-column pl3 pt2"
+                    className="flex flex-column pl3 pt2 pr3"
                 >
-                    <section className="flex flex-column">
+                    <section className="flex flex-column mb2">
                         <div>
                             <Typography variant="h6" className="pl2 pb2">
                                 Coluna
@@ -380,12 +380,12 @@ const TabColumnInfo = ({
                                     deleteCurrentColumn();
                                 }}
                             >
-                                Deletar coluna
+                                Remover coluna
                             </Button>
                         </Stack>
                     </section>
 
-                    <section>
+                    <section className='bt b--silver pt2'>
                         <div className="flex flex-column">
                             <div>
                                 <Typography variant="h6" className="pl2">
