@@ -328,8 +328,7 @@ const TabColumnConfig = ({
                     selected_column={selected_column}
                     deleteColumnByPos={deleteColumnByPos}
                     board_columns={board_columns}
-                    board_next_group_id={board_next_group_id}
-                    returnNextGroupId={returnNextGroupId}
+                    board_swinlanes={board_swinlanes}
                 />
             ) : (
                 'Clique em um item para editar suas propriedades.'

@@ -38,10 +38,9 @@ const CREATE_SUBCOLUMN = 'CreateSubColumn';
 // eslint-disable-next-line
 const TabColumnInfo = ({
     selected_column,
+    deleteColumnByPos,
     board_columns,
-    board_next_group_id,
-    returnNextGroupId,
-    deleteColumnByPos
+    board_swinlanes
 }) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
@@ -53,7 +52,8 @@ const TabColumnInfo = ({
     const [selected_subcolumn, setSelectedSubColumn] = useState(false);
     const [temp_subcolumns, setTempSubColumns] = useState([]);
 
-    const [has_unsaved_data, setHasUnsavedData] = useState(true);
+    const [has_unsaved_data_column, setHasUnsavedDataColumn] = useState(true);
+    const [has_unsaved_data_group, setHasUnsavedDataGroup] = useState(true);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
@@ -70,7 +70,8 @@ const TabColumnInfo = ({
         await setTempSubColumns([]);
         await setSelectedSubColumn(false);
 
-        updateHasUnsavedData();
+        updateHasUnsavedDataGroup();
+        updateHasUnsavedDataColumn();
 
         await setCurrentColumn(findById(board_columns, selected_column));
     }, [selected_column]);
@@ -104,7 +105,7 @@ const TabColumnInfo = ({
             return;
         }
 
-        updateHasUnsavedData();
+        updateHasUnsavedDataGroup();
     }, [temp_subcolumns]);
 
     //#region Modal stuff
@@ -130,9 +131,6 @@ const TabColumnInfo = ({
 
     const saveColumnInfo = async () => {
         const this_name = name.current ? name.current.value : null;
-        const this_subcolumn_name = subcolumn_name.current
-            ? subcolumn_name.current.value
-            : null;
 
         current_column.name =
             this_name && this_name != current_column.name
@@ -145,20 +143,8 @@ const TabColumnInfo = ({
                 ? show_swin_lane.current.checked
                 : current_column.showSwinLanes;
 
-        if (this_subcolumn_name) {
-            current_subcolumn.name =
-                this_subcolumn_name &&
-                this_subcolumn_name != current_subcolumn.name
-                    ? this_subcolumn_name
-                    : current_subcolumn.name;
-
-            await updateGroup(current_subcolumn.id, current_subcolumn.name);
-        }
-
-        if (has_subcolumn) {
-            current_column.groups = temp_subcolumns
-                ? temp_subcolumns
-                : current_column.groups;
+        if (board_swinlanes.length == 0) {
+            current_column.showSwinLanes = false;
         }
 
         await updateColumn(
@@ -168,7 +154,31 @@ const TabColumnInfo = ({
         );
 
         await setCurrentColumn(findById(board_columns, selected_column));
-        await updateHasUnsavedData();
+        await updateHasUnsavedDataColumn();
+    };
+
+    const saveSubColumnInfo = async () => {
+        const this_subcolumn_name = subcolumn_name.current
+            ? subcolumn_name.current.value
+            : null;
+
+        if (this_subcolumn_name) {
+            current_subcolumn.name =
+                this_subcolumn_name &&
+                this_subcolumn_name != current_subcolumn.name
+                    ? this_subcolumn_name
+                    : current_subcolumn.name;
+            await updateGroup(current_subcolumn.id, current_subcolumn.name);
+        }
+
+        if (has_subcolumn) {
+            current_column.groups = temp_subcolumns
+                ? temp_subcolumns
+                : current_column.groups;
+        }
+
+        await setCurrentColumn(findById(board_columns, selected_column));
+        await updateHasUnsavedDataGroup();
     };
 
     const removeCurrentSubColumn = async (obj) => {
@@ -182,7 +192,29 @@ const TabColumnInfo = ({
         await setTempSubColumns(current_column.groups);
     };
 
-    const updateHasUnsavedData = async () => {
+    const updateHasUnsavedDataColumn = async () => {
+        // validates if the name is the same
+        if (name.current && name.current.value != current_column.name) {
+            await setHasUnsavedDataColumn(false);
+
+            return;
+        }
+
+        // valide if show_swinlane changed
+        if (
+            show_swin_lane.current &&
+            show_swin_lane.current.checked != current_column.showSwinLanes
+        ) {
+            await setHasUnsavedDataColumn(false);
+
+            return;
+        }
+
+        await setHasUnsavedDataColumn(true);
+    };
+
+    const updateHasUnsavedDataGroup = async () => {
+        // validates if the order of the groups is the same
         if (has_subcolumn) {
             const current_selected_column_groups = findById(
                 board_columns,
@@ -196,36 +228,22 @@ const TabColumnInfo = ({
                     temp_subcolumns
                 )
             ) {
-                await setHasUnsavedData(false);
+                await setHasUnsavedDataGroup(false);
                 return;
             }
         }
 
-        if (name.current && name.current.value != current_column.name) {
-            await setHasUnsavedData(false);
-
-            return;
-        }
-
+        // validades if the name is the same
         if (
             subcolumn_name.current &&
             subcolumn_name.current.value != current_subcolumn.name
         ) {
-            await setHasUnsavedData(false);
+            await setHasUnsavedDataGroup(false);
 
             return;
         }
 
-        if (
-            show_swin_lane.current &&
-            show_swin_lane.current.checked != current_column.showSwinLanes
-        ) {
-            await setHasUnsavedData(false);
-
-            return;
-        }
-
-        await setHasUnsavedData(true);
+        await setHasUnsavedDataGroup(true);
     };
 
     const getItemStyle = (isDragging, draggableStyle) => ({
@@ -309,140 +327,168 @@ const TabColumnInfo = ({
                     autoComplete="off"
                     className="flex flex-column pl3 pt2"
                 >
-                    <TextField
-                        label="Nome da coluna"
-                        defaultValue={current_column.name}
-                        inputRef={name}
-                        onKeyUp={() => updateHasUnsavedData()}
-                    />
-
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                inputRef={show_swin_lane}
-                                defaultChecked={current_column.showSwinLanes}
-                                onClick={() => updateHasUnsavedData()}
-                            />
-                        }
-                        label="Mostrar com raias (se existir)"
-                        className="pl2"
-                    />
-
-                    <Stack direction="row" spacing={2} className="pb2 pt2 pl2">
-                        <Button
-                            variant="outlined"
-                            color="error"
-                            className="w-20"
-                            onClick={() => {
-                                deleteCurrentColumn();
-                            }}
-                        >
-                            Deletar coluna
-                        </Button>
-                    </Stack>
-
-                    <hr></hr>
-
-                    <div className="flex flex-column">
+                    <section className="flex flex-column">
                         <div>
-                            <Typography variant="h6" className="pl2">
-                                Subcolunas
+                            <Typography variant="h6" className="pl2 pb2">
+                                Coluna
                             </Typography>
                         </div>
+
+                        <TextField
+                            label="Nome da coluna"
+                            defaultValue={current_column.name}
+                            inputRef={name}
+                            onKeyUp={() => updateHasUnsavedDataColumn()}
+                        />
+
+                        {board_swinlanes.length > 0 && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        inputRef={show_swin_lane}
+                                        defaultChecked={
+                                            current_column.showSwinLanes
+                                        }
+                                        onClick={() =>
+                                            updateHasUnsavedDataColumn()
+                                        }
+                                    />
+                                }
+                                label="Mostrar com raias (se existir)"
+                                className="pl2"
+                            />
+                        )}
 
                         <Stack
                             direction="row"
                             spacing={2}
-                            className="pt3 pb3 pl2"
+                            className="pb2 pt2 pl2"
                         >
                             <Button
                                 variant="contained"
                                 color="success"
-                                className="w-25"
-                                onClick={() => {
-                                    openCustomModal(CREATE_SUBCOLUMN);
-                                }}
+                                disabled={has_unsaved_data_column}
+                                onClick={() => saveColumnInfo()}
                             >
-                                Adicionar subcoluna
+                                Salvar coluna
                             </Button>
                             <Button
                                 variant="outlined"
                                 color="error"
-                                className="w-25"
-                                disabled={!selected_subcolumn || !has_subcolumn}
-                                onClick={() =>
-                                    removeCurrentSubColumn(current_subcolumn)
-                                }
+                                className="w-20"
+                                onClick={() => {
+                                    deleteCurrentColumn();
+                                }}
                             >
-                                Remover subcoluna
+                                Deletar coluna
                             </Button>
                         </Stack>
+                    </section>
 
-                        {has_subcolumn && temp_subcolumns && (
-                            <div className="pl2">
-                                <DragDropContext onDragEnd={onDragEnd}>
-                                    <Droppable
-                                        droppableId="subcolumnDroppable"
-                                        direction="horizontal"
-                                    >
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                style={getListStyle(
-                                                    snapshot.isDraggingOver
-                                                )}
-                                                {...provided.droppableProps}
-                                            >
-                                                {temp_subcolumns.map(
-                                                    (group, index) => (
-                                                        <TabColumnItem
-                                                            column={group}
-                                                            index={index}
-                                                            key={index}
-                                                            getItemStyle={
-                                                                getItemStyle
-                                                            }
-                                                            setSelectedColumn={
-                                                                setSelectedSubColumn
-                                                            }
-                                                        />
-                                                    )
-                                                )}
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
+                    <section>
+                        <div className="flex flex-column">
+                            <div>
+                                <Typography variant="h6" className="pl2">
+                                    Subcolunas
+                                </Typography>
                             </div>
-                        )}
 
-                        {has_subcolumn && current_subcolumn && (
-                            <div className="flex flex-column pt3 pl2">
-                                <hr></hr>
-                                <TextField
-                                    label="Nome da subcoluna"
-                                    defaultValue={current_subcolumn.name}
-                                    inputRef={subcolumn_name}
-                                    onKeyUp={() => updateHasUnsavedData()}
-                                />
-                            </div>
-                        )}
-                    </div>
+                            <Stack
+                                direction="row"
+                                spacing={2}
+                                className="pt3 pb3 pl2"
+                            >
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    className="w-25"
+                                    onClick={() => {
+                                        openCustomModal(CREATE_SUBCOLUMN);
+                                    }}
+                                >
+                                    Adicionar subcoluna
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    className="w-25"
+                                    disabled={
+                                        !selected_subcolumn || !has_subcolumn
+                                    }
+                                    onClick={() =>
+                                        removeCurrentSubColumn(
+                                            current_subcolumn
+                                        )
+                                    }
+                                >
+                                    Remover subcoluna
+                                </Button>
+                            </Stack>
 
-                    <Stack direction="row" spacing={2} className="pt3 pb3">
-                        <Button
-                            variant="contained"
-                            color="success"
-                            disabled={has_unsaved_data}
-                            onClick={() => saveColumnInfo()}
-                        >
-                            Salvar
-                        </Button>
+                            {has_subcolumn && temp_subcolumns && (
+                                <div className="pl2">
+                                    <DragDropContext onDragEnd={onDragEnd}>
+                                        <Droppable
+                                            droppableId="subcolumnDroppable"
+                                            direction="horizontal"
+                                        >
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    style={getListStyle(
+                                                        snapshot.isDraggingOver
+                                                    )}
+                                                    {...provided.droppableProps}
+                                                >
+                                                    {temp_subcolumns.map(
+                                                        (group, index) => (
+                                                            <TabColumnItem
+                                                                column={group}
+                                                                index={index}
+                                                                key={index}
+                                                                getItemStyle={
+                                                                    getItemStyle
+                                                                }
+                                                                setSelectedColumn={
+                                                                    setSelectedSubColumn
+                                                                }
+                                                            />
+                                                        )
+                                                    )}
+                                                    {provided.placeholder}
+                                                </div>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
+                                </div>
+                            )}
 
-                        <Button variant="outlined" color="error">
-                            Cancelar
-                        </Button>
-                    </Stack>
+                            {has_subcolumn && current_subcolumn && (
+                                <div className="flex flex-column pt3 pl2">
+                                    <hr></hr>
+                                    <TextField
+                                        label="Nome da subcoluna"
+                                        defaultValue={current_subcolumn.name}
+                                        inputRef={subcolumn_name}
+                                        onKeyUp={() =>
+                                            updateHasUnsavedDataGroup()
+                                        }
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <Stack direction="row" spacing={2} className="pt3 pb3">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                disabled={has_unsaved_data_group}
+                                onClick={() => saveSubColumnInfo()}
+                            >
+                                Salvar subcoluna
+                            </Button>
+                        </Stack>
+                    </section>
                 </Box>
             )}
             <Modal
@@ -466,8 +512,6 @@ const TabColumnInfo = ({
 TabColumnInfo.propTypes = {
     selected_column: propTypes.string,
     board_columns: propTypes.array,
-    board_next_group_id: propTypes.number,
-    returnNextGroupId: propTypes.func,
     deleteColumnByPos: propTypes.func
 };
 
