@@ -237,10 +237,11 @@ const TabColumnConfig = ({
     };
 
     const deleteColumnByPos = async (pos) => {
-        board_columns.splice(pos, 1);
+        const removed_column = board_columns.splice(pos, 1);
 
-        await updateNewBoardColumns(board_columns);
-        await separateColumns();
+        console.log(removed_column);
+        // await updateNewBoardColumns(board_columns);
+        // await separateColumns();
     };
 
     return (

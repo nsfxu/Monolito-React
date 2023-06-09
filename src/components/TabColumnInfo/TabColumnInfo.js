@@ -17,6 +17,11 @@ import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
 
 import { updateColumn } from '../../services/column-service';
+import {
+    createGroup,
+    deleteGroup,
+    updateGroup
+} from '../../services/group-service';
 
 import {
     findById,
@@ -146,6 +151,8 @@ const TabColumnInfo = ({
                 this_subcolumn_name != current_subcolumn.name
                     ? this_subcolumn_name
                     : current_subcolumn.name;
+
+            await updateGroup(current_subcolumn.id, current_subcolumn.name);
         }
 
         if (has_subcolumn) {
@@ -165,6 +172,7 @@ const TabColumnInfo = ({
     };
 
     const removeCurrentSubColumn = async (obj) => {
+        await deleteGroup(obj.id);
         const pos = current_column.groups.indexOf(obj);
 
         current_column.groups.splice(pos, 1);
@@ -265,13 +273,16 @@ const TabColumnInfo = ({
     const getModalResult = async (result, modal_type) => {
         switch (modal_type) {
             case CREATE_SUBCOLUMN:
+                const response = await createGroup(selected_column, result);
+                console.log(response);
+                console.log(result, selected_column);
+
                 current_column.groups.push({
-                    id: board_next_group_id,
+                    id: response.result.id_group,
                     name: result,
                     cards: []
                 });
 
-                returnNextGroupId(board_next_group_id);
                 await setHasSubcolumn(hasSubColumns(current_column.groups));
                 await setTempSubColumns([]);
                 await setTempSubColumns(current_column.groups);
