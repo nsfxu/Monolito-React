@@ -21,13 +21,14 @@ import { hasSubColumns } from '../../utils/column-utils';
 /* eslint-disable */
 // eslint-disable-next-line
 const CreateCard = ({
-    addNewCard,
     columns,
     participants,
     statusArr,
     tagsArr,
     swinlanesArr,
-    closeModal
+    closeModal,
+    addNewCard,
+    toast
 }) => {
     const title = useRef();
     const description = useRef();
@@ -38,26 +39,34 @@ const CreateCard = ({
     const [swinlane, setSwinlane] = useState(null);
 
     const [selected_tags, setSelectedTags] = useState(null);
-    const [selected_column, setSelectedColumn] = useState([]);
+    const [selected_column, setSelectedColumn] = useState([]);    
 
-    const validateInputs = async () => {
-        if (title.current.value && personName && column) {
-            let temp_subcolumn = subcolumn;
-
-            if (!hasSubColumns(selected_column.groups) || !subcolumn) {
-                temp_subcolumn = selected_column.groups[0].id;
-            }
-
-            addNewCard(selected_column, {
-                title: title.current.value,
-                description: description.current.value,
-                person: personName,
-                columnId: column,
-                groupId: temp_subcolumn,
-                laneId: swinlane,
-                tags: selected_tags
-            });
+    const validateInputs = () => {
+        if (!title.current.value) {
+            toast('Preencha o título do card.');
+            return;
         }
+
+        if (!column) {
+            toast('Selecione a coluna para o novo card.');
+            return;
+        }
+
+        let temp_subcolumn = subcolumn;
+
+        if (!hasSubColumns(selected_column.groups) || !subcolumn) {
+            temp_subcolumn = selected_column.groups[0].id;
+        }
+
+        addNewCard(selected_column, {
+            title: title.current.value,
+            description: description.current.value,
+            person: personName,
+            columnId: column,
+            groupId: temp_subcolumn,
+            laneId: swinlane,
+            tags: selected_tags
+        });
     };
 
     useEffect(() => {
@@ -398,13 +407,14 @@ const CreateCard = ({
 };
 
 CreateCard.propTypes = {
-    addNewCard: propTypes.func,
     columns: propTypes.array,
     participants: propTypes.array,
     statusArr: propTypes.array,
     tagsArr: propTypes.array,
     swinlanesArr: propTypes.array,
-    closeModal: propTypes.func
+    closeModal: propTypes.func,
+    addNewCard: propTypes.func,
+    toast: propTypes.func
 };
 
 export default CreateCard;

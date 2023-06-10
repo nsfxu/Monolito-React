@@ -3,6 +3,8 @@ import Modal from 'react-modal';
 
 import propTypes from 'prop-types';
 
+import { ToastContainer, toast } from 'react-toastify';
+
 import { Grid } from '@mui/material';
 
 import ModalStyles from '../../constants/modal-styles';
@@ -11,16 +13,24 @@ import CreateCard from '../CreateCard';
 import NormalColumn from '../NormalColumn';
 import SwinlaneHeader from '../SwinlaneHeader';
 
+import { createCard } from '../../services/card-service';
+
+import {
+    findColumnById,
+    addObjectIntoPosition
+} from '../../utils/column-utils';
+
 /* eslint-disable */
 // eslint-disable-next-line
 const Column = ({
+    board_info,
     columns,
     swinlanes,
     status,
     participants,
     tags,
-    addNewCard,
-    toggleSwinlane
+    toggleSwinlane,
+    updateBoardInfo
 }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
@@ -49,6 +59,58 @@ const Column = ({
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const addNewCard = async (currentColumn, new_card) => {
+        const items = board_info;
+
+        const response = await createCard(
+            new_card.title,
+            new_card.description,
+            new_card.groupId,
+            new_card.person,
+            new_card.laneId
+        );
+
+        if (response.error) {
+            toast('Aconteceu algum erro ao adicionar o card');
+            console.log(response);
+
+            return;
+        }
+
+        const card_object = {
+            id: response.result.id_card,
+            name: new_card.title,
+            description: new_card.description,
+            tags: new_card.tags,
+            id_user: new_card.id_user,
+            laneId: new_card.laneId
+        };
+
+        if (currentColumn.showSwinLanes) {
+            card_object.laneId = new_card.laneId;
+        }
+
+        const column_to_add = findColumnById(items, new_card.columnId);
+
+        if (new_card.groupId) {
+            const groupIndex = column_to_add.groups.findIndex((group) => {
+                return group.id == new_card.groupId;
+            });
+
+            addObjectIntoPosition(
+                column_to_add.groups[parseInt(groupIndex)],
+                0,
+                card_object
+            );
+        } else {
+            addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
+        }
+
+        // forceUpdate();
+        toast('Card criado com sucesso.');
+        updateBoardInfo(items);
     };
 
     return (
@@ -95,28 +157,32 @@ const Column = ({
                 appElement={document.getElementById('root')}
             >
                 <CreateCard
-                    addNewCard={addNewCard}
+                    board_info={board_info}
                     columns={columns}
                     participants={participants}
                     statusArr={status}
                     tagsArr={tags}
                     swinlanesArr={swinlanes}
                     closeModal={closeModal}
+                    addNewCard={addNewCard}
+                    toast={toast}
                 />
             </Modal>
+            <ToastContainer />
         </>
     );
 };
 
 Column.propTypes = {
+    board_info: propTypes.object,
     columns: propTypes.array,
     swinlanes: propTypes.array,
     status: propTypes.array,
     participants: propTypes.array,
     tags: propTypes.array,
-    addNewCard: propTypes.func,
     addNewSubColumn: propTypes.func,
-    toggleSwinlane: propTypes.func
+    toggleSwinlane: propTypes.func,
+    updateBoardInfo: propTypes.func
 };
 
 export default Column;

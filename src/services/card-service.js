@@ -9,6 +9,7 @@ const updateCardGroup = async (
     id_group,
     id_swinlane
 ) => {
+    console.log(id_card, new_order, old_order, id_group, id_swinlane);
     try {
         const { data } = await api.put(`/card/${id_card}`, {
             new_order: new_order,

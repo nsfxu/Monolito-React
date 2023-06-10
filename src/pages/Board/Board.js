@@ -25,7 +25,8 @@ import {
 import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
-import { createCard, updateCardGroup } from '../../services/card-service';
+
+import { updateCardGroup } from '../../services/card-service';
 import {
     getBoardInfo,
     getBoardParticipants
@@ -570,57 +571,6 @@ const Board = (props) => {
         console.log(response);
     };
 
-    const addNewCard = async (currentColumn, new_card) => {
-        const items = board_info;
-
-        const response = await createCard(
-            new_card.title,
-            new_card.description,
-            new_card.groupId,
-            new_card.person,
-            new_card.laneId
-        );
-
-        if (response.error) {
-            toast('Aconteceu algum erro ao adicionar o card');
-            console.log(response);
-
-            return;
-        }
-
-        const card_object = {
-            id: response.result.id_card,
-            name: new_card.title,
-            description: new_card.description,
-            tags: new_card.tags,
-            id_user: new_card.id_user
-        };
-
-        if (currentColumn.showSwinLanes) {
-            card_object.laneId = new_card.laneId;
-        }
-
-        const column_to_add = findColumnById(items, new_card.columnId);
-
-        if (new_card.groupId) {
-            const groupIndex = column_to_add.groups.findIndex((group) => {
-                return group.id == new_card.groupId;
-            });
-
-            addObjectIntoPosition(
-                column_to_add.groups[parseInt(groupIndex)],
-                0,
-                card_object
-            );
-        } else {
-            addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
-        }
-
-        forceUpdate();
-        toast('Card criado com sucesso.');
-        updateBoardInfo(items);
-    };
-
     const addNewColumn = (name) => {
         const items = board_info;
 
@@ -699,13 +649,14 @@ const Board = (props) => {
                         {board_info && participants && (
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Column
+                                    board_info={board_info}
                                     columns={board_info.columns}
                                     swinlanes={board_info.swinlanes}
                                     participants={participants}
                                     status={status}
                                     tags={tags}
-                                    addNewCard={addNewCard}
                                     toggleSwinlane={toggleSwinlane}
+                                    updateBoardInfo={updateBoardInfo}
                                 />
                             </DragDropContext>
                         )}
