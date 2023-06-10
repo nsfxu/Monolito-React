@@ -19,7 +19,11 @@ const CREATE_SWINLANE = 'CreateSwinlane';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabSwinlaneConfig = ({ board_id, board_swinlanes }) => {
+const TabSwinlaneConfig = ({
+    board_id,
+    board_swinlanes,
+    updateNewBoardSwinlanes
+}) => {
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,6 +68,9 @@ const TabSwinlaneConfig = ({ board_id, board_swinlanes }) => {
                 };
 
                 board_swinlanes.push(new_swinlane);
+                
+                await updateNewBoardSwinlanes(board_swinlanes);
+                await setTempSwinlanes(board_swinlanes);
 
                 break;
 
@@ -225,7 +232,8 @@ const TabSwinlaneConfig = ({ board_id, board_swinlanes }) => {
 
 TabSwinlaneConfig.propTypes = {
     board_id: propTypes.number,
-    board_swinlanes: propTypes.array
+    board_swinlanes: propTypes.array,
+    updateNewBoardSwinlanes: propTypes.func
 };
 
 export default TabSwinlaneConfig;
