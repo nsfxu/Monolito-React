@@ -29,11 +29,7 @@ const TabColumnConfig = ({
     board_id,
     board_columns,
     board_swinlanes,
-    board_next_group_id,
-    board_next_column_id,
-    updateNewBoardColumns,
-    returnNextGroupId,
-    returnNextColumnId
+    updateNewBoardColumns
 }) => {
     const [temp_columns, setTempColumns] = useState(board_columns);
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
@@ -360,9 +356,7 @@ TabColumnConfig.propTypes = {
     board_id: propTypes.number,
     board_columns: propTypes.array,
     board_swinlanes: propTypes.array,
-    board_next_group_id: propTypes.number,
-    updateNewBoardColumns: propTypes.func,
-    returnNextGroupId: propTypes.func
+    updateNewBoardColumns: propTypes.func
 };
 
 export default TabColumnConfig;
