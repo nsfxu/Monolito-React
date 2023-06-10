@@ -28,7 +28,6 @@ const ConfigBoardModal = ({
         updateWithNewBoardInfo(board_info);
     };
 
-
     function a11yProps(index) {
         return {
             id: `vertical-tab-${index}`,
@@ -77,7 +76,10 @@ const ConfigBoardModal = ({
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <TabSwinlaneConfig board_swinlanes={board_info.swinlanes} />
+                    <TabSwinlaneConfig
+                        board_id={board_id}
+                        board_swinlanes={board_info.swinlanes}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     Membros

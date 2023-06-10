@@ -13,12 +13,13 @@ import ModalStyles from '../../constants/modal-styles';
 import CreateSwinlane from '../CreateSwinlane';
 
 import TabColumn from '../TabColumn';
+import { createSwinlane } from '../../services/swinlane-service';
 
 const CREATE_SWINLANE = 'CreateSwinlane';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabSwinlaneConfig = ({ board_swinlanes }) => {
+const TabSwinlaneConfig = ({ board_id, board_swinlanes }) => {
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,30 +48,22 @@ const TabSwinlaneConfig = ({ board_swinlanes }) => {
     const getModalResult = async (result, modal_type) => {
         switch (modal_type) {
             case CREATE_SWINLANE:
-                console.log(result);
-                // const column_response = await createColumn(board_id, result);
+                const swinlane_response = await createSwinlane(
+                    board_id,
+                    result
+                );
 
-                // if (column_response.error) {
-                //     return;
-                // }
+                if (swinlane_response.error) {
+                    return;
+                }
 
-                // const new_column = {
-                //     id: column_response.result.id_column,
-                //     name: result,
-                //     groups: [
-                //         {
-                //             id: column_response.result.id_group,
-                //             name: 'Doing',
-                //             cards: []
-                //         }
-                //     ],
-                //     showSwinLanes: false
-                // };
+                const new_swinlane = {
+                    id: swinlane_response.result.id_swinlane,
+                    name: result,
+                    styles: swinlane_response.result.styles
+                };
 
-                // board_columns.push(new_column);
-
-                // await updateNewBoardColumns(board_columns);
-                // await separateColumns();
+                board_swinlanes.push(new_swinlane);
 
                 break;
 
@@ -231,6 +224,7 @@ const TabSwinlaneConfig = ({ board_swinlanes }) => {
 };
 
 TabSwinlaneConfig.propTypes = {
+    board_id: propTypes.number,
     board_swinlanes: propTypes.array
 };
 
