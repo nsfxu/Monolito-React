@@ -62,7 +62,7 @@ const BoardList = ({ userObject, openModal }) => {
                             <Grid item xs={4} key={board.id_board}>
                                 <Card
                                     sx={{
-                                        minWidth: 400,
+                                        minWidth: 300,
                                         backgroundColor: '#252627'
                                     }}
                                 >
