@@ -571,42 +571,6 @@ const Board = (props) => {
         console.log(response);
     };
 
-    const addNewColumn = (name) => {
-        const items = board_info;
-
-        items.columns.push({
-            id: items.nextColumnId,
-            name: name,
-            groups: [{ id: items.nextGroupId, name: 'Doing', cards: [] }],
-            showSwinLanes: false
-        });
-
-        items.nextColumnId++;
-        items.nextGroupId++;
-
-        updateBoardInfo(items);
-        toast('Coluna criada');
-    };
-
-    const addNewSubColumn = (columnId) => {
-        const items = board_info;
-
-        const column_to_add = items.columns.find(
-            (column) => column.id == columnId
-        );
-
-        column_to_add.groups.push({
-            id: items.nextGroupId,
-            name: 'Done',
-            cards: []
-        });
-        items.nextGroupId++;
-
-        forceUpdate();
-        updateBoardInfo(items);
-        toast('Subcoluna criada');
-    };
-
     // #endregion
 
     return (

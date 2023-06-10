@@ -59,10 +59,10 @@ const BoardList = ({ userObject, openModal }) => {
                 >
                     {boards && boards.length > 0 ? (
                         boards.map((board) => (
-                            <Grid item xs={4} key={board.id_board}>
+                            <Grid item key={board.id_board}>
                                 <Card
                                     sx={{
-                                        minWidth: 300,
+                                        minWidth: 400,
                                         backgroundColor: '#252627'
                                     }}
                                 >
@@ -78,7 +78,7 @@ const BoardList = ({ userObject, openModal }) => {
                                             variant="body2"
                                             sx={{ color: 'lightgrey' }}
                                         >
-                                            {board.description.length > 150
+                                            {board.description && board.description.length > 150
                                                 ? board.description.slice(
                                                       0,
                                                       147
