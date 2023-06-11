@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import propTypes from 'prop-types';
 
 import {
     Card as MUICard,
@@ -11,14 +12,14 @@ import {
 
 import { red, blueGrey } from '@mui/material/colors';
 
-import propTypes from 'prop-types';
-
 import Modal from 'react-modal';
 import ShowCard from '../ShowCard';
 
+import ModalStyles from '../../constants/modal-styles';
+
 /* eslint-disable */
 // eslint-disable-next-line
-const Card = ({ object, tagsArr }) => {
+const Card = ({ object, tagsArr, swinlanes, status, participants }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cardTags, setCardTags] = useState([]);
 
@@ -104,10 +105,17 @@ const Card = ({ object, tagsArr }) => {
 
             <Modal
                 isOpen={isModalOpen}
+                style={ModalStyles.createCard}
                 onRequestClose={closeModal}
                 appElement={document.getElementById('root')}
             >
-                <ShowCard object={object} />
+                <ShowCard
+                    cardObj={object}
+                    participants={participants}
+                    swinlanes={swinlanes}
+                    status={status}
+                    tagsArr={tagsArr}
+                />
             </Modal>
         </>
     );
@@ -115,7 +123,8 @@ const Card = ({ object, tagsArr }) => {
 
 Card.propTypes = {
     object: propTypes.object,
-    tagsArr: propTypes.array
+    tagsArr: propTypes.array,
+    participants: propTypes.array
 };
 
 export default Card;

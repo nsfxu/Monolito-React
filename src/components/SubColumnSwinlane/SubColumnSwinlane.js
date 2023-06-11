@@ -14,6 +14,9 @@ const SubColumnSwinlane = ({
     all_swinlanes,
     all_groups,
     tagsArr,
+    swinlanes,
+    status,
+    participants,
     is_first_column,
     toggleSwinlane
 }) => {
@@ -28,6 +31,9 @@ const SubColumnSwinlane = ({
                             <CardColumnList
                                 cards={current_group.cards}
                                 tagsArr={tagsArr}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 provided={provided}
                                 swinlane={{
                                     is_swinlane: true,
@@ -52,7 +58,12 @@ const SubColumnSwinlane = ({
                     if (card.laneId == swinlane_id) {
                         return (
                             <li className="bw1 mt3" key={index}>
-                                <Card object={card} tagsArr={tagsArr} />
+                                <Card
+                                    object={card}
+                                    tagsArr={tagsArr}
+                                    swinlanes={swinlanes}
+                                    status={status}
+                                />
                             </li>
                         );
                     }
@@ -109,6 +120,7 @@ SubColumnSwinlane.propTypes = {
     all_swinlanes: propTypes.any,
     title: propTypes.string,
     tagsArr: propTypes.array,
+    participants: propTypes.array,
     is_first_column: propTypes.bool,
     toggleSwinlane: propTypes.func
 };

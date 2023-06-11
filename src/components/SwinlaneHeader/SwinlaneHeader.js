@@ -17,6 +17,9 @@ const SwinlaneHeader = ({
     columns,
     all_swinlanes,
     tags,
+    swinlanes,
+    status,
+    participants,
     toggleSwinlane,
     openModal
 }) => {
@@ -28,6 +31,9 @@ const SwinlaneHeader = ({
                         <CardColumnList
                             cards={this_column.groups[0].cards}
                             tagsArr={tags}
+                            swinlanes={swinlanes}
+                            status={status}
+                            participants={participants}
                             provided={provided}
                             swinlane={{
                                 is_swinlane: true,
@@ -51,7 +57,13 @@ const SwinlaneHeader = ({
                     if (card.laneId == swinlane_id)
                         return (
                             <li className="bw1 mt3" key={index}>
-                                <Card object={card} tagsArr={tags} />
+                                <Card
+                                    object={card}
+                                    tagsArr={tags}
+                                    swinlanes={swinlanes}
+                                    status={status}
+                                    participants={participants}
+                                />
                             </li>
                         );
                 })}
@@ -91,6 +103,9 @@ const SwinlaneHeader = ({
                                 all_swinlanes={all_swinlanes}
                                 all_groups={this_column.groups}
                                 tagsArr={tags}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 is_first_column={is_first_column}
                                 toggleSwinlane={toggleSwinlane}
                             />
@@ -133,6 +148,7 @@ SwinlaneHeader.propTypes = {
     columns: propTypes.array,
     all_swinlanes: propTypes.array,
     tags: propTypes.array,
+    participants: propTypes.array,
     toggleSwinlane: propTypes.func,
     openModal: propTypes.func,
     addNewSubColumn: propTypes.func

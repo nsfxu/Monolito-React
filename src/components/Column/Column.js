@@ -132,6 +132,9 @@ const Column = ({
                                                 columns={swinlane_columns}
                                                 all_swinlanes={swinlanes}
                                                 tags={tags}
+                                                swinlanes={swinlanes}
+                                                status={columns}
+                                                participants={participants}
                                                 openModal={openModal}
                                                 toggleSwinlane={toggleSwinlane}
                                             />
@@ -144,6 +147,9 @@ const Column = ({
                                     key={index}
                                     this_column={column}
                                     tags={tags}
+                                    swinlanes={swinlanes}
+                                    status={columns}
+                                    participants={participants}
                                     openModal={openModal}
                                 />
                             )}

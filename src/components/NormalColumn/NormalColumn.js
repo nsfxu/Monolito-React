@@ -13,7 +13,14 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const NormalColumn = ({ this_column, tags, openModal }) => {
+const NormalColumn = ({
+    this_column,
+    tags,
+    swinlanes,
+    status,
+    participants,
+    openModal
+}) => {
     return (
         <Grid
             container
@@ -39,6 +46,9 @@ const NormalColumn = ({ this_column, tags, openModal }) => {
                                 key={group.id}
                                 data={group.cards}
                                 tagsArr={tags}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                             />
                         ))}
                     </div>
@@ -48,6 +58,9 @@ const NormalColumn = ({ this_column, tags, openModal }) => {
                             <CardColumnList
                                 cards={this_column.groups[0].cards}
                                 tagsArr={tags}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 provided={provided}
                                 swinlane={{
                                     is_swinlane: false,
@@ -64,8 +77,9 @@ const NormalColumn = ({ this_column, tags, openModal }) => {
 
 NormalColumn.propTypes = {
     this_column: propTypes.any,
-    openModal: propTypes.func,
-    tags: propTypes.array
+    tags: propTypes.array,
+    participants: propTypes.array,
+    openModal: propTypes.func
 };
 
 export default NormalColumn;

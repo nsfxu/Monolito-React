@@ -8,7 +8,16 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
+const SubColumn = ({
+    parentColumnId,
+    groupId,
+    title,
+    data,
+    tagsArr,
+    swinlanes,
+    status,
+    participants
+}) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
             <header className="self-center">
@@ -21,6 +30,9 @@ const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
                             <CardColumnList
                                 cards={data}
                                 tagsArr={tagsArr}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 provided={provided}
                                 swinlane={{
                                     is_swinlane: false,
