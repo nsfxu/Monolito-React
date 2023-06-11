@@ -80,8 +80,28 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
     }, [cardObj, tagsArr]);
 
     const validateInputs = () => {
-        console.log(selected_tags);
+        if (!title.current.value) {
+            toast('Preencha o título do card.');
+            return;
+        }
 
+        if (!column) {
+            toast('Selecione a coluna para o card.');
+            return;
+        }
+
+        let temp_subcolumn = subcolumn;
+
+        if (!hasSubColumns(selected_column.groups) || !subcolumn) {
+            temp_subcolumn = selected_column.groups[0].id;
+        }
+
+        console.log(title.current.value, selected_tags);
+
+        // terminar edição de cards usando tags e swinlanes
+        // fazer essas alterações para a criação de cards tbm
+        // boa sorte
+        
         // atualizar current_tags
     };
 
