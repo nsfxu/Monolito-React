@@ -140,7 +140,7 @@ const Board = (props) => {
                         this_group.cards.map((this_card) => {
                             board_info.card_tags.map((ct) => {
                                 if (this_card.id == ct.id_card) {
-                                    this_card.tags = JSON.parse(ct.tags);
+                                    this_card.id_tags = JSON.parse(ct.tags);
                                 }
                             });
                         });

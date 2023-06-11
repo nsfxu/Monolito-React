@@ -18,7 +18,6 @@ import { hasSubColumns } from '../../utils/column-utils';
 /* eslint-disable */
 // eslint-disable-next-line
 const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
-    console.log(tagsArr, cardObj);
     const title = useRef();
     const description = useRef();
 
@@ -27,6 +26,7 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
     const [id_group, setIdGroup] = useState(cardObj.id_group);
     const [id_user, setIdUser] = useState(cardObj.id_user);
     const [lane_id, setLaneId] = useState(cardObj.laneId);
+    let current_tags = [];
 
     const [columns, setColumns] = useState([]);
 
@@ -64,8 +64,25 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         }
     }, [status]);
 
+    useEffect(() => {
+        tagsArr.map((this_tag) => {
+            if (cardObj.id_tags.length > 0) {
+                cardObj.id_tags.map((current_tag) => {
+                    if (current_tag == this_tag.id) {
+                        current_tags.push(this_tag);
+                    }
+                });
+            }
+        });
+
+        console.log(current_tags, tagsArr);
+        setSelectedTags(current_tags);
+    }, [cardObj, tagsArr]);
+
     const validateInputs = () => {
         console.log(selected_tags);
+
+        // atualizar current_tags
     };
 
     const handleChangeSubcolumn = (e) => {
@@ -101,10 +118,10 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         setLaneId(new_swinlane_id);
     };
 
-    const updateTags = (tagsArr) => {
+    const updateTags = (this_tags) => {
         let temp_tags = [];
 
-        tagsArr?.map((tag) => temp_tags.push(tag.id_tag));
+        this_tags?.map((tag) => temp_tags.push(tag.id));
 
         setSelectedTags([...temp_tags]);
     };
@@ -344,36 +361,40 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
                 )}
 
                 {/* Tags */}
-                <div>
-                    <Autocomplete
-                        multiple
-                        filterSelectedOptions
-                        options={tagsArr}
-                        onChange={(event, value) => updateTags(value)}
-                        getOptionLabel={(tag) => tag.name}
-                        renderTags={(values, tagProps) =>
-                            values.map((option, index) => (
-                                <Chip
-                                    sx={chipStyle}
-                                    variant="outlined"
-                                    label={option.name}
-                                    {...tagProps({ index })}
+                {selected_tags && (
+                    <div>
+                        <Autocomplete
+                            multiple
+                            options={tagsArr}
+                            getOptionLabel={(tag) => tag.name}
+                            defaultValue={selected_tags}
+                            onChange={(event, value) => {
+                                setSelectedTags(value);
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Tags"
+                                    sx={inputTagStyle}
+                                    variant="standard"
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
                                 />
-                            ))
-                        }
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Tags"
-                                sx={inputTagStyle}
-                                variant="standard"
-                                InputLabelProps={{
-                                    shrink: true
-                                }}
-                            />
-                        )}
-                    ></Autocomplete>
-                </div>
+                            )}
+                            renderTags={(values, tagProps) =>
+                                values.map((option, index) => (
+                                    <Chip
+                                        sx={chipStyle}
+                                        variant="outlined"
+                                        label={option.name}
+                                        {...tagProps({ index })}
+                                    />
+                                ))
+                            }
+                        ></Autocomplete>
+                    </div>
+                )}
 
                 <div className="mt3">
                     <Stack direction="row" spacing={3}>
