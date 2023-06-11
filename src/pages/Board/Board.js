@@ -85,6 +85,7 @@ const Board = (props) => {
         if (board_info) {
             getAllColumns();
             getAllTags();
+            insertAllCardTags();
             forceUpdate();
             console.log(board_info);
         }
@@ -125,6 +126,30 @@ const Board = (props) => {
         });
 
         forceUpdate();
+    };
+
+    const insertAllCardTags = () => {
+        if (board_info.columns.length == 0) {
+            return;
+        }
+
+        board_info.columns.map((this_column) => {
+            if (this_column.groups.length > 0) {
+                this_column.groups.map((this_group) => {
+                    if (this_group.cards.length > 0) {
+                        this_group.cards.map((this_card) => {
+                            board_info.card_tags.map((ct) => {
+                                if (this_card.id == ct.id_card) {
+                                    this_card.tags = JSON.parse(ct.tags);
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+        });
+
+        console.log(board_info);
     };
 
     const getAllParticipants = async (id_board) => {

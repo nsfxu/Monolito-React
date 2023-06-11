@@ -18,6 +18,7 @@ import { hasSubColumns } from '../../utils/column-utils';
 /* eslint-disable */
 // eslint-disable-next-line
 const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
+    console.log(tagsArr, cardObj);
     const title = useRef();
     const description = useRef();
 
@@ -63,13 +64,8 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         }
     }, [status]);
 
-    useEffect(() => {
-        console.log(selected_column);
-    }, [selected_column]);
-
     const validateInputs = () => {
-        // cardObj.name = name;
-        // cardObj.description = description;
+        console.log(selected_tags);
     };
 
     const handleChangeSubcolumn = (e) => {
