@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import propTypes from 'prop-types';
 import {
+    Autocomplete,
     Box,
     FormControl,
     InputLabel,
@@ -8,15 +9,15 @@ import {
     OutlinedInput,
     Select,
     Stack,
-    TextField
+    TextField,
+    Chip,
+    Button
 } from '@mui/material';
 import { hasSubColumns } from '../../utils/column-utils';
 
 /* eslint-disable */
 // eslint-disable-next-line
 const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
-    console.log(cardObj);
-
     const title = useRef();
     const description = useRef();
 
@@ -29,6 +30,7 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
     const [columns, setColumns] = useState([]);
 
     const [selected_column, setSelectedColumn] = useState([]);
+    const [selected_tags, setSelectedTags] = useState(null);
 
     useEffect(() => {
         const temp_columns = [];
@@ -65,7 +67,7 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         console.log(selected_column);
     }, [selected_column]);
 
-    const validateEdits = () => {
+    const validateInputs = () => {
         // cardObj.name = name;
         // cardObj.description = description;
     };
@@ -97,6 +99,20 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         });
     };
 
+    const handleChangeSwinlane = (e) => {
+        const new_swinlane_id = e.target.value;
+
+        setLaneId(new_swinlane_id);
+    };
+
+    const updateTags = (tagsArr) => {
+        let temp_tags = [];
+
+        tagsArr?.map((tag) => temp_tags.push(tag.id_tag));
+
+        setSelectedTags([...temp_tags]);
+    };
+
     const titleStyle = {
         input: { color: '#F2F7F2', height: '50px', fontSize: '22px' },
         '& .MuiOutlinedInput-root': {
@@ -114,6 +130,17 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
     const multiStyle = {
         label: { color: 'grey', fontSize: '22px' },
         textareaStyle: { color: '#F2F7F2' },
+        '& label.Mui-focused': {
+            color: '#F0F0F0'
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#F0F0F0'
+        }
+    };
+
+    const inputTagStyle = {
+        input: { color: '#F2F7F2', height: '55px' },
+        label: { color: 'grey', fontSize: '22px' },
         '& label.Mui-focused': {
             color: '#F0F0F0'
         },
@@ -157,6 +184,11 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
                 backgroundColor: '#35393C'
             }
         }
+    };
+
+    const chipStyle = {
+        color: 'white',
+        backgroundColor: '#35393F'
     };
 
     return (
@@ -290,27 +322,83 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
                     </div>
                 )}
 
+                {/* Swinlane */}
+                {selected_column && selected_column.showSwinLanes && (
+                    <div>
+                        <FormControl sx={{ width: '100%' }}>
+                            <InputLabel sx={inputSelectStyles}>Raia</InputLabel>
+
+                            <Select
+                                fullWidth
+                                sx={selectStyle}
+                                value={lane_id ? lane_id : ''}
+                                onChange={handleChangeSwinlane}
+                                defaultValue={lane_id}
+                                input={<OutlinedInput label="Raia" />}
+                                MenuProps={MenuProps}
+                            >
+                                {swinlanes?.map((swinlane, index) => (
+                                    <MenuItem value={swinlane.id} key={index}>
+                                        {swinlane.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                )}
+
                 {/* Tags */}
                 <div>
-                    <label className="f6 b db mb2">
-                        Tags <span className="normal black-60">(optional)</span>
-                    </label>
-                    <input
-                        className="input-reset ba b--black-20 pa2 mb2 db w-100"
-                        type="text"
-                    />
+                    <Autocomplete
+                        multiple
+                        filterSelectedOptions
+                        options={tagsArr}
+                        onChange={(event, value) => updateTags(value)}
+                        getOptionLabel={(tag) => tag.name}
+                        renderTags={(values, tagProps) =>
+                            values.map((option, index) => (
+                                <Chip
+                                    sx={chipStyle}
+                                    variant="outlined"
+                                    label={option.name}
+                                    {...tagProps({ index })}
+                                />
+                            ))
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Tags"
+                                sx={inputTagStyle}
+                                variant="standard"
+                                InputLabelProps={{
+                                    shrink: true
+                                }}
+                            />
+                        )}
+                    ></Autocomplete>
                 </div>
 
                 <div className="mt3">
-                    <input
-                        className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6"
-                        type="submit"
-                        value="Atualizar card"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            validateEdits();
-                        }}
-                    />
+                    <Stack direction="row" spacing={3}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                validateInputs();
+                            }}
+                        >
+                            Atualizar card
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => closeModal()}
+                        >
+                            Fechar
+                        </Button>
+                    </Stack>
                 </div>
             </Stack>
         </Box>
