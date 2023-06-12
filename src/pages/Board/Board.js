@@ -142,6 +142,7 @@ const Board = (props) => {
                 this_column.groups.map((this_group) => {
                     if (this_group.cards.length > 0) {
                         this_group.cards.map((this_card) => {
+                            console.log(this_card);
                             board_info.card_tags.map((ct) => {
                                 if (this_card.id == ct.id_card) {
                                     this_card.id_tags = JSON.parse(ct.tags);

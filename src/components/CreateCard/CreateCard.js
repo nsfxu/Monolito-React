@@ -38,10 +38,10 @@ const CreateCard = ({
     const [subcolumn, setSubcolumn] = useState(null);
     const [swinlane, setSwinlane] = useState(null);
 
-    const [selected_tags, setSelectedTags] = useState(null);
-    const [selected_column, setSelectedColumn] = useState([]);    
+    const [selected_tags, setSelectedTags] = useState([]);
+    const [selected_column, setSelectedColumn] = useState([]);
 
-    const validateInputs = () => {
+    const validateInputs = async () => {
         if (!title.current.value) {
             toast('Preencha o título do card.');
             return;
@@ -58,14 +58,22 @@ const CreateCard = ({
             temp_subcolumn = selected_column.groups[0].id;
         }
 
+        let temp_swinlane = swinlane;
+        if (selected_column.showSwinLanes && !temp_swinlane) {
+            temp_swinlane = swinlanesArr[0].id;
+        }
+
+        let temp_id_tags = [];
+        selected_tags.map((this_tag) => temp_id_tags.push(this_tag.id));
+
         addNewCard(selected_column, {
             title: title.current.value,
             description: description.current.value,
             person: personName,
             columnId: column,
             groupId: temp_subcolumn,
-            laneId: swinlane,
-            tags: selected_tags
+            laneId: temp_swinlane,
+            tags: temp_id_tags
         });
     };
 
@@ -352,10 +360,12 @@ const CreateCard = ({
                 <div>
                     <Autocomplete
                         multiple
-                        filterSelectedOptions
                         options={tagsArr}
-                        onChange={(event, value) => updateTags(value)}
                         getOptionLabel={(tag) => tag.name}
+                        defaultValue={selected_tags}
+                        onChange={(event, value) => {
+                            setSelectedTags(value);
+                        }}
                         renderTags={(values, tagProps) =>
                             values.map((option, index) => (
                                 <Chip

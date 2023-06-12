@@ -19,6 +19,7 @@ import {
     findColumnById,
     addObjectIntoPosition
 } from '../../utils/column-utils';
+import { updateCardTags } from '../../services/tags-services';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -84,10 +85,13 @@ const Column = ({
             id: response.result.id_card,
             name: new_card.title,
             description: new_card.description,
-            tags: new_card.tags,
+            id_tags: new_card.tags,
             id_user: new_card.id_user,
             laneId: new_card.laneId
         };
+
+        const tag_result = await updateCardTags(card_object.id, new_card.tags);
+        console.log(tag_result);
 
         if (currentColumn.showSwinLanes) {
             card_object.laneId = new_card.laneId;
@@ -138,7 +142,9 @@ const Column = ({
                                                 participants={participants}
                                                 openModal={openModal}
                                                 toggleSwinlane={toggleSwinlane}
-                                                getInfoByBoardId={getInfoByBoardId}
+                                                getInfoByBoardId={
+                                                    getInfoByBoardId
+                                                }
                                             />
                                             {(isSwinlaneGroupShown = true)}
                                         </>

@@ -109,19 +109,23 @@ const ShowCard = ({
             temp_subcolumn = selected_column.groups[0].id;
         }
 
-        let temp_id_tags = [];
+        let temp_swinlane = swinlane;
 
+        if (selected_column.showSwinLanes && !temp_swinlane) {
+            temp_swinlane = swinlanesArr[0].id;
+        }
+
+        let temp_id_tags = [];
         selected_tags.map((this_tag) => temp_id_tags.push(this_tag.id));
 
         const tags_result = await updateCardTags(id, temp_id_tags);
-
         const card_result = await updateCard(
             id,
             title.current.value,
             description.current.value,
             id_user,
             temp_subcolumn,
-            lane_id,
+            temp_swinlane,
             null
         );
 
