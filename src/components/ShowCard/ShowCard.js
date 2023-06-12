@@ -1,4 +1,8 @@
+/* eslint-disable */
+// eslint-disable-next-line
 import React, { useState, useRef, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import propTypes from 'prop-types';
 import {
     Autocomplete,
@@ -13,14 +17,22 @@ import {
     Chip,
     Button
 } from '@mui/material';
+
 import { hasSubColumns } from '../../utils/column-utils';
+
 import { updateCardTags } from '../../services/tags-services';
 import { updateCard } from '../../services/card-service';
 
-/* eslint-disable */
-// eslint-disable-next-line
-const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
-    console.log(participants);
+const ShowCard = ({
+    cardObj,
+    participants,
+    swinlanes,
+    status,
+    tagsArr,
+    closeModal
+}) => {
+    const history = useHistory();
+
     const title = useRef();
     const description = useRef();
 
@@ -69,7 +81,7 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
 
     useEffect(() => {
         tagsArr.map((this_tag) => {
-            if (cardObj.id_tags.length > 0) {
+            if (cardObj.id_tags && cardObj.id_tags.length > 0) {
                 cardObj.id_tags.map((current_tag) => {
                     if (current_tag == this_tag.id) {
                         current_tags.push(this_tag);

@@ -115,6 +115,7 @@ const Card = ({ object, tagsArr, swinlanes, status, participants }) => {
                     swinlanes={swinlanes}
                     status={status}
                     tagsArr={tagsArr}
+                    closeModal={closeModal}
                 />
             </Modal>
         </>
