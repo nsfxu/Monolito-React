@@ -97,15 +97,19 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
             temp_subcolumn = selected_column.groups[0].id;
         }
 
+        let temp_id_tags = [];
+
+        selected_tags.map((this_tag) => temp_id_tags.push(this_tag.id));
+
         console.log(
             id,
             title.current.value,
             description.current.value,
             id_user,
             id_column,
-            id_group,
+            temp_subcolumn,
             lane_id,
-            selected_tags
+            temp_id_tags
         );
     };
 
