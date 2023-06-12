@@ -1,7 +1,6 @@
 /* eslint-disable */
 // eslint-disable-next-line
 import React, { useState, useRef, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import propTypes from 'prop-types';
 import {
@@ -29,10 +28,9 @@ const ShowCard = ({
     swinlanes,
     status,
     tagsArr,
-    closeModal
+    closeModal,
+    getInfoByBoardId
 }) => {
-    const history = useHistory();
-
     const title = useRef();
     const description = useRef();
 
@@ -128,6 +126,8 @@ const ShowCard = ({
         );
 
         console.log(card_result);
+
+        await getInfoByBoardId();
     };
 
     const handleChangeIdUser = (event) => {

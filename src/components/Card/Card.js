@@ -19,7 +19,7 @@ import ModalStyles from '../../constants/modal-styles';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Card = ({ object, tagsArr, swinlanes, status, participants }) => {
+const Card = ({ object, tagsArr, swinlanes, status, participants, getInfoByBoardId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cardTags, setCardTags] = useState([]);
 
@@ -116,6 +116,7 @@ const Card = ({ object, tagsArr, swinlanes, status, participants }) => {
                     status={status}
                     tagsArr={tagsArr}
                     closeModal={closeModal}
+                    getInfoByBoardId={getInfoByBoardId}
                 />
             </Modal>
         </>

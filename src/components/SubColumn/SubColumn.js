@@ -16,7 +16,8 @@ const SubColumn = ({
     tagsArr,
     swinlanes,
     status,
-    participants
+    participants,
+    getInfoByBoardId
 }) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
@@ -38,6 +39,7 @@ const SubColumn = ({
                                     is_swinlane: false,
                                     id: null
                                 }}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         )}
                     </Droppable>

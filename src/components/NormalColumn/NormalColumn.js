@@ -19,7 +19,8 @@ const NormalColumn = ({
     swinlanes,
     status,
     participants,
-    openModal
+    openModal,
+    getInfoByBoardId
 }) => {
     return (
         <Grid
@@ -49,6 +50,7 @@ const NormalColumn = ({
                                 swinlanes={swinlanes}
                                 status={status}
                                 participants={participants}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         ))}
                     </div>
@@ -66,6 +68,7 @@ const NormalColumn = ({
                                     is_swinlane: false,
                                     id: null
                                 }}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         )}
                     </Droppable>

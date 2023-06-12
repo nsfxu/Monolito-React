@@ -74,10 +74,7 @@ const Board = (props) => {
 
     useEffect(async () => {
         if (board_id) {
-            const db_board_data = await getBoardInfo(board_id);
-
-            await updateBoardInfo({ ...db_board_data.result });
-            await getAllParticipants(board_id);
+            await getInfoByBoardId();
         }
     }, [board_id]);
 
@@ -98,6 +95,13 @@ const Board = (props) => {
     }, [participants]);
 
     //#region functions
+
+    const getInfoByBoardId = async () => {
+        const db_board_data = await getBoardInfo(board_id);
+
+        await updateBoardInfo({ ...db_board_data.result });
+        await getAllParticipants(board_id);
+    };
 
     const updateWithNewBoardInfo = async (board_info) => {
         await updateBoardInfo({
@@ -646,6 +650,7 @@ const Board = (props) => {
                                     tags={tags}
                                     toggleSwinlane={toggleSwinlane}
                                     updateBoardInfo={updateBoardInfo}
+                                    getInfoByBoardId={getInfoByBoardId}
                                 />
                             </DragDropContext>
                         )}

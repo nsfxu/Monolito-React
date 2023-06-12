@@ -21,7 +21,8 @@ const SwinlaneHeader = ({
     status,
     participants,
     toggleSwinlane,
-    openModal
+    openModal,
+    getInfoByBoardId
 }) => {
     const renderDroppable = (this_column, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
@@ -39,6 +40,7 @@ const SwinlaneHeader = ({
                                 is_swinlane: true,
                                 id: swinlane_id
                             }}
+                            getInfoByBoardId={getInfoByBoardId}
                         />
                     )}
                 </Droppable>
@@ -63,6 +65,7 @@ const SwinlaneHeader = ({
                                     swinlanes={swinlanes}
                                     status={status}
                                     participants={participants}
+                                    getInfoByBoardId={getInfoByBoardId}
                                 />
                             </li>
                         );
@@ -108,6 +111,7 @@ const SwinlaneHeader = ({
                                 participants={participants}
                                 is_first_column={is_first_column}
                                 toggleSwinlane={toggleSwinlane}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         ) : (
                             all_swinlanes.map((swinlane, index) => (

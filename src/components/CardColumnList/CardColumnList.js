@@ -14,7 +14,8 @@ const CardColumnList = ({
     status,
     participants,
     provided,
-    swinlane
+    swinlane,
+    getInfoByBoardId
 }) => {
     const renderDraggableCards = (card, index) => {
         return (
@@ -32,6 +33,7 @@ const CardColumnList = ({
                             swinlanes={swinlanes}
                             status={status}
                             participants={participants}
+                            getInfoByBoardId={getInfoByBoardId}
                         />
                     </li>
                 )}

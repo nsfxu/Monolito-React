@@ -30,7 +30,8 @@ const Column = ({
     participants,
     tags,
     toggleSwinlane,
-    updateBoardInfo
+    updateBoardInfo,
+    getInfoByBoardId
 }) => {
     const [swinlane_columns, setSwinlaneColumns] = useState([]);
 
@@ -137,6 +138,7 @@ const Column = ({
                                                 participants={participants}
                                                 openModal={openModal}
                                                 toggleSwinlane={toggleSwinlane}
+                                                getInfoByBoardId={getInfoByBoardId}
                                             />
                                             {(isSwinlaneGroupShown = true)}
                                         </>
@@ -151,6 +153,7 @@ const Column = ({
                                     status={columns}
                                     participants={participants}
                                     openModal={openModal}
+                                    getInfoByBoardId={getInfoByBoardId}
                                 />
                             )}
                         </Grid>
