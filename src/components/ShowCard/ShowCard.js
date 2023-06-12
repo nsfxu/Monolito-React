@@ -18,6 +18,7 @@ import { hasSubColumns } from '../../utils/column-utils';
 /* eslint-disable */
 // eslint-disable-next-line
 const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
+    console.log(participants);
     const title = useRef();
     const description = useRef();
 
@@ -85,24 +86,37 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
             return;
         }
 
-        if (!column) {
+        if (!id_column) {
             toast('Selecione a coluna para o card.');
             return;
         }
 
-        let temp_subcolumn = subcolumn;
+        let temp_subcolumn = id_group;
 
-        if (!hasSubColumns(selected_column.groups) || !subcolumn) {
+        if (!hasSubColumns(selected_column.groups) || !id_group) {
             temp_subcolumn = selected_column.groups[0].id;
         }
 
-        console.log(title.current.value, selected_tags);
+        console.log(
+            id,
+            title.current.value,
+            description.current.value,
+            id_user,
+            id_column,
+            id_group,
+            lane_id,
+            selected_tags
+        );
+    };
 
-        // terminar edição de cards usando tags e swinlanes
-        // fazer essas alterações para a criação de cards tbm
-        // boa sorte
-        
-        // atualizar current_tags
+    const handleChangeIdUser = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setIdUser(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value
+        );
     };
 
     const handleChangeSubcolumn = (e) => {
@@ -284,11 +298,12 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
                         <Select
                             fullWidth
                             sx={selectStyle}
-                            defaultValue={cardObj.id_user}
-                            // onChange={handleChangePerson}
+                            value={id_user}
+                            onChange={handleChangeIdUser}
                             input={<OutlinedInput label="Responsável" />}
                             MenuProps={MenuProps}
                         >
+                            <MenuItem value={1}>Sem responsável</MenuItem>
                             {participants?.map((participant, index) => (
                                 <MenuItem
                                     value={participant.id_user}
