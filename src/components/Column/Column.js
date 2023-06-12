@@ -91,7 +91,6 @@ const Column = ({
         };
 
         const tag_result = await updateCardTags(card_object.id, new_card.tags);
-        console.log(tag_result);
 
         if (currentColumn.showSwinLanes) {
             card_object.laneId = new_card.laneId;

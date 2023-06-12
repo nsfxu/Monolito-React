@@ -71,4 +71,13 @@ const updateCard = async (
     }
 };
 
-export { updateCardGroup, updateCard, createCard };
+const deleteCard = async (id_card) => {
+    try {
+        const { data } = await api.delete(`/card/${id_card}`);
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+export { updateCardGroup, updateCard, createCard, deleteCard };

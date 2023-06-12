@@ -20,7 +20,7 @@ import {
 import { hasSubColumns } from '../../utils/column-utils';
 
 import { updateCardTags } from '../../services/tags-services';
-import { updateCard } from '../../services/card-service';
+import { deleteCard, updateCard } from '../../services/card-service';
 
 const ShowCard = ({
     cardObj,
@@ -177,12 +177,16 @@ const ShowCard = ({
         setLaneId(new_swinlane_id);
     };
 
-    const updateTags = (this_tags) => {
-        let temp_tags = [];
+    const deleteCurrentCard = async () => {
+        const delete_result = await deleteCard(cardObj.id);
 
-        this_tags?.map((tag) => temp_tags.push(tag.id));
+        // esse botão não está funcionando em swinlanes com subcolunas
+        // testar com swinlanes normais e com colunas com subcolunas
+        // boa sorte
 
-        setSelectedTags([...temp_tags]);
+        console.log(delete_result);
+
+        await getInfoByBoardId();
     };
 
     const titleStyle = {
@@ -467,6 +471,16 @@ const ShowCard = ({
                             }}
                         >
                             Atualizar card
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                deleteCurrentCard();
+                            }}
+                        >
+                            Excluir card
                         </Button>
                         <Button
                             variant="outlined"
