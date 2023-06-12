@@ -46,4 +46,29 @@ const createCard = async (
     }
 };
 
-export { updateCardGroup, createCard };
+const updateCard = async (
+    id,
+    name,
+    description,
+    id_user,
+    id_group,
+    id_swinlane,
+    style
+) => {
+    try {
+        const { data } = await api.put(`/card/edit/${id}`, {
+            name: name,
+            description: description,
+            id_user: id_user,
+            id_group: id_group,
+            id_swinlane: id_swinlane,
+            style: style
+        });
+
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+export { updateCardGroup, updateCard, createCard };

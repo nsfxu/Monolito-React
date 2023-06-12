@@ -14,6 +14,8 @@ import {
     Button
 } from '@mui/material';
 import { hasSubColumns } from '../../utils/column-utils';
+import { updateCardTags } from '../../services/tags-services';
+import { updateCard } from '../../services/card-service';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -80,7 +82,7 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
         setSelectedTags(current_tags);
     }, [cardObj, tagsArr]);
 
-    const validateInputs = () => {
+    const validateInputs = async () => {
         if (!title.current.value) {
             toast('Preencha o título do card.');
             return;
@@ -101,16 +103,19 @@ const ShowCard = ({ cardObj, participants, swinlanes, status, tagsArr }) => {
 
         selected_tags.map((this_tag) => temp_id_tags.push(this_tag.id));
 
-        console.log(
+        const tags_result = await updateCardTags(id, temp_id_tags);
+
+        const card_result = await updateCard(
             id,
             title.current.value,
             description.current.value,
             id_user,
-            id_column,
             temp_subcolumn,
             lane_id,
-            temp_id_tags
+            null
         );
+
+        console.log(card_result);
     };
 
     const handleChangeIdUser = (event) => {
