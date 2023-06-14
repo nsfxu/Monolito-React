@@ -18,6 +18,7 @@ import Modal from 'react-modal';
 import ShowCard from '../ShowCard';
 
 import ModalStyles from '../../constants/modal-styles';
+import { updateCardGroup } from '../../services/card-service';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -31,7 +32,6 @@ const Card = ({
 }) => {
     object.id == 13 ? console.log(object, status) : '';
 
-    let isSelectOpen = false;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [cardTags, setCardTags] = useState([]);
@@ -131,6 +131,40 @@ const Card = ({
         };
     }
 
+    const handleChangeColumn = async (e) => {
+        const new_column_id = e.target.value;
+
+        let temp_swinlane = null;
+        let id_first_group = null;
+
+        status.map((column) => {
+            if (column.id == new_column_id) {
+                if (column.showSwinLanes && swinlanes.length > 0) {
+                    temp_swinlane = swinlanes[0].id;
+                }
+
+                id_first_group = column.groups[0].id;
+
+                return;
+            }
+        });
+
+        if (id_first_group) {
+            const card_response = await updateCardGroup(
+                object.id,
+                0,
+                0,
+                id_first_group,
+                temp_swinlane
+            );
+
+            console.log(card_response);
+        }
+        setIdColumn(new_column_id);
+
+        getInfoByBoardId();
+    };
+
     const openModal = () => {
         setIsModalOpen(true);
     };
@@ -186,8 +220,7 @@ const Card = ({
                                     sx={selectStyle}
                                     value={id_column}
                                     className="w-100"
-                                    onMouseDown={() => (isSelectOpen = true)}
-                                    onBlur={() => (isSelectOpen = false)}
+                                    onChange={handleChangeColumn}
                                 >
                                     {status?.map(({ id, name }, index) => (
                                         <MenuItem value={id} key={index}>
