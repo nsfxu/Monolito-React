@@ -7,7 +7,9 @@ import {
     CardContent,
     Avatar,
     Stack,
-    Chip
+    Chip,
+    Select,
+    MenuItem
 } from '@mui/material';
 
 import { blueGrey } from '@mui/material/colors';
@@ -27,10 +29,14 @@ const Card = ({
     participants,
     getInfoByBoardId
 }) => {
-    object.id == 13 ? console.log(object) : '';
+    object.id == 13 ? console.log(object, status) : '';
+
+    let isSelectOpen = false;
     const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [cardTags, setCardTags] = useState([]);
     const [responsibleName, setResponsibleName] = useState('');
+    const [id_column, setIdColumn] = useState(null);
 
     useEffect(() => {
         getAllCardTags();
@@ -56,6 +62,18 @@ const Card = ({
             console.log(cardTags);
         }
     }, [cardTags]);
+
+    useEffect(() => {
+        if (status) {
+            status.map((column) => {
+                column.groups.map((group) => {
+                    if (group.id == object.id_group) {
+                        setIdColumn(column.id);
+                    }
+                });
+            });
+        }
+    }, [status]);
 
     const getAllCardTags = () => {
         let tempTagsArr = [];
@@ -121,12 +139,29 @@ const Card = ({
         setIsModalOpen(false);
     };
 
+    const selectStyle = {
+        height: '30px',
+        label: { color: '#ff0000' },
+        color: 'white',
+        '.MuiOutlinedInput-notchedOutline': {
+            borderColor: 'lightgrey'
+        },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'white'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'white'
+        },
+        '.MuiSvgIcon-root ': {
+            fill: 'white !important'
+        }
+    };
+
     return (
         <>
             <MUICard
                 sx={{ maxWidth: 240, minWidth: 240, bgcolor: blueGrey[900] }}
                 variant="outlined"
-                onClick={() => openModal()}
             >
                 <CardHeader
                     sx={{ color: '#f9f9f9' }}
@@ -137,23 +172,49 @@ const Card = ({
                         />
                     }
                     title={object.name}
+                    onClick={() => openModal()}
                 />
                 <CardContent>
                     <Stack
-                        direction="row"
-                        spacing={0}
-                        sx={{ flexWrap: 'wrap', gap: 1 }}
+                        direction="column"
+                        spacing={3}
+                        className="w-100 h-100"
                     >
-                        {cardTags.length > 0 &&
-                            cardTags.map(({ id, name, style }) => (
-                                <Chip
-                                    key={id}
-                                    label={name}
-                                    // size={size}
-                                    // variant={variant}
-                                    sx={JSON.parse(style)}
-                                />
-                            ))}
+                        <div>
+                            {id_column && (
+                                <Select
+                                    sx={selectStyle}
+                                    value={id_column}
+                                    className="w-100"
+                                    onMouseDown={() => (isSelectOpen = true)}
+                                    onBlur={() => (isSelectOpen = false)}
+                                >
+                                    {status?.map(({ id, name }, index) => (
+                                        <MenuItem value={id} key={index}>
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        </div>
+                        <div>
+                            <Stack
+                                direction="row"
+                                spacing={0}
+                                sx={{ flexWrap: 'wrap', gap: 1 }}
+                            >
+                                {cardTags.length > 0 &&
+                                    cardTags.map(({ id, name, style }) => (
+                                        <Chip
+                                            key={id}
+                                            label={name}
+                                            // size={size}
+                                            // variant={variant}
+                                            sx={JSON.parse(style)}
+                                        />
+                                    ))}
+                            </Stack>
+                        </div>
                     </Stack>
                 </CardContent>
             </MUICard>
