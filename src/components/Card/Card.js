@@ -11,7 +11,7 @@ import {
     CardContent,
     Avatar,
     Stack,
-    Button,
+    // Button,
     Chip,
     Select,
     MenuItem,
@@ -180,7 +180,7 @@ const Card = ({
         setIsModalOpen(false);
     };
 
-    function ButtonField(props) {
+    function TypographyField(props) {
         const {
             setOpen,
             label,
@@ -191,25 +191,26 @@ const Card = ({
         } = props;
 
         return (
-            <Button
-                variant="outlined"
+            <Typography
                 id={id}
                 disabled={disabled}
                 ref={ref}
                 aria-label={ariaLabel}
                 onClick={() => setOpen?.((prev) => !prev)}
+                variant="body2"
+                style={{ color: 'white' }}
             >
                 {label ?? 'Pick a date'}
-            </Button>
+            </Typography>
         );
     }
 
-    function ButtonDatePicker(props) {
+    function TypographyDatePicker(props) {
         const [open, setOpen] = React.useState(false);
 
         return (
             <DatePicker
-                slots={{ field: ButtonField, ...props.slots }}
+                slots={{ field: TypographyField, ...props.slots }}
                 slotProps={{ field: { setOpen } }}
                 {...props}
                 open={open}
@@ -283,15 +284,9 @@ const Card = ({
                             >
                                 Data de criação: {object.creationDate}
                             </Typography>
-                            <Typography
-                                variant="body2"
-                                style={{ color: 'white' }}
-                            >
-                                Data de expectativa:
-                            </Typography>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <ButtonDatePicker
-                                    label={`Current date: ${
+                                <TypographyDatePicker
+                                    label={`Data de expectativa: ${
                                         value == null
                                             ? 'null'
                                             : value.format('DD-MM-YYYY')
