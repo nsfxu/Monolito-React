@@ -278,23 +278,29 @@ const Card = ({
                             )}
                         </div>
                         <div>
-                            <Typography
-                                variant="body2"
-                                style={{ color: 'white' }}
-                            >
-                                Data de criação: {object.creationDate}
-                            </Typography>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <TypographyDatePicker
-                                    label={`Data de expectativa: ${
-                                        value == null
-                                            ? 'null'
-                                            : value.format('DD-MM-YYYY')
-                                    }`}
-                                    value={value}
-                                    onChange={(newValue) => setValue(newValue)}
-                                />
-                            </LocalizationProvider>
+                            <Stack direction="column" spacing={1}>
+                                <Typography
+                                    variant="body2"
+                                    style={{ color: 'white' }}
+                                >
+                                    Data de criação: {object.creationDate}
+                                </Typography>
+                                <LocalizationProvider
+                                    dateAdapter={AdapterDayjs}
+                                >
+                                    <TypographyDatePicker
+                                        label={`Data de expectativa: ${
+                                            value == null
+                                                ? 'Nenhuma'
+                                                : value.format('DD-MM-YYYY')
+                                        }`}
+                                        value={value}
+                                        onChange={(newValue) =>
+                                            setValue(newValue)
+                                        }
+                                    />
+                                </LocalizationProvider>
+                            </Stack>
                         </div>
 
                         {cardTags && cardTags.length > 0 && (
