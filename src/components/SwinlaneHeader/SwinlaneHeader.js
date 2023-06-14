@@ -85,7 +85,7 @@ const SwinlaneHeader = ({
     let is_first_column = true;
 
     return (
-        <>
+        <div className='flex'>
             {columns.map((this_column, index) => (
                 <div
                     key={index}
@@ -144,7 +144,7 @@ const SwinlaneHeader = ({
                         : is_first_column}
                 </div>
             ))}
-        </>
+        </div>
     );
 };
 

@@ -18,7 +18,8 @@ const SubColumnSwinlane = ({
     status,
     participants,
     is_first_column,
-    toggleSwinlane
+    toggleSwinlane,
+    getInfoByBoardId
 }) => {
     const renderDroppable = (current_group, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
@@ -39,6 +40,7 @@ const SubColumnSwinlane = ({
                                     is_swinlane: true,
                                     id: swinlane_id
                                 }}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         )}
                     </Droppable>
@@ -63,6 +65,7 @@ const SubColumnSwinlane = ({
                                     tagsArr={tagsArr}
                                     swinlanes={swinlanes}
                                     status={status}
+                                    getInfoByBoardId={getInfoByBoardId}
                                 />
                             </li>
                         );
