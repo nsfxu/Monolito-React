@@ -124,6 +124,10 @@ const Column = ({
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="flex-start"
+                style={{
+                    flexWrap: 'nowrap',
+                    width: '100%'
+                }}
             >
                 {columns &&
                     columns.map((column, index) => (
