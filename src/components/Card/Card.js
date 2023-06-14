@@ -27,8 +27,7 @@ const Card = ({
     participants,
     getInfoByBoardId
 }) => {
-    // console.log(object);
-
+    object.id == 13 ? console.log(object) : '';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cardTags, setCardTags] = useState([]);
     const [responsibleName, setResponsibleName] = useState('');
@@ -38,7 +37,7 @@ const Card = ({
     }, [tagsArr]);
 
     useEffect(() => {
-        if (!participants.length > 0 || !object) return;
+        if (!participants || !participants.length > 0 || !object) return;
         const this_card_user = participants.find(
             (user) => object.id_user == user.id_user
         );
@@ -52,9 +51,15 @@ const Card = ({
         setResponsibleName(this_card_user.name);
     }, [participants, object]);
 
+    useEffect(() => {
+        if (cardTags.length > 0) {
+            console.log(cardTags);
+        }
+    }, [cardTags]);
+
     const getAllCardTags = () => {
         let tempTagsArr = [];
-        const card_tags = object.tags;
+        const card_tags = object.id_tags;
 
         if (tagsArr && card_tags && card_tags.length > 0) {
             card_tags?.map((id) => {
@@ -140,29 +145,15 @@ const Card = ({
                         sx={{ flexWrap: 'wrap', gap: 1 }}
                     >
                         {cardTags.length > 0 &&
-                            cardTags.map(
-                                ({
-                                    id,
-                                    label,
-                                    size,
-                                    variant,
-                                    textColor,
-                                    bgColor,
-                                    borderColor
-                                }) => (
-                                    <Chip
-                                        key={id}
-                                        label={label}
-                                        size={size}
-                                        variant={variant}
-                                        sx={{
-                                            color: textColor,
-                                            backgroundColor: bgColor,
-                                            borderColor: borderColor
-                                        }}
-                                    />
-                                )
-                            )}
+                            cardTags.map(({ id, name, style }) => (
+                                <Chip
+                                    key={id}
+                                    label={name}
+                                    // size={size}
+                                    // variant={variant}
+                                    sx={JSON.parse(style)}
+                                />
+                            ))}
                     </Stack>
                 </CardContent>
             </MUICard>
