@@ -9,7 +9,8 @@ import {
     Stack,
     Chip,
     Select,
-    MenuItem
+    MenuItem,
+    Typography
 } from '@mui/material';
 
 import { blueGrey } from '@mui/material/colors';
@@ -157,8 +158,6 @@ const Card = ({
                 id_first_group,
                 temp_swinlane
             );
-
-            console.log(card_response);
         }
         setIdColumn(new_column_id);
 
@@ -231,23 +230,33 @@ const Card = ({
                             )}
                         </div>
                         <div>
-                            <Stack
-                                direction="row"
-                                spacing={0}
-                                sx={{ flexWrap: 'wrap', gap: 1 }}
+                            <Typography
+                                variant="body2"
+                                style={{ color: 'white' }}
                             >
-                                {cardTags.length > 0 &&
-                                    cardTags.map(({ id, name, style }) => (
-                                        <Chip
-                                            key={id}
-                                            label={name}
-                                            // size={size}
-                                            // variant={variant}
-                                            sx={JSON.parse(style)}
-                                        />
-                                    ))}
-                            </Stack>
+                                Data de criação: {object.creationDate}
+                            </Typography>
                         </div>
+                        {cardTags && cardTags.length > 0 && (
+                            <div>
+                                <Stack
+                                    direction="row"
+                                    spacing={0}
+                                    sx={{ flexWrap: 'wrap', gap: 1 }}
+                                >
+                                    {cardTags.length > 0 &&
+                                        cardTags.map(({ id, name, style }) => (
+                                            <Chip
+                                                key={id}
+                                                label={name}
+                                                // size={size}
+                                                // variant={variant}
+                                                sx={JSON.parse(style)}
+                                            />
+                                        ))}
+                                </Stack>
+                            </div>
+                        )}
                     </Stack>
                 </CardContent>
             </MUICard>
