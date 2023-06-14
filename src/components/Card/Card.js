@@ -11,6 +11,7 @@ import {
     CardContent,
     Avatar,
     Stack,
+    Button,
     Chip,
     Select,
     MenuItem,
@@ -38,6 +39,9 @@ const Card = ({
     object.id == 13 ? console.log(object, status) : '';
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
 
     const [cardTags, setCardTags] = useState([]);
     const [responsibleName, setResponsibleName] = useState('');
@@ -176,6 +180,45 @@ const Card = ({
         setIsModalOpen(false);
     };
 
+    function ButtonField(props) {
+        const {
+            setOpen,
+            label,
+            id,
+            disabled,
+            InputProps: { ref } = {},
+            inputProps: { 'aria-label': ariaLabel } = {}
+        } = props;
+
+        return (
+            <Button
+                variant="outlined"
+                id={id}
+                disabled={disabled}
+                ref={ref}
+                aria-label={ariaLabel}
+                onClick={() => setOpen?.((prev) => !prev)}
+            >
+                {label ?? 'Pick a date'}
+            </Button>
+        );
+    }
+
+    function ButtonDatePicker(props) {
+        const [open, setOpen] = React.useState(false);
+
+        return (
+            <DatePicker
+                slots={{ field: ButtonField, ...props.slots }}
+                slotProps={{ field: { setOpen } }}
+                {...props}
+                open={open}
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
+            />
+        );
+    }
+
     const selectStyle = {
         height: '30px',
         label: { color: '#ff0000' },
@@ -247,7 +290,15 @@ const Card = ({
                                 Data de expectativa:
                             </Typography>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker />
+                                <ButtonDatePicker
+                                    label={`Current date: ${
+                                        value == null
+                                            ? 'null'
+                                            : value.format('DD-MM-YYYY')
+                                    }`}
+                                    value={value}
+                                    onChange={(newValue) => setValue(newValue)}
+                                />
                             </LocalizationProvider>
                         </div>
 
