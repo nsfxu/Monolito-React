@@ -269,6 +269,7 @@ const CreateCard = ({
                             input={<OutlinedInput label="Responsável" />}
                             MenuProps={MenuProps}
                         >
+                            <MenuItem value={1}>Sem responsável</MenuItem>
                             {participants?.map((participant, index) => (
                                 <MenuItem
                                     value={participant.id_user}

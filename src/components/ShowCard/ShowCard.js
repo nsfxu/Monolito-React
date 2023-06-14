@@ -109,7 +109,7 @@ const ShowCard = ({
             temp_subcolumn = selected_column.groups[0].id;
         }
 
-        let temp_swinlane = swinlane;
+        let temp_swinlane = lane_id;
 
         if (selected_column.showSwinLanes && !temp_swinlane) {
             temp_swinlane = swinlanesArr[0].id;

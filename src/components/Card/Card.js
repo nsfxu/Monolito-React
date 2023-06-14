@@ -10,7 +10,7 @@ import {
     Chip
 } from '@mui/material';
 
-import { red, blueGrey } from '@mui/material/colors';
+import { blueGrey } from '@mui/material/colors';
 
 import Modal from 'react-modal';
 import ShowCard from '../ShowCard';
@@ -19,13 +19,38 @@ import ModalStyles from '../../constants/modal-styles';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const Card = ({ object, tagsArr, swinlanes, status, participants, getInfoByBoardId }) => {
+const Card = ({
+    object,
+    tagsArr,
+    swinlanes,
+    status,
+    participants,
+    getInfoByBoardId
+}) => {
+    // console.log(object);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cardTags, setCardTags] = useState([]);
+    const [responsibleName, setResponsibleName] = useState('');
 
     useEffect(() => {
         getAllCardTags();
     }, [tagsArr]);
+
+    useEffect(() => {
+        if (!participants.length > 0 || !object) return;
+        const this_card_user = participants.find(
+            (user) => object.id_user == user.id_user
+        );
+
+        if (object.id_user == 1) {
+            setResponsibleName('?');
+
+            return;
+        }
+
+        setResponsibleName(this_card_user.name);
+    }, [participants, object]);
 
     const getAllCardTags = () => {
         let tempTagsArr = [];
@@ -41,6 +66,47 @@ const Card = ({ object, tagsArr, swinlanes, status, participants, getInfoByBoard
 
         setCardTags(tempTagsArr);
     };
+
+    function stringToColor(string) {
+        let hash = 0;
+        let i;
+
+        /* eslint-disable no-bitwise */
+        for (i = 0; i < string.length; i += 1) {
+            hash = string.charCodeAt(i) + ((hash << 5) - hash);
+        }
+
+        let color = '#';
+
+        for (i = 0; i < 3; i += 1) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += `00${value.toString(16)}`.slice(-2);
+        }
+        /* eslint-enable no-bitwise */
+
+        return color;
+    }
+
+    function stringAvatar(name) {
+        let validated_name = name.toUpperCase().split(' ');
+
+        if (validated_name.length > 1) {
+            validated_name = `${name.toUpperCase().split(' ')[0][0]}${
+                name.toUpperCase().split(' ')[1][0]
+            }`;
+        } else {
+            validated_name = name.toUpperCase().split(' ')[0][0];
+        }
+
+        return {
+            sx: {
+                bgcolor: stringToColor(name),
+                width: 32,
+                height: 32
+            },
+            children: validated_name
+        };
+    }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -61,11 +127,9 @@ const Card = ({ object, tagsArr, swinlanes, status, participants, getInfoByBoard
                     sx={{ color: '#f9f9f9' }}
                     avatar={
                         <Avatar
-                            sx={{ bgcolor: red[500], width: 32, height: 32 }}
+                            {...stringAvatar(responsibleName)}
                             aria-label="recipe"
-                        >
-                            GF
-                        </Avatar>
+                        />
                     }
                     title={object.name}
                 />
