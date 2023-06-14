@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import {
     Card as MUICard,
     CardHeader,
@@ -210,7 +214,7 @@ const Card = ({
                 <CardContent>
                     <Stack
                         direction="column"
-                        spacing={3}
+                        spacing={2}
                         className="w-100 h-100"
                     >
                         <div>
@@ -236,7 +240,17 @@ const Card = ({
                             >
                                 Data de criação: {object.creationDate}
                             </Typography>
+                            <Typography
+                                variant="body2"
+                                style={{ color: 'white' }}
+                            >
+                                Data de expectativa:
+                            </Typography>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker />
+                            </LocalizationProvider>
                         </div>
+
                         {cardTags && cardTags.length > 0 && (
                             <div>
                                 <Stack
