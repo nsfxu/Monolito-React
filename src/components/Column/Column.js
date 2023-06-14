@@ -86,7 +86,7 @@ const Column = ({
             name: new_card.title,
             description: new_card.description,
             id_tags: new_card.tags,
-            id_user: new_card.id_user,
+            id_user: new_card.person,
             laneId: new_card.laneId
         };
 
