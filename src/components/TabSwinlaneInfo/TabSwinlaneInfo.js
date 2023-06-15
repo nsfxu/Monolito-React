@@ -39,13 +39,17 @@ const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
 
     const updateHasUnsavedData = async () => {
         // validades if the name is the same
-        if (name.current && name.current.value != current_swinlane.name) {
-            await setHasUnsavedDataGroup(false);
+        if (
+            name &&
+            name.current &&
+            name.current.value != current_swinlane.name
+        ) {
+            await setHasUnsavedData(false);
 
             return;
         }
 
-        await setHasUnsavedDataGroup(true);
+        await setHasUnsavedData(true);
     };
 
     const swinlane_name_style = {
@@ -71,7 +75,7 @@ const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
 
     return (
         <>
-            {selected_swinlane && (
+            {current_swinlane && (
                 <Box
                     component="form"
                     sx={{
@@ -90,10 +94,10 @@ const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
 
                         <TextField
                             label="Raia da coluna"
-                            defaultValue={selected_swinlane.name}
+                            defaultValue={current_swinlane.name}
                             inputRef={name}
                             sx={swinlane_name_style}
-                            onKeyUp={() => updateHasUnsavedDataColumn()}
+                            onKeyUp={() => updateHasUnsavedData()}
                         />
 
                         <Stack
