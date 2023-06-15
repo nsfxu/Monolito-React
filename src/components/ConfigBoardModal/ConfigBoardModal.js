@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import propTypes from 'prop-types';
 
-import { Tab, Tabs, Box } from '@mui/material';
+import { Tab, Tabs, Box, Typography, Button } from '@mui/material';
 
 import TabPanel from '../TabPanel';
 import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 
+const SECTION_TITLE_COLOR = 'white';
 /* eslint-disable */
 // eslint-disable-next-line
 const ConfigBoardModal = ({
@@ -41,36 +42,53 @@ const ConfigBoardModal = ({
     }
 
     return (
-        <section>
-            <button
-                onClick={() => {
-                    closeModal();
-                }}
-            >
-                Fechar
-            </button>
+        <section className="flex flex-column ma3 h-100">
+            <Typography variant="h4">Configurações do quadro</Typography>
+
+            <hr className="mt3 mb3 w-100" style={{ borderColor: 'grey' }}></hr>
+
             <Box
                 sx={{
                     flexGrow: 1,
-                    bgcolor: 'background.paper',
+                    bgcolor: '#43474C',
                     display: 'flex',
                     height: '550'
                 }}
+                className="br1 h-100"
             >
                 <Tabs
+                    className="ml2"
                     orientation="vertical"
                     variant="scrollable"
                     value={value}
                     onChange={handleChange}
                     aria-label="Vertical tabs example"
                 >
-                    <Tab label="Colunas/Subcolunas" {...a11yProps(0)} />
-                    <Tab label="Raias" {...a11yProps(1)} />
-                    <Tab label="Etiquetas" {...a11yProps(2)} />
-                    <Tab label="Membros" {...a11yProps(3)} />
-                    <Tab label="Quadro" {...a11yProps(4)} />
-                    <Tab label="Item Six" {...a11yProps(5)} />
-                    <Tab label="Item Seven" {...a11yProps(6)} />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Colunas/Subcolunas"
+                        {...a11yProps(0)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Raias"
+                        {...a11yProps(1)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Etiquetas"
+                        {...a11yProps(2)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Membros"
+                        {...a11yProps(3)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Quadro"
+                        {...a11yProps(4)}
+                    />
                 </Tabs>
                 <TabPanel value={value} index={0}>
                     <TabColumnConfig
@@ -96,13 +114,18 @@ const ConfigBoardModal = ({
                 <TabPanel value={value} index={4}>
                     Item Five
                 </TabPanel>
-                <TabPanel value={value} index={5}>
-                    Item Six
-                </TabPanel>
-                <TabPanel value={value} index={6}>
-                    Item Seven
-                </TabPanel>
             </Box>
+            <div className='mt3'>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => {
+                        closeModal();
+                    }}
+                >
+                    Fechar
+                </Button>
+            </div>
         </section>
     );
 };
