@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 
 import Modal from 'react-modal';
 import ModalStyles from '../../constants/modal-styles';
@@ -246,8 +246,13 @@ const TabColumnConfig = ({
 
     return (
         <>
-            <section className="ma3">
+            <section className="ma3 h-100">
                 <div className="flex flex-column">
+                    <div>
+                        <Typography variant="h6" className="pb3">
+                            Ordem das colunas
+                        </Typography>
+                    </div>
                     <div className="self-start pb3">
                         <Stack direction="row" spacing={2}>
                             <Button

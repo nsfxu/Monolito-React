@@ -249,18 +249,18 @@ const TabColumnInfo = ({
     const getItemStyle = (isDragging, draggableStyle) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: 'none',
-        padding: grid * 2,
+        padding: grid * 3,
         margin: `0 ${grid}px 0 0`,
 
         // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
+        background: isDragging ? 'lightgrey' : '#565B61',
 
         // styles we need to apply on draggables
         ...draggableStyle
     });
 
     const getListStyle = (isDraggingOver) => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        background: isDraggingOver ? 'lightblue' : '#35393C',
         display: 'flex',
         padding: grid,
         overflow: 'auto'
@@ -327,11 +327,11 @@ const TabColumnInfo = ({
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
                 borderStyle: 'solid',
-                borderColor: 'grey'
+                borderColor: 'lightgrey !important'
             },
             '&.Mui-focused fieldset': {
-                borderStyle: 'solid',
-                borderColor: '#F2F7F2'
+                borderStyle: 'solid'
+                // borderColor: '#F2F7F2'
             }
         }
     };
@@ -351,7 +351,7 @@ const TabColumnInfo = ({
                     <section className="flex flex-column mb2">
                         <div>
                             <Typography variant="h6" className="pl2 pb2">
-                                Coluna
+                                Coluna selecionada
                             </Typography>
                         </div>
 
@@ -368,6 +368,8 @@ const TabColumnInfo = ({
                                 control={
                                     <Checkbox
                                         inputRef={show_swin_lane}
+                                        sx={{ color: 'white' }}
+                                        color="default"
                                         defaultChecked={
                                             current_column.showSwinLanes
                                         }
@@ -376,7 +378,7 @@ const TabColumnInfo = ({
                                         }
                                     />
                                 }
-                                label="Mostrar com raias (se existir)"
+                                label="Mostrar com raias"
                                 className="pl2"
                             />
                         )}
@@ -395,7 +397,7 @@ const TabColumnInfo = ({
                                 Salvar coluna
                             </Button>
                             <Button
-                                variant="outlined"
+                                variant="contained"
                                 color="error"
                                 className="w-20"
                                 onClick={() => {
@@ -407,11 +409,11 @@ const TabColumnInfo = ({
                         </Stack>
                     </section>
 
-                    <section className="bt b--silver pt2">
+                    <section className="bt b--silver pt3">
                         <div className="flex flex-column">
                             <div>
                                 <Typography variant="h6" className="pl2">
-                                    Subcolunas
+                                    Ordem das subcolunas
                                 </Typography>
                             </div>
 
@@ -431,7 +433,7 @@ const TabColumnInfo = ({
                                     Adicionar subcoluna
                                 </Button>
                                 <Button
-                                    variant="outlined"
+                                    variant="contained"
                                     color="error"
                                     className="w-25"
                                     disabled={
@@ -485,13 +487,21 @@ const TabColumnInfo = ({
                                 </div>
                             )}
 
+                            <hr className="mt3 mb3 w-100"></hr>
+
+                            <div>
+                                <Typography variant="h6" className="pl2">
+                                    Subcoluna selecionada
+                                </Typography>
+                            </div>
+
                             {has_subcolumn && current_subcolumn && (
-                                <div className="flex flex-column pt3 pl2">
-                                    <hr></hr>
+                                <div className="flex flex-column pt3">
                                     <TextField
                                         label="Nome da subcoluna"
                                         defaultValue={current_subcolumn.name}
                                         inputRef={subcolumn_name}
+                                        sx={column_name_style}
                                         onKeyUp={() =>
                                             updateHasUnsavedDataGroup()
                                         }

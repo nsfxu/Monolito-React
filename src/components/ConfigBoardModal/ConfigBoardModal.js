@@ -55,7 +55,7 @@ const ConfigBoardModal = ({
                     flexGrow: 1,
                     bgcolor: '#43474C',
                     display: 'flex',
-                    height: '550'
+                    height: '980px'
                 }}
                 className="br1 h-100"
             >
@@ -126,9 +126,9 @@ const ConfigBoardModal = ({
                 </TabPanel>
             </Box>
 
-            <div className="mt3">
+            <div className="pt3">
                 <Button
-                    variant="outlined"
+                    variant="contained"
                     color="error"
                     onClick={() => {
                         closeModal();
