@@ -71,6 +71,18 @@ const updateCard = async (
     }
 };
 
+const updateCardExpectedDate = async (id, expectedDate) => {
+    try {
+        const { data } = await api.put(`/card/edit/expected/${id}`, {
+            expectedDate: expectedDate
+        });
+
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const deleteCard = async (id_card) => {
     try {
         const { data } = await api.delete(`/card/${id_card}`);
@@ -80,4 +92,10 @@ const deleteCard = async (id_card) => {
     }
 };
 
-export { updateCardGroup, updateCard, createCard, deleteCard };
+export {
+    updateCardGroup,
+    updateCard,
+    createCard,
+    deleteCard,
+    updateCardExpectedDate
+};

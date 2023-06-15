@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import propTypes from 'prop-types';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -24,7 +25,10 @@ import Modal from 'react-modal';
 import ShowCard from '../ShowCard';
 
 import ModalStyles from '../../constants/modal-styles';
-import { updateCardGroup } from '../../services/card-service';
+import {
+    updateCardExpectedDate,
+    updateCardGroup
+} from '../../services/card-service';
 
 /* eslint-disable */
 // eslint-disable-next-line
@@ -67,10 +71,12 @@ const Card = ({
     }, [participants, object]);
 
     useEffect(() => {
-        if (cardTags.length > 0) {
-            console.log(cardTags);
+        if (object.expectedDate) {
+            const [day, month, year] = object.expectedDate.split('/');
+
+            setValue(dayjs(`${year}-${month}-${day}`));
         }
-    }, [cardTags]);
+    }, [object]);
 
     useEffect(() => {
         if (status) {
@@ -180,6 +186,19 @@ const Card = ({
         setIsModalOpen(false);
     };
 
+    const updateExpectedDateInDB = async (new_date) => {
+        if (!new_date) {
+            return;
+        }
+
+        setValue(new_date);
+        new_date = dayjs(new_date).format('YYYY-MM-DD');
+
+        const response = await updateCardExpectedDate(object.id, new_date);
+
+        console.log(response);
+    };
+
     function TypographyField(props) {
         const {
             setOpen,
@@ -192,6 +211,7 @@ const Card = ({
 
         return (
             <Typography
+                className="pointer"
                 id={id}
                 disabled={disabled}
                 ref={ref}
@@ -241,7 +261,7 @@ const Card = ({
     return (
         <>
             <MUICard
-                sx={{ maxWidth: 240, minWidth: 240, bgcolor: blueGrey[900] }}
+                sx={{ maxWidth: 250, minWidth: 240, bgcolor: blueGrey[900] }}
                 variant="outlined"
             >
                 <CardHeader
@@ -292,11 +312,11 @@ const Card = ({
                                         label={`Data de expectativa: ${
                                             value == null
                                                 ? 'Nenhuma'
-                                                : value.format('DD-MM-YYYY')
+                                                : value.format('DD/MM/YYYY')
                                         }`}
                                         value={value}
                                         onChange={(newValue) =>
-                                            setValue(newValue)
+                                            updateExpectedDateInDB(newValue)
                                         }
                                     />
                                 </LocalizationProvider>
