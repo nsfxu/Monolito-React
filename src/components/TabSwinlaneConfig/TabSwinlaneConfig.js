@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -14,6 +14,7 @@ import CreateSwinlane from '../CreateSwinlane';
 
 import TabColumn from '../TabColumn';
 import { createSwinlane } from '../../services/swinlane-service';
+import TabSwinlaneInfo from '../TabSwinlaneInfo/TabSwinlaneInfo';
 
 const CREATE_SWINLANE = 'CreateSwinlane';
 
@@ -25,6 +26,8 @@ const TabSwinlaneConfig = ({
     updateNewBoardSwinlanes
 }) => {
     const [temp_swinlanes, setTempSwinlanes] = useState(board_swinlanes);
+
+    const [selected_swinlane, setSelectedSwinlane] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
@@ -81,28 +84,9 @@ const TabSwinlaneConfig = ({
 
     //#endregion
 
-    const grid = 8;
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary
-    }));
-
-    const getItemStyle = (isDragging, draggableStyle) => ({
-        // some basic styles to make the items look a bit nicer
-        userSelect: 'none',
-        padding: grid * 2,
-        margin: `0 ${grid}px 0 0`,
-
-        // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
-
-        // styles we need to apply on draggables
-        ...draggableStyle
-    });
+    useEffect(() => {
+        console.log(selected_swinlane);
+    }, [selected_swinlane]);
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -125,6 +109,36 @@ const TabSwinlaneConfig = ({
 
         setTempSwinlanes(items);
     };
+    const grid = 8;
+
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#565B61' : '#565B61',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: 'white',
+        fontSize: '16px'
+    }));
+
+    const getItemStyle = (isDragging, draggableStyle) => ({
+        // some basic styles to make the items look a bit nicer
+        userSelect: 'none',
+        padding: grid * 2,
+        margin: `0 ${grid}px 0 0`,
+
+        // change background colour if dragging
+        background: isDragging ? 'lightgrey' : '565B61',
+
+        // styles we need to apply on draggables
+        ...draggableStyle
+    });
+
+    const getListStyle = (isDraggingOver) => ({
+        background: isDraggingOver ? 'lightblue' : '#35393C',
+        display: 'flex',
+        padding: grid,
+        overflow: 'auto'
+    });
 
     return (
         <>
@@ -146,6 +160,7 @@ const TabSwinlaneConfig = ({
                         </Button>
                         <Button
                             variant="contained"
+                            color="success"
                             // disabled={has_unsaved_data}
                             // onClick={() => saveNewColumnOrder()}
                         >
@@ -168,7 +183,9 @@ const TabSwinlaneConfig = ({
                                         }
                                         spacing={3}
                                         className="list flex flex-column w-100 pl3 pr4 pa3"
-                                        style={{ backgroundColor: 'lightgray' }}
+                                        style={getListStyle(
+                                            snapshot.isDraggingOver
+                                        )}
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
                                     >
@@ -192,18 +209,20 @@ const TabSwinlaneConfig = ({
                                                                     .draggableProps
                                                                     .style
                                                             )}
-                                                            // onClick={() => {
-                                                            //     setSelectedColumn(
-                                                            //         `${column.id}`
-                                                            //     );
-                                                            // }}
+                                                            onClick={() => {
+                                                                setSelectedSwinlane(
+                                                                    `${swinlane.id}`
+                                                                );
+                                                            }}
                                                         >
                                                             <TabColumn
                                                                 column_info={
                                                                     swinlane
                                                                 }
                                                             />
-                                                            {provided.placeholder}
+                                                            {
+                                                                provided.placeholder
+                                                            }
                                                         </Item>
                                                     )}
                                                 </Draggable>
@@ -220,6 +239,15 @@ const TabSwinlaneConfig = ({
                 </div>
 
                 <hr className="mt3 mb3 w-100"></hr>
+
+                {selected_swinlane ? (
+                    <TabSwinlaneInfo
+                        selected_swinlane={selected_swinlane}
+                        board_swinlanes={board_swinlanes}
+                    />
+                ) : (
+                    'Clique em um item para editar suas propriedades.'
+                )}
             </section>
             <Modal
                 isOpen={isModalOpen}
