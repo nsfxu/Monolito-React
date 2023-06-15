@@ -1,8 +1,14 @@
 /* eslint-disable */
 // eslint-disable-next-line
 import React, { useState, useRef, useEffect } from 'react';
+import dayjs from 'dayjs';
 
 import propTypes from 'prop-types';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import {
     Autocomplete,
     Box,
@@ -14,7 +20,8 @@ import {
     Stack,
     TextField,
     Chip,
-    Button
+    Button,
+    Typography
 } from '@mui/material';
 
 import { hasSubColumns } from '../../utils/column-utils';
@@ -31,6 +38,8 @@ const ShowCard = ({
     closeModal,
     getInfoByBoardId
 }) => {
+    const [open, setOpen] = useState(false);
+
     const title = useRef();
     const description = useRef();
 
@@ -39,6 +48,8 @@ const ShowCard = ({
     const [id_group, setIdGroup] = useState(cardObj.id_group);
     const [id_user, setIdUser] = useState(cardObj.id_user);
     const [lane_id, setLaneId] = useState(cardObj.laneId);
+    const [expectedDate, setExpectedDate] = useState(null);
+
     let current_tags = [];
 
     const [columns, setColumns] = useState([]);
@@ -92,6 +103,14 @@ const ShowCard = ({
         setSelectedTags(current_tags);
     }, [cardObj, tagsArr]);
 
+    useEffect(() => {
+        if (cardObj.expectedDate) {
+            const [day, month, year] = cardObj.expectedDate.split('/');
+
+            setExpectedDate(dayjs(`${year}-${month}-${day}`));
+        }
+    }, [cardObj]);
+
     const validateInputs = async () => {
         if (!title.current.value) {
             toast('Preencha o título do card.');
@@ -101,6 +120,13 @@ const ShowCard = ({
         if (!id_column) {
             toast('Selecione a coluna para o card.');
             return;
+        }
+
+        let temp_expected_date = null;
+
+        if (expectedDate) {
+            temp_expected_date = expectedDate;
+            // temp_expected_date = dayjs(expectedDate).format('YYYY-MM-DD');
         }
 
         let temp_subcolumn = id_group;
@@ -122,7 +148,8 @@ const ShowCard = ({
         const card_result = await updateCard(
             id,
             title.current.value,
-            description.current.value,
+            description.current.value ? description.current.value : '',
+            temp_expected_date,
             id_user,
             temp_subcolumn,
             temp_swinlane,
@@ -178,13 +205,9 @@ const ShowCard = ({
     };
 
     const deleteCurrentCard = async () => {
-        const delete_result = await deleteCard(cardObj.id);
+        await deleteCard(cardObj.id);
 
-        // esse botão não está funcionando em swinlanes com subcolunas
-        // testar com swinlanes normais e com colunas com subcolunas
-        // boa sorte
-
-        console.log(delete_result);
+        // resolvido, obrigado a todos os envolvidos
 
         await getInfoByBoardId();
     };
@@ -267,6 +290,52 @@ const ShowCard = ({
         backgroundColor: '#35393F'
     };
 
+    function TypographyField(props) {
+        const {
+            setOpen,
+            label,
+            id,
+            disabled,
+            InputProps: { ref } = {},
+            inputProps: { 'aria-label': ariaLabel } = {}
+        } = props;
+
+        return (
+            <Typography
+                className="pointer"
+                id={id}
+                disabled={disabled}
+                ref={ref}
+                aria-label={ariaLabel}
+                onClick={() => setOpen?.((prev) => !prev)}
+                variant="body1"
+                style={{ color: 'white' }}
+            >
+                {label ?? 'Pick a date'}
+            </Typography>
+        );
+    }
+
+    function TypographyDatePicker(props) {
+        const [open, setOpen] = React.useState(false);
+
+        return (
+            <DatePicker
+                slots={{ field: TypographyField, ...props.slots }}
+                slotProps={{
+                    field: { setOpen },
+                    actionBar: {
+                        actions: ['clear']
+                    }
+                }}
+                {...props}
+                open={open}
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
+            />
+        );
+    }
+
     return (
         <Box>
             {/* Title */}
@@ -315,6 +384,21 @@ const ShowCard = ({
                         }}
                         inputRef={description}
                     />
+                </div>
+
+                {/* Expected Date */}
+                <div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TypographyDatePicker
+                            label={`Data de expectativa: ${
+                                expectedDate == null
+                                    ? 'Nenhuma'
+                                    : expectedDate.format('DD/MM/YYYY')
+                            }`}
+                            value={expectedDate}
+                            onChange={(newValue) => setExpectedDate(newValue)}
+                        />
+                    </LocalizationProvider>
                 </div>
 
                 {/* Person */}

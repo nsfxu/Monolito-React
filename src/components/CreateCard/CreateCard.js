@@ -64,7 +64,7 @@ const CreateCard = ({
         let temp_expected_date = null;
 
         if (expectedDate) {
-            temp_expected_date = dayjs(expectedDate).format('YYYY-MM-DD');
+            temp_expected_date = expectedDate;
         }
 
         let temp_subcolumn = subcolumn;

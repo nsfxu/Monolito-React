@@ -52,6 +52,7 @@ const updateCard = async (
     id,
     name,
     description,
+    temp_expected_date,
     id_user,
     id_group,
     id_swinlane,
@@ -61,6 +62,7 @@ const updateCard = async (
         const { data } = await api.put(`/card/edit/${id}`, {
             name: name,
             description: description,
+            expectedDate: temp_expected_date,
             id_user: id_user,
             id_group: id_group,
             id_swinlane: id_swinlane,
