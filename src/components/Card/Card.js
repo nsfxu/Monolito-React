@@ -187,12 +187,11 @@ const Card = ({
     };
 
     const updateExpectedDateInDB = async (new_date) => {
-        if (!new_date) {
-            return;
-        }
-
         setValue(new_date);
-        new_date = dayjs(new_date).format('YYYY-MM-DD');
+        
+        if (new_date) {
+            new_date = dayjs(new_date).format('YYYY-MM-DD');
+        }
 
         const response = await updateCardExpectedDate(object.id, new_date);
 
@@ -231,7 +230,12 @@ const Card = ({
         return (
             <DatePicker
                 slots={{ field: TypographyField, ...props.slots }}
-                slotProps={{ field: { setOpen } }}
+                slotProps={{
+                    field: { setOpen },
+                    actionBar: {
+                        actions: ['clear']
+                    }
+                }}
                 {...props}
                 open={open}
                 onClose={() => setOpen(false)}

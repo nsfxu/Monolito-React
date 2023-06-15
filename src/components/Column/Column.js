@@ -69,6 +69,7 @@ const Column = ({
         const response = await createCard(
             new_card.title,
             new_card.description,
+            new_card.expectedDate,
             new_card.groupId,
             new_card.person,
             new_card.laneId
@@ -85,6 +86,8 @@ const Column = ({
             id: response.result.id_card,
             name: new_card.title,
             description: new_card.description,
+            creationDate: new_card.creationDate,
+            expectedDate: new_card.expectedDate,
             id_tags: new_card.tags,
             id_user: new_card.person,
             laneId: new_card.laneId

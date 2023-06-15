@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import dayjs from 'dayjs';
 
 import propTypes from 'prop-types';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import {
     Autocomplete,
@@ -13,7 +18,8 @@ import {
     OutlinedInput,
     Select,
     Stack,
-    TextField
+    TextField,
+    Typography
 } from '@mui/material';
 
 import { hasSubColumns } from '../../utils/column-utils';
@@ -30,6 +36,8 @@ const CreateCard = ({
     addNewCard,
     toast
 }) => {
+    const [open, setOpen] = useState(false);
+
     const title = useRef();
     const description = useRef();
 
@@ -37,6 +45,7 @@ const CreateCard = ({
     const [column, setColumn] = useState(null);
     const [subcolumn, setSubcolumn] = useState(null);
     const [swinlane, setSwinlane] = useState(null);
+    const [expectedDate, setExpectedDate] = useState(null);
 
     const [selected_tags, setSelectedTags] = useState([]);
     const [selected_column, setSelectedColumn] = useState([]);
@@ -50,6 +59,12 @@ const CreateCard = ({
         if (!column) {
             toast('Selecione a coluna para o novo card.');
             return;
+        }
+
+        let temp_expected_date = null;
+
+        if (expectedDate) {
+            temp_expected_date = dayjs(expectedDate).format('YYYY-MM-DD');
         }
 
         let temp_subcolumn = subcolumn;
@@ -69,6 +84,8 @@ const CreateCard = ({
         addNewCard(selected_column, {
             title: title.current.value,
             description: description.current.value,
+            creationDate: dayjs().format('DD-MM-YYYY'),
+            expectedDate: temp_expected_date,
             person: personName,
             columnId: column,
             groupId: temp_subcolumn,
@@ -213,6 +230,52 @@ const CreateCard = ({
         backgroundColor: '#35393F'
     };
 
+    function TypographyField(props) {
+        const {
+            setOpen,
+            label,
+            id,
+            disabled,
+            InputProps: { ref } = {},
+            inputProps: { 'aria-label': ariaLabel } = {}
+        } = props;
+
+        return (
+            <Typography
+                className="pointer"
+                id={id}
+                disabled={disabled}
+                ref={ref}
+                aria-label={ariaLabel}
+                onClick={() => setOpen?.((prev) => !prev)}
+                variant="body1"
+                style={{ color: 'white' }}
+            >
+                {label ?? 'Pick a date'}
+            </Typography>
+        );
+    }
+
+    function TypographyDatePicker(props) {
+        const [open, setOpen] = React.useState(false);
+
+        return (
+            <DatePicker
+                slots={{ field: TypographyField, ...props.slots }}
+                slotProps={{
+                    field: { setOpen },
+                    actionBar: {
+                        actions: ['clear']
+                    }
+                }}
+                {...props}
+                open={open}
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
+            />
+        );
+    }
+
     return (
         <Box>
             <Stack spacing={3} className="pa3">
@@ -252,6 +315,21 @@ const CreateCard = ({
                         }}
                         inputRef={description}
                     />
+                </div>
+
+                {/* Expected Date */}
+                <div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TypographyDatePicker
+                            label={`Data de expectativa: ${
+                                expectedDate == null
+                                    ? 'Nenhuma'
+                                    : expectedDate.format('DD/MM/YYYY')
+                            }`}
+                            value={expectedDate}
+                            onChange={(newValue) => setExpectedDate(newValue)}
+                        />
+                    </LocalizationProvider>
                 </div>
 
                 {/* Person */}

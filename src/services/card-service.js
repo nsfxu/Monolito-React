@@ -26,6 +26,7 @@ const updateCardGroup = async (
 const createCard = async (
     name,
     description,
+    expectedDate,
     // style,
     id_group,
     id_user,
@@ -35,6 +36,7 @@ const createCard = async (
         const { data } = await api.post(`/card/create`, {
             name: name,
             description: description,
+            expectedDate: expectedDate,
             style: null,
             id_group: id_group,
             id_user: id_user,
