@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
-import { Button, Divider, Stack } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 
@@ -68,7 +68,7 @@ const TabSwinlaneConfig = ({
                 };
 
                 board_swinlanes.push(new_swinlane);
-                
+
                 await updateNewBoardSwinlanes(board_swinlanes);
                 await setTempSwinlanes(board_swinlanes);
 
@@ -128,7 +128,12 @@ const TabSwinlaneConfig = ({
 
     return (
         <>
-            <div className="flex flex-column pa2">
+            <section className="flex flex-column ma3 h-100">
+                <div>
+                    <Typography variant="h6" className="pb3">
+                        Ordem das raias
+                    </Typography>
+                </div>
                 <div className="self-start pb3">
                     <Stack direction="row" spacing={2}>
                         <Button
@@ -198,11 +203,13 @@ const TabSwinlaneConfig = ({
                                                                     swinlane
                                                                 }
                                                             />
+                                                            {provided.placeholder}
                                                         </Item>
                                                     )}
                                                 </Draggable>
                                             )
                                         )}
+                                        {provided.placeholder}
                                     </Stack>
                                 )}
                             </Droppable>
@@ -211,7 +218,9 @@ const TabSwinlaneConfig = ({
                         <p>Você ainda não tem uma raia feita.</p>
                     )}
                 </div>
-            </div>
+
+                <hr className="mt3 mb3 w-100"></hr>
+            </section>
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}

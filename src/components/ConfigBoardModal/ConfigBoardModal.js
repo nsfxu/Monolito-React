@@ -108,7 +108,14 @@ const ConfigBoardModal = ({
                         updateNewBoardColumns={updateNewBoardColumns}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel
+                    value={value}
+                    index={1}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
                     <TabSwinlaneConfig
                         board_id={board_id}
                         board_swinlanes={board_info.swinlanes}
