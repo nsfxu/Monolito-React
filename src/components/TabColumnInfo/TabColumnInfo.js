@@ -315,6 +315,27 @@ const TabColumnInfo = ({
         deleteColumnByPos(board_columns.indexOf(current_column));
     };
 
+    const column_name_style = {
+        '.MuiInputLabel-root': {
+            color: 'white !important'
+        },
+        input: {
+            color: '#F2F7F2',
+            height: '50px',
+            fontSize: '18px'
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderStyle: 'solid',
+                borderColor: 'grey'
+            },
+            '&.Mui-focused fieldset': {
+                borderStyle: 'solid',
+                borderColor: '#F2F7F2'
+            }
+        }
+    };
+
     return (
         <>
             {current_column && (
@@ -338,6 +359,7 @@ const TabColumnInfo = ({
                             label="Nome da coluna"
                             defaultValue={current_column.name}
                             inputRef={name}
+                            sx={column_name_style}
                             onKeyUp={() => updateHasUnsavedDataColumn()}
                         />
 
@@ -385,7 +407,7 @@ const TabColumnInfo = ({
                         </Stack>
                     </section>
 
-                    <section className='bt b--silver pt2'>
+                    <section className="bt b--silver pt2">
                         <div className="flex flex-column">
                             <div>
                                 <Typography variant="h6" className="pl2">

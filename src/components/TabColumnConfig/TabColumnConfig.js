@@ -260,6 +260,7 @@ const TabColumnConfig = ({
                             </Button>
                             <Button
                                 variant="contained"
+                                color="success"
                                 disabled={has_unsaved_data}
                                 onClick={() => saveNewColumnOrder()}
                             >
