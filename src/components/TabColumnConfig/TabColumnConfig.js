@@ -185,18 +185,18 @@ const TabColumnConfig = ({
     const getItemStyle = (isDragging, draggableStyle) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: 'none',
-        padding: grid * 2,
+        padding: grid * 4,
         margin: `0 ${grid}px 0 0`,
 
         // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
+        background: isDragging ? 'lightgrey' : '#565B61',
 
         // styles we need to apply on draggables
         ...draggableStyle
     });
 
     const getListStyle = (isDraggingOver) => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        background: isDraggingOver ? 'lightblue' : '#35393C',
         display: 'flex',
         padding: grid,
         overflow: 'auto'
@@ -246,93 +246,100 @@ const TabColumnConfig = ({
 
     return (
         <>
-            <div className="flex flex-column pa2">
-                <div className="self-start pb3">
-                    <Stack direction="row" spacing={2}>
-                        <Button
-                            variant="contained"
-                            onClick={() => {
-                                openCustomModal(CREATE_COLUMN);
-                            }}
-                        >
-                            Criar coluna
-                        </Button>
-                        <Button
-                            variant="contained"
-                            disabled={has_unsaved_data}
-                            onClick={() => saveNewColumnOrder()}
-                        >
-                            Salvar ordem
-                        </Button>
-                    </Stack>
+            <section className="ma3">
+                <div className="flex flex-column">
+                    <div className="self-start pb3">
+                        <Stack direction="row" spacing={2}>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    openCustomModal(CREATE_COLUMN);
+                                }}
+                            >
+                                Criar coluna
+                            </Button>
+                            <Button
+                                variant="contained"
+                                disabled={has_unsaved_data}
+                                onClick={() => saveNewColumnOrder()}
+                            >
+                                Salvar ordem
+                            </Button>
+                        </Stack>
+                    </div>
+
+                    <div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable
+                                droppableId="columnConfigTab"
+                                direction="horizontal"
+                            >
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        style={getListStyle(
+                                            snapshot.isDraggingOver
+                                        )}
+                                        {...provided.droppableProps}
+                                    >
+                                        {temp_columns &&
+                                            temp_columns.map(
+                                                (column, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {column ==
+                                                        'swinlane_group' ? (
+                                                            <>
+                                                                <TabSwinlaneGroup
+                                                                    all_columns={
+                                                                        swinlane_columns
+                                                                    }
+                                                                    index={
+                                                                        index
+                                                                    }
+                                                                    sendBackResult={
+                                                                        getResults
+                                                                    }
+                                                                    setSelectedColumn={
+                                                                        setSelectedColumn
+                                                                    }
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <TabColumnItem
+                                                                column={column}
+                                                                index={index}
+                                                                getItemStyle={
+                                                                    getItemStyle
+                                                                }
+                                                                setSelectedColumn={
+                                                                    setSelectedColumn
+                                                                }
+                                                            />
+                                                        )}
+                                                    </React.Fragment>
+                                                )
+                                            )}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </div>
                 </div>
 
-                <div>
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable
-                            droppableId="columnConfigTab"
-                            direction="horizontal"
-                        >
-                            {(provided, snapshot) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    style={getListStyle(
-                                        snapshot.isDraggingOver
-                                    )}
-                                    {...provided.droppableProps}
-                                >
-                                    {temp_columns &&
-                                        temp_columns.map((column, index) => (
-                                            <React.Fragment key={index}>
-                                                {column == 'swinlane_group' ? (
-                                                    <>
-                                                        <TabSwinlaneGroup
-                                                            all_columns={
-                                                                swinlane_columns
-                                                            }
-                                                            index={index}
-                                                            sendBackResult={
-                                                                getResults
-                                                            }
-                                                            setSelectedColumn={
-                                                                setSelectedColumn
-                                                            }
-                                                        />
-                                                    </>
-                                                ) : (
-                                                    <TabColumnItem
-                                                        column={column}
-                                                        index={index}
-                                                        getItemStyle={
-                                                            getItemStyle
-                                                        }
-                                                        setSelectedColumn={
-                                                            setSelectedColumn
-                                                        }
-                                                    />
-                                                )}
-                                            </React.Fragment>
-                                        ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
-                </div>
-            </div>
+                <hr className="mt3 mb3"></hr>
 
-            <hr></hr>
-
-            {selected_column ? (
-                <TabColumnInfo
-                    selected_column={selected_column}
-                    deleteColumnByPos={deleteColumnByPos}
-                    board_columns={board_columns}
-                    board_swinlanes={board_swinlanes}
-                />
-            ) : (
-                'Clique em um item para editar suas propriedades.'
-            )}
+                {selected_column ? (
+                    <TabColumnInfo
+                        selected_column={selected_column}
+                        deleteColumnByPos={deleteColumnByPos}
+                        board_columns={board_columns}
+                        board_swinlanes={board_swinlanes}
+                    />
+                ) : (
+                    'Clique em um item para editar suas propriedades.'
+                )}
+            </section>
 
             <Modal
                 isOpen={isModalOpen}

@@ -8,6 +8,9 @@ import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 
 const SECTION_TITLE_COLOR = 'white';
+const TAB_PANEL_BACKGROUND = '#4D5156';
+const TAB_PANEL_TEXT_COLOR = 'white';
+
 /* eslint-disable */
 // eslint-disable-next-line
 const ConfigBoardModal = ({
@@ -90,7 +93,14 @@ const ConfigBoardModal = ({
                         {...a11yProps(4)}
                     />
                 </Tabs>
-                <TabPanel value={value} index={0}>
+                <TabPanel
+                    value={value}
+                    index={0}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
                     <TabColumnConfig
                         board_id={board_id}
                         board_columns={board_info.columns}
@@ -115,7 +125,8 @@ const ConfigBoardModal = ({
                     Item Five
                 </TabPanel>
             </Box>
-            <div className='mt3'>
+
+            <div className="mt3">
                 <Button
                     variant="outlined"
                     color="error"
