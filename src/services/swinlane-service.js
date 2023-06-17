@@ -11,12 +11,12 @@ import api from '../factory/api';
 //     }
 // };
 
-const createSwinlane = async (id_board, name, styles) => {
+const createSwinlane = async (id_board, name, style) => {
     try {
         const { data } = await api.post(`/swinlane/create`, {
             id_board: id_board,
             name: name,
-            styles: styles
+            style: style
         });
         return data;
     } catch (err) {
@@ -33,10 +33,11 @@ const deleteSwinlane = async (id_swinlane) => {
     }
 };
 
-const updateGroup = async (id_group, name) => {
+const updateSwinlane = async (id_swinlane, name, style) => {
     try {
-        const { data } = await api.put(`/group/${id_group}`, {
-            name: name
+        const { data } = await api.put(`/swinlane/${id_swinlane}`, {
+            name: name,
+            style: style
         });
         return data;
     } catch (err) {
@@ -44,10 +45,10 @@ const updateGroup = async (id_group, name) => {
     }
 };
 
-const updateOrder = async (id_board, columns) => {
+const updateOrder = async (id_board, swinlanes) => {
     try {
-        const { data } = await api.put(`/column/order/${id_board}`, {
-            columns: columns
+        const { data } = await api.put(`/swinlane/order/${id_board}`, {
+            swinlanes: swinlanes
         });
         return data;
     } catch (err) {
@@ -55,4 +56,4 @@ const updateOrder = async (id_board, columns) => {
     }
 };
 
-export { createSwinlane, deleteSwinlane, updateGroup, updateOrder };
+export { createSwinlane, deleteSwinlane, updateSwinlane, updateOrder };
