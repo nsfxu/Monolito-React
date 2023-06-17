@@ -19,23 +19,12 @@ const TabSwinlaneInfo = ({
 
     const [current_swinlane, setCurrentSwinlane] = useState(undefined);
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
-    const [state, setState] = useState(null);
+
     const name = useRef();
-
-    useEffect(() => {
-        if (state) {
-            return;
-        }
-
-        const temp_state = {
-            displayColorPicker: false,
-            color: current_swinlane.style
-                ? JSON.parse(current_swinlane).color
-                : 'cyan'
-        };
-
-        setState(temp_state);
-    }, [state, current_swinlane]);
+    const [state, setState] = useState({
+        displayColorPicker: false,
+        color: 'cyan'
+    });
 
     useEffect(async () => {
         await setCurrentSwinlane(undefined);
@@ -49,7 +38,17 @@ const TabSwinlaneInfo = ({
         if (!current_swinlane) {
             return;
         }
+        const temp_state = { ...state };
+        let swinlane_color = '#565B61';
 
+        if (current_swinlane.style) {
+            swinlane_color = JSON.parse(current_swinlane.style).color;
+        }
+
+        temp_state.color = swinlane_color;
+        setState(temp_state);
+
+        console.log(temp_state);
         console.log(current_swinlane);
     }, [current_swinlane]);
 
@@ -60,12 +59,21 @@ const TabSwinlaneInfo = ({
     };
 
     const updateHasUnsavedData = async () => {
+        const current_color = state.color;
+
         // validades if the name is the same
         if (
             name &&
             name.current &&
             name.current.value != current_swinlane.name
         ) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        // validates if the color its the same
+        if (state.color != current_color) {
             await setHasUnsavedData(false);
 
             return;
