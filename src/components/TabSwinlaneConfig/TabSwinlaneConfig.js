@@ -13,7 +13,11 @@ import ModalStyles from '../../constants/modal-styles';
 import CreateSwinlane from '../CreateSwinlane';
 
 import TabColumn from '../TabColumn';
-import { createSwinlane, updateOrder } from '../../services/swinlane-service';
+import {
+    createSwinlane,
+    deleteSwinlane,
+    updateOrder
+} from '../../services/swinlane-service';
 import TabSwinlaneInfo from '../TabSwinlaneInfo/TabSwinlaneInfo';
 
 const CREATE_SWINLANE = 'CreateSwinlane';
@@ -88,6 +92,8 @@ const TabSwinlaneConfig = ({
         console.log(selected_swinlane);
     }, [selected_swinlane]);
 
+    const grid = 8;
+
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -109,8 +115,6 @@ const TabSwinlaneConfig = ({
 
         setTempSwinlanes(items);
     };
-
-    const grid = 8;
 
     const Item = styled(Paper)(({ theme }) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#565B61' : '#565B61',
@@ -167,6 +171,14 @@ const TabSwinlaneConfig = ({
 
         await updateOrder(board_id, new_order);
         updateNewBoardSwinlanes(new_order_swinlanes);
+    };
+
+    const deleteThisSwinlane = async (pos) => {
+        const removed_swinlane = board_swinlanes.splice(pos, 1);
+
+        await deleteSwinlane(removed_swinlane[0].id);
+
+        updateNewBoardSwinlanes(board_swinlanes);
     };
 
     return (
@@ -273,6 +285,7 @@ const TabSwinlaneConfig = ({
                     <TabSwinlaneInfo
                         selected_swinlane={selected_swinlane}
                         board_swinlanes={board_swinlanes}
+                        deleteThisSwinlane={deleteThisSwinlane}
                     />
                 ) : (
                     'Clique em um item para editar suas propriedades.'

@@ -40,8 +40,6 @@ const Card = ({
     participants,
     getInfoByBoardId
 }) => {
-    object.id == 13 ? console.log(object, status) : '';
-
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [open, setOpen] = useState(false);
@@ -188,7 +186,7 @@ const Card = ({
 
     const updateExpectedDateInDB = async (new_date) => {
         setValue(new_date);
-        
+
         if (new_date) {
             new_date = dayjs(new_date).format('YYYY-MM-DD');
         }

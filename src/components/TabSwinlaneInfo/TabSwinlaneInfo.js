@@ -7,7 +7,11 @@ import { findById } from '../../utils/column-utils';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
+const TabSwinlaneInfo = ({
+    selected_swinlane,
+    board_swinlanes,
+    deleteThisSwinlane
+}) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
@@ -50,6 +54,10 @@ const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
         }
 
         await setHasUnsavedData(true);
+    };
+
+    const deleteCurrentSwinlane = () => {
+        deleteThisSwinlane(board_swinlanes.indexOf(current_swinlane));
     };
 
     const swinlane_name_style = {
@@ -118,7 +126,7 @@ const TabSwinlaneInfo = ({ selected_swinlane, board_swinlanes }) => {
                                 color="error"
                                 className="w-20"
                                 onClick={() => {
-                                    console.log('implementar');
+                                    deleteCurrentSwinlane();
                                 }}
                             >
                                 Remover raia
