@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { SketchPicker } from 'react-color';
+
 import propTypes from 'prop-types';
 
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
@@ -17,8 +19,26 @@ const TabSwinlaneInfo = ({
 
     const [current_swinlane, setCurrentSwinlane] = useState(undefined);
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
-
+    const [state, setState] = useState(null);
     const name = useRef();
+
+    useEffect(() => {
+        if (state) {
+            return;
+        }
+
+        const temp_state = {
+            displayColorPicker: false,
+            color: {
+                r: '241',
+                g: '112',
+                b: '19',
+                a: '1'
+            }
+        };
+
+        setState(temp_state);
+    }, [state]);
 
     useEffect(async () => {
         await setCurrentSwinlane(undefined);
@@ -60,6 +80,32 @@ const TabSwinlaneInfo = ({
         deleteThisSwinlane(board_swinlanes.indexOf(current_swinlane));
     };
 
+    const handleClick = () => {
+        const temp_state = { ...state };
+
+        temp_state.displayColorPicker = !state.displayColorPicker;
+
+        setState(temp_state);
+    };
+
+    const handleClose = () => {
+        const temp_state = { ...state };
+
+        temp_state.displayColorPicker = false;
+
+        setState(temp_state);
+    };
+
+    const handleChange = (color) => {
+        const temp_state = { ...state };
+
+        temp_state.color = color.rgb;
+
+        console.log(temp_state.color);
+
+        setState(temp_state);
+    };
+
     const swinlane_name_style = {
         '.MuiInputLabel-root': {
             color: 'white !important'
@@ -78,6 +124,38 @@ const TabSwinlaneInfo = ({
                 borderStyle: 'solid'
                 // borderColor: '#F2F7F2'
             }
+        }
+    };
+
+    const styles = {
+        color: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: state
+                ? `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`
+                : '0, 0, 0, 255'
+        },
+        swatch: {
+            marginTop: '5px',
+            marginLeft: '20px',
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer'
+        },
+        popover: {
+            position: 'absolute',
+            zIndex: '2'
+        },
+        cover: {
+            position: 'fixed',
+            top: '0px',
+            right: '0px',
+            bottom: '0px',
+            left: '0px'
         }
     };
 
@@ -107,6 +185,29 @@ const TabSwinlaneInfo = ({
                             sx={swinlane_name_style}
                             onKeyUp={() => updateHasUnsavedData()}
                         />
+                        <div className="flex flex-row justify-start align-center pt3 pl2 pb3">
+                            <Typography variant="h6">Cor da raia</Typography>
+                            <div>
+                                <div
+                                    style={styles.swatch}
+                                    onClick={handleClick}
+                                >
+                                    <div style={styles.color} />
+                                </div>
+                                {state.displayColorPicker ? (
+                                    <div style={styles.popover}>
+                                        <div
+                                            style={styles.cover}
+                                            onClick={handleClose}
+                                        />
+                                        <SketchPicker
+                                            color={state.color}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
 
                         <Stack
                             direction="row"
