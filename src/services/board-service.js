@@ -11,6 +11,27 @@ const getBoardInfo = async (id) => {
     }
 };
 
+const updateBoardInfo = async (id_board, name, description) => {
+    try {
+        const { data } = await api.put(`/board/${id_board}`, {
+            name: name,
+            description: description
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+const getBoardInformation = async (id) => {
+    try {
+        const { data } = await api.get(`/board/info/${id}`);
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const createBoard = async (id_user, name, description) => {
     try {
         const { data } = await api.post(`/board/create`, {
@@ -68,8 +89,10 @@ const getBoardParticipants = async (id) => {
 
 export {
     getBoardInfo,
+    getBoardInformation,
     getBoardParticipants,
     createBoard,
+    updateBoardInfo,
     addUserToBoard,
     updateUserPermission,
     deleteUserFromBoard

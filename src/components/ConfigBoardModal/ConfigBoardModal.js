@@ -4,9 +4,11 @@ import propTypes from 'prop-types';
 import { Tab, Tabs, Box, Typography, Button } from '@mui/material';
 
 import TabPanel from '../TabPanel';
+
 import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 import TabMemberConfig from '../TabMemberConfig/TabMemberConfig';
+import TabBoardConfig from '../TabBoardConfig/TabBoardConfig';
 
 const SECTION_TITLE_COLOR = 'white';
 const TAB_PANEL_BACKGROUND = '#4D5156';
@@ -142,8 +144,15 @@ const ConfigBoardModal = ({
                         updateParticipants={updateParticipants}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={4}>
-                    Board
+                <TabPanel
+                    value={value}
+                    index={4}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabBoardConfig board_id={board_id} />
                 </TabPanel>
             </Box>
 
