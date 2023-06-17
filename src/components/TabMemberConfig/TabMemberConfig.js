@@ -7,6 +7,7 @@ import {
     Button,
     MenuItem,
     Select,
+    Stack,
     TextField,
     Typography
 } from '@mui/material';
@@ -57,9 +58,20 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
 
             response.result.user_exists = user_exists;
 
-            console.log(response.result);
             setFoundUser(response.result);
         }
+    };
+
+    const addUserToBoard = async () => {
+        console.log(found_user, permission_id);
+    };
+
+    const updateUserPermission = async (id_user, id_permission) => {
+        console.log(id_user, id_permission);
+    };
+
+    const removeUserFromBoard = async (id_user) => {
+        console.log(id_user);
     };
 
     function stringToColor(string) {
@@ -126,6 +138,87 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
                 <div>
                     <Typography variant="h6">Membros</Typography>
                 </div>
+                <div className="ba mt4 flex flex-column pa3">
+                    {participants.map((this_participant, index) => (
+                        <div className="flex flex-row" key={index}>
+                            <Avatar {...stringAvatar(this_participant.name)} />
+
+                            <div className="flex flex-column pl2 pb2 w-100">
+                                <Typography variant="body1">
+                                    {this_participant.name}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    sx={{ color: 'lightgrey' }}
+                                >
+                                    @{this_participant.username}
+                                </Typography>
+                                <Typography variant="body1">
+                                    Permissão:
+                                    {this_participant.id_permission == 1 &&
+                                        ' Admin'}
+                                    {this_participant.id_permission == 2 &&
+                                        ' Usuário'}
+                                    {this_participant.id_permission == 3 &&
+                                        ' Convidado'}
+                                </Typography>
+
+                                <Stack direction="row" spacing={2}>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={() =>
+                                            removeUserFromBoard(
+                                                this_participant.id_user
+                                            )
+                                        }
+                                    >
+                                        Remover do quadro
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            updateUserPermission(
+                                                this_participant.id_user,
+                                                1
+                                            )
+                                        }
+                                    >
+                                        Admin
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            updateUserPermission(
+                                                this_participant.id_user,
+                                                2
+                                            )
+                                        }
+                                    >
+                                        Usuário
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            updateUserPermission(
+                                                this_participant.id_user,
+                                                3
+                                            )
+                                        }
+                                    >
+                                        Convidado
+                                    </Button>
+                                </Stack>
+                                <div className="flex flex-row w-100 h-25 mt3"></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <hr className="w-100 mt4"></hr>
+
+                <div>
+                    <Typography variant="h6">Adicionar membros</Typography>
+                </div>
                 <div className="flex flex-column">
                     <TextField
                         fullWidth
@@ -170,9 +263,7 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
                                     <Button
                                         variant="contained"
                                         color="success"
-                                        onClick={() =>
-                                            console.log(found_user.id_user)
-                                        }
+                                        onClick={() => addUserToBoard()}
                                     >
                                         Adicionar usuário como
                                     </Button>
