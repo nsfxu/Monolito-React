@@ -98,7 +98,11 @@ const SubColumnSwinlane = ({
     return all_swinlanes.map((swinlane, index) => (
         <div key={index}>
             <ListItemButton
-                sx={{ backgroundColor: 'cyan' }}
+                sx={{
+                    backgroundColor: swinlane.style
+                        ? JSON.parse(swinlane.style).color
+                        : 'cyan'
+                }}
                 style={{ minHeight: '3em' }}
                 className="w-100"
                 onClick={() => {

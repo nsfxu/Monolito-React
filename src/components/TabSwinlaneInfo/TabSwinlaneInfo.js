@@ -29,16 +29,13 @@ const TabSwinlaneInfo = ({
 
         const temp_state = {
             displayColorPicker: false,
-            color: {
-                r: '241',
-                g: '112',
-                b: '19',
-                a: '1'
-            }
+            color: current_swinlane.style
+                ? JSON.parse(current_swinlane).color
+                : 'cyan'
         };
 
         setState(temp_state);
-    }, [state]);
+    }, [state, current_swinlane]);
 
     useEffect(async () => {
         await setCurrentSwinlane(undefined);
@@ -52,6 +49,7 @@ const TabSwinlaneInfo = ({
         if (!current_swinlane) {
             return;
         }
+
         console.log(current_swinlane);
     }, [current_swinlane]);
 
@@ -99,7 +97,7 @@ const TabSwinlaneInfo = ({
     const handleChange = (color) => {
         const temp_state = { ...state };
 
-        temp_state.color = color.rgb;
+        temp_state.color = color.hex;
 
         console.log(temp_state.color);
 
@@ -132,16 +130,12 @@ const TabSwinlaneInfo = ({
             width: '350px',
             height: '35px',
             borderRadius: '2px',
-            background: state
-                ? `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`
-                : '0, 0, 0, 255'
+            background: state ? `${state.color}` : '#33A599'
         },
         swatch: {
             marginLeft: '20px',
             // padding: '3px',
-            ackground: state
-                ? `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`
-                : '0, 0, 0, 255',
+            background: state ? `${state.color}` : '#33A599',
             borderRadius: '1px',
             boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
             display: 'inline-block',
