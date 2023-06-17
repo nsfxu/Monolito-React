@@ -82,6 +82,10 @@ const TabSwinlaneInfo = ({
             ? JSON.parse(current_swinlane.style).color
             : '#565B61';
 
+        const current_textColor = current_swinlane.style
+            ? JSON.parse(current_swinlane.style).textColor
+            : 'white';
+
         // validades if the name is the same
         if (
             name &&
@@ -95,6 +99,13 @@ const TabSwinlaneInfo = ({
 
         // validates if the color its the same
         if (state.color != current_color) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        // validates if the text color its the same
+        if (state.textColor != current_textColor) {
             await setHasUnsavedData(false);
 
             return;

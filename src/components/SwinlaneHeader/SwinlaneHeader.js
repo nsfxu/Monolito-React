@@ -121,7 +121,7 @@ const SwinlaneHeader = ({
                                             backgroundColor: swinlane.style
                                                 ? JSON.parse(swinlane.style)
                                                       .color
-                                                : 'cyan'
+                                                : '#565B61'
                                         }}
                                         style={{ minHeight: '3em' }}
                                         onClick={() => {
@@ -130,6 +130,13 @@ const SwinlaneHeader = ({
                                     >
                                         {is_first_column && (
                                             <ListItemText
+                                                color={
+                                                    swinlane.style
+                                                        ? JSON.parse(
+                                                              swinlane.style
+                                                          ).textColor
+                                                        : 'white'
+                                                }
                                                 primary={swinlane.name}
                                             ></ListItemText>
                                         )}

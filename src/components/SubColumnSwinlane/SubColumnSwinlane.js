@@ -110,7 +110,14 @@ const SubColumnSwinlane = ({
                 }}
             >
                 {is_first_column && (
-                    <ListItemText primary={swinlane.name}></ListItemText>
+                    <ListItemText
+                        sx={{
+                            color: swinlane.style
+                                ? JSON.parse(swinlane.style).textColor
+                                : 'cyan'
+                        }}
+                        primary={swinlane.name}
+                    ></ListItemText>
                 )}
             </ListItemButton>
             <Collapse in={swinlane.expanded} className="w-100">
