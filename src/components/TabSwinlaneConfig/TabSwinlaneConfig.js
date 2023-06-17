@@ -127,13 +127,15 @@ const TabSwinlaneConfig = ({
 
     const getItemStyle = (style, isDragging, draggableStyle) => {
         let default_item_color = '#565B61';
+        let default_text_color = 'white';
 
         if (style) {
             const this_swinlane_style = JSON.parse(style);
 
             default_item_color = this_swinlane_style.color;
+            default_text_color = this_swinlane_style.textColor;
         }
-        
+
         return {
             // some basic styles to make the items look a bit nicer
             userSelect: 'none',
@@ -142,6 +144,7 @@ const TabSwinlaneConfig = ({
 
             // change background colour if dragging
             background: isDragging ? 'lightgrey' : default_item_color,
+            color: default_text_color,
 
             // styles we need to apply on draggables
             ...draggableStyle

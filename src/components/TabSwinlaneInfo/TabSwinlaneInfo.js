@@ -9,6 +9,13 @@ import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { findById } from '../../utils/column-utils';
 import { updateSwinlane } from '../../services/swinlane-service';
 
+const DEFAULT_STATE = {
+    displayColorPicker: false,
+    displayTextColorPicker: false,
+    color: '#565B61',
+    textColor: 'white'
+};
+
 const TabSwinlaneInfo = ({
     selected_swinlane,
     board_swinlanes,
@@ -21,15 +28,11 @@ const TabSwinlaneInfo = ({
     const [has_unsaved_data, setHasUnsavedData] = useState(true);
 
     const name = useRef();
-    const [state, setState] = useState({
-        displayColorPicker: false,
-        displayTextColorPicker: false,
-        color: '#565B61',
-        textColor: 'white'
-    });
+    const [state, setState] = useState(DEFAULT_STATE);
 
     useEffect(async () => {
         await setCurrentSwinlane(undefined);
+        await setState(DEFAULT_STATE);
 
         updateHasUnsavedData();
 
@@ -41,13 +44,17 @@ const TabSwinlaneInfo = ({
             return;
         }
         const temp_state = { ...state };
+
         let swinlane_color = '#565B61';
+        let swinlane_textColor = 'white';
 
         if (current_swinlane.style) {
             swinlane_color = JSON.parse(current_swinlane.style).color;
+            swinlane_textColor = JSON.parse(current_swinlane.style).textColor;
         }
 
         temp_state.color = swinlane_color;
+        temp_state.textColor = swinlane_textColor;
         setState(temp_state);
 
         console.log(current_swinlane);
