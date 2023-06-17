@@ -24,6 +24,39 @@ const createBoard = async (id_user, name, description) => {
     }
 };
 
+const addUserToBoard = async (id_user, id_board, id_permission) => {
+    try {
+        const { data } = await api.post(`/board/${id_board}/users/${id_user}`, {
+            id_permission: id_permission
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+const updateUserPermission = async (id_user, id_board, id_permission) => {
+    try {
+        const { data } = await api.put(`/board/${id_board}/users/${id_user}`, {
+            id_permission: id_permission
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
+const deleteUserFromBoard = async (id_board, id_user) => {
+    try {
+        const { data } = await api.delete(
+            `/board/${id_board}/users/${id_user}`
+        );
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const getBoardParticipants = async (id) => {
     try {
         const { data } = await api.get(`/board/users/${id}`);
@@ -33,4 +66,11 @@ const getBoardParticipants = async (id) => {
     }
 };
 
-export { getBoardInfo, getBoardParticipants, createBoard };
+export {
+    getBoardInfo,
+    getBoardParticipants,
+    createBoard,
+    addUserToBoard,
+    updateUserPermission,
+    deleteUserFromBoard
+};
