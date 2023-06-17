@@ -13,7 +13,7 @@ import ModalStyles from '../../constants/modal-styles';
 import CreateSwinlane from '../CreateSwinlane';
 
 import TabColumn from '../TabColumn';
-import { createSwinlane } from '../../services/swinlane-service';
+import { createSwinlane, updateOrder } from '../../services/swinlane-service';
 import TabSwinlaneInfo from '../TabSwinlaneInfo/TabSwinlaneInfo';
 
 const CREATE_SWINLANE = 'CreateSwinlane';
@@ -109,6 +109,7 @@ const TabSwinlaneConfig = ({
 
         setTempSwinlanes(items);
     };
+
     const grid = 8;
 
     const Item = styled(Paper)(({ theme }) => ({
@@ -140,6 +141,34 @@ const TabSwinlaneConfig = ({
         overflow: 'auto'
     });
 
+    const getNewOrderForApi = () => {
+        let result = [];
+
+        temp_swinlanes?.map((swinlane) => {
+            result.push({ id: swinlane.id, name: swinlane.name });
+        });
+
+        return result;
+    };
+
+    const getFinalColumnResult = () => {
+        let result = [];
+
+        temp_swinlanes?.map((swinlane) => {
+            result.push(swinlane);
+        });
+
+        return result;
+    };
+
+    const saveNewSwinlaneOrder = async () => {
+        const new_order = getNewOrderForApi();
+        const new_order_swinlanes = getFinalColumnResult();
+
+        await updateOrder(board_id, new_order);
+        updateNewBoardSwinlanes(new_order_swinlanes);
+    };
+
     return (
         <>
             <section className="flex flex-column ma3 h-100">
@@ -162,7 +191,7 @@ const TabSwinlaneConfig = ({
                             variant="contained"
                             color="success"
                             // disabled={has_unsaved_data}
-                            // onClick={() => saveNewColumnOrder()}
+                            onClick={() => saveNewSwinlaneOrder()}
                         >
                             Salvar ordem
                         </Button>
