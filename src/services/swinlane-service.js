@@ -37,7 +37,7 @@ const updateSwinlane = async (id_swinlane, name, style) => {
     try {
         const { data } = await api.put(`/swinlane/${id_swinlane}`, {
             name: name,
-            style: style
+            style: JSON.stringify(style)
         });
         return data;
     } catch (err) {

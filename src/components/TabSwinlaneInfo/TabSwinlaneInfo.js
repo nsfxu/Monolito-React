@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SketchPicker } from 'react-color';
-
+/* eslint-disable */
+// eslint-disable-next-line
 import propTypes from 'prop-types';
 
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 
 import { findById } from '../../utils/column-utils';
+import { updateSwinlane } from '../../services/swinlane-service';
 
-/* eslint-disable */
-// eslint-disable-next-line
 const TabSwinlaneInfo = ({
     selected_swinlane,
     board_swinlanes,
@@ -23,7 +23,9 @@ const TabSwinlaneInfo = ({
     const name = useRef();
     const [state, setState] = useState({
         displayColorPicker: false,
-        color: 'cyan'
+        displayTextColorPicker: false,
+        color: '#565B61',
+        textColor: 'white'
     });
 
     useEffect(async () => {
@@ -48,18 +50,30 @@ const TabSwinlaneInfo = ({
         temp_state.color = swinlane_color;
         setState(temp_state);
 
-        console.log(temp_state);
         console.log(current_swinlane);
     }, [current_swinlane]);
 
     const saveSwinlaneInfo = async () => {
         const this_name = name.current ? name.current.value : null;
+        const this_color = state.color ? state.color : '#565B61';
+        const this_textColor = state.textColor ? state.textColor : 'white';
 
-        console.log(this_name);
+        const style_json = { color: this_color, textColor: this_textColor };
+
+        const response = await updateSwinlane(
+            selected_swinlane,
+            this_name,
+            style_json
+        );
+        // const response = (selected_swinlane, this_name, style_json);
+
+        console.log(response);
     };
 
     const updateHasUnsavedData = async () => {
-        const current_color = state.color;
+        const current_color = current_swinlane.style
+            ? JSON.parse(current_swinlane.style).color
+            : '#565B61';
 
         // validades if the name is the same
         if (
@@ -107,9 +121,33 @@ const TabSwinlaneInfo = ({
 
         temp_state.color = color.hex;
 
-        console.log(temp_state.color);
+        setState(temp_state);
+        updateHasUnsavedData();
+    };
+
+    const handleTextClick = () => {
+        const temp_state = { ...state };
+
+        temp_state.displayTextColorPicker = !state.displayTextColorPicker;
 
         setState(temp_state);
+    };
+
+    const handleTextClose = () => {
+        const temp_state = { ...state };
+
+        temp_state.displayTextColorPicker = false;
+
+        setState(temp_state);
+    };
+
+    const handleTextChange = (color) => {
+        const temp_state = { ...state };
+
+        temp_state.textColor = color.hex;
+
+        setState(temp_state);
+        updateHasUnsavedData();
     };
 
     const swinlane_name_style = {
@@ -134,6 +172,22 @@ const TabSwinlaneInfo = ({
     };
 
     const styles = {
+        textColor: {
+            width: '36px',
+            height: '14px',
+            borderRadius: '2px',
+            background: state ? `${state.textColor}` : '#white'
+        },
+        textSwatch: {
+            marginTop: '5px',
+            marginLeft: '20px',
+            padding: '5px',
+            background: '#fff',
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer'
+        },
         color: {
             width: '350px',
             height: '35px',
@@ -188,6 +242,8 @@ const TabSwinlaneInfo = ({
                             sx={swinlane_name_style}
                             onKeyUp={() => updateHasUnsavedData()}
                         />
+
+                        {/* Cor da raia */}
                         <div className="flex flex-row justify-start align-center pt3 pl2 pb3">
                             <Typography variant="h6">Cor da raia</Typography>
                             <div>
@@ -199,7 +255,10 @@ const TabSwinlaneInfo = ({
                                         style={styles.color}
                                         className="flex justify-center items-center h-100"
                                     >
-                                        <Typography variant="body1">
+                                        <Typography
+                                            variant="body1"
+                                            sx={{ color: state.textColor }}
+                                        >
                                             {current_swinlane.name}
                                         </Typography>
                                     </div>
@@ -213,6 +272,33 @@ const TabSwinlaneInfo = ({
                                         <SketchPicker
                                             color={state.color}
                                             onChange={handleChange}
+                                        />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+
+                        {/* Cor do texto raia */}
+                        <div className="flex flex-row justify-start align-center pt3 pl2 pb3">
+                            <Typography variant="h6">
+                                Cor do texto raia
+                            </Typography>
+                            <div>
+                                <div
+                                    style={styles.textSwatch}
+                                    onClick={handleTextClick}
+                                >
+                                    <div style={styles.textColor} />
+                                </div>
+                                {state.displayTextColorPicker ? (
+                                    <div style={styles.popover}>
+                                        <div
+                                            style={styles.cover}
+                                            onClick={handleTextClose}
+                                        />
+                                        <SketchPicker
+                                            color={state.textColor}
+                                            onChange={handleTextChange}
                                         />
                                     </div>
                                 ) : null}
