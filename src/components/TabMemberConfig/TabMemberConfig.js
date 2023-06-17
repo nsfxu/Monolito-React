@@ -11,9 +11,13 @@ import {
     TextField,
     Typography
 } from '@mui/material';
+import {
+    addUserToBoard,
+    deleteUserFromBoard
+} from '../../services/board-service';
 import { findByUsername } from '../../services/user-service';
 
-const TabMemberConfig = ({ participants, updateParticipants }) => {
+const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
     const username = useRef();
 
     const [found_user, setFoundUser] = useState(null);
@@ -62,8 +66,22 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
         }
     };
 
-    const addUserToBoard = async () => {
-        console.log(found_user, permission_id);
+    const addCurrentUserToBoard = async () => {
+        const response = await addUserToBoard(
+            found_user.id_user,
+            board_id,
+            permission_id
+        );
+
+        const temp_participants = [...participants];
+
+        found_user.id_permission = permission_id;
+
+        temp_participants.push(found_user);
+
+        await updateParticipants(temp_participants);
+        setFoundUser(null);
+        username.current.value = '';
     };
 
     const updateUserPermission = async (id_user, id_permission) => {
@@ -71,7 +89,25 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
     };
 
     const removeUserFromBoard = async (id_user) => {
-        console.log(id_user);
+        const response = await deleteUserFromBoard(board_id, id_user);
+
+        if (response.result == 'User deleted.') {
+            let removed_participant = participants.map((participant) => {
+                if (participant.id_user == id_user) {
+                    return participant;
+                }
+            });
+
+            const temp_participants = [...participants];
+
+            const pos = temp_participants.indexOf(removed_participant);
+
+            temp_participants.splice(pos, 1);
+
+            updateParticipants(temp_participants);
+        }
+
+        console.log(response);
     };
 
     function stringToColor(string) {
@@ -263,7 +299,7 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
                                     <Button
                                         variant="contained"
                                         color="success"
-                                        onClick={() => addUserToBoard()}
+                                        onClick={() => addCurrentUserToBoard()}
                                     >
                                         Adicionar usuário como
                                     </Button>
@@ -289,6 +325,7 @@ const TabMemberConfig = ({ participants, updateParticipants }) => {
 };
 
 TabMemberConfig.propTypes = {
+    board_id: propTypes.number,
     participants: propTypes.array,
     updateParticipants: propTypes.func
 };

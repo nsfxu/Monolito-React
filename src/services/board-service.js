@@ -27,7 +27,7 @@ const createBoard = async (id_user, name, description) => {
 const addUserToBoard = async (id_user, id_board, id_permission) => {
     try {
         const { data } = await api.post(`/board/${id_board}/users/${id_user}`, {
-            id_permission: id_permission
+            permission_id: id_permission
         });
         return data;
     } catch (err) {
@@ -38,7 +38,7 @@ const addUserToBoard = async (id_user, id_board, id_permission) => {
 const updateUserPermission = async (id_user, id_board, id_permission) => {
     try {
         const { data } = await api.put(`/board/${id_board}/users/${id_user}`, {
-            id_permission: id_permission
+            permission_id: id_permission
         });
         return data;
     } catch (err) {

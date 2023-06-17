@@ -137,6 +137,7 @@ const ConfigBoardModal = ({
                     }}
                 >
                     <TabMemberConfig
+                        board_id={board_id}
                         participants={participants}
                         updateParticipants={updateParticipants}
                     />
