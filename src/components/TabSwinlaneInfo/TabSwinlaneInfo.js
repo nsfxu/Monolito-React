@@ -19,7 +19,8 @@ const DEFAULT_STATE = {
 const TabSwinlaneInfo = ({
     selected_swinlane,
     board_swinlanes,
-    deleteThisSwinlane
+    deleteThisSwinlane,
+    updateSwinlaneInfo
 }) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
@@ -55,6 +56,7 @@ const TabSwinlaneInfo = ({
 
         temp_state.color = swinlane_color;
         temp_state.textColor = swinlane_textColor;
+
         setState(temp_state);
 
         console.log(current_swinlane);
@@ -72,9 +74,10 @@ const TabSwinlaneInfo = ({
             this_name,
             style_json
         );
-        // const response = (selected_swinlane, this_name, style_json);
 
         console.log(response);
+        await updateSwinlaneInfo(selected_swinlane, this_name, style_json);
+        updateHasUnsavedData();
     };
 
     const updateHasUnsavedData = async () => {
@@ -117,6 +120,8 @@ const TabSwinlaneInfo = ({
     const deleteCurrentSwinlane = () => {
         deleteThisSwinlane(board_swinlanes.indexOf(current_swinlane));
     };
+
+    //#region COLOR PICKER FUNCS
 
     const handleClick = () => {
         const temp_state = { ...state };
@@ -167,6 +172,8 @@ const TabSwinlaneInfo = ({
         setState(temp_state);
         updateHasUnsavedData();
     };
+
+    //#endregion
 
     const swinlane_name_style = {
         '.MuiInputLabel-root': {

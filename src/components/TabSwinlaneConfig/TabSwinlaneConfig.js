@@ -194,6 +194,21 @@ const TabSwinlaneConfig = ({
         updateNewBoardSwinlanes(board_swinlanes);
     };
 
+    const updateSwinlaneInfo = (this_swinlane, name, style) => {
+        const temp_swinlanes = [...board_swinlanes];
+
+        temp_swinlanes.map((swinlane) => {
+            if (swinlane.id == this_swinlane) {
+                swinlane.name = name;
+                swinlane.style = JSON.stringify(style);
+
+                return;
+            }
+        });
+
+        updateNewBoardSwinlanes(temp_swinlanes);
+    };
+
     return (
         <>
             <section className="flex flex-column ma3 h-100">
@@ -300,6 +315,7 @@ const TabSwinlaneConfig = ({
                         selected_swinlane={selected_swinlane}
                         board_swinlanes={board_swinlanes}
                         deleteThisSwinlane={deleteThisSwinlane}
+                        updateSwinlaneInfo={updateSwinlaneInfo}
                     />
                 ) : (
                     'Clique em um item para editar suas propriedades.'
