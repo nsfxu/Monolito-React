@@ -132,7 +132,7 @@ const TabSwinlaneConfig = ({
         margin: `0 ${grid}px 0 0`,
 
         // change background colour if dragging
-        background: isDragging ? 'lightgrey' : '565B61',
+        background: isDragging ? 'lightgrey' : '#565B61',
 
         // styles we need to apply on draggables
         ...draggableStyle

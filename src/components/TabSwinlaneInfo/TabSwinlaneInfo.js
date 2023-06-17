@@ -129,18 +129,19 @@ const TabSwinlaneInfo = ({
 
     const styles = {
         color: {
-            width: '36px',
-            height: '14px',
+            width: '350px',
+            height: '35px',
             borderRadius: '2px',
             background: state
                 ? `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`
                 : '0, 0, 0, 255'
         },
         swatch: {
-            marginTop: '5px',
             marginLeft: '20px',
-            padding: '5px',
-            background: '#fff',
+            // padding: '3px',
+            ackground: state
+                ? `rgba(${state.color.r}, ${state.color.g}, ${state.color.b}, ${state.color.a})`
+                : '0, 0, 0, 255',
             borderRadius: '1px',
             boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
             display: 'inline-block',
@@ -192,7 +193,14 @@ const TabSwinlaneInfo = ({
                                     style={styles.swatch}
                                     onClick={handleClick}
                                 >
-                                    <div style={styles.color} />
+                                    <div
+                                        style={styles.color}
+                                        className="flex justify-center items-center h-100"
+                                    >
+                                        <Typography variant="body1">
+                                            {current_swinlane.name}
+                                        </Typography>
+                                    </div>
                                 </div>
                                 {state.displayColorPicker ? (
                                     <div style={styles.popover}>
