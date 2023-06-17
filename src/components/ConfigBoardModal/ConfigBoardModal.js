@@ -6,6 +6,7 @@ import { Tab, Tabs, Box, Typography, Button } from '@mui/material';
 import TabPanel from '../TabPanel';
 import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
+import TabMemberConfig from '../TabMemberConfig/TabMemberConfig';
 
 const SECTION_TITLE_COLOR = 'white';
 const TAB_PANEL_BACKGROUND = '#4D5156';
@@ -16,8 +17,10 @@ const TAB_PANEL_TEXT_COLOR = 'white';
 const ConfigBoardModal = ({
     board_id,
     board_info,
+    participants,
     closeModal,
-    updateWithNewBoardInfo
+    updateWithNewBoardInfo,
+    updateParticipants
 }) => {
     const [value, setValue] = useState(0);
     const [, updateState] = useState();
@@ -123,13 +126,23 @@ const ConfigBoardModal = ({
                     />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    Membros
+                    Tags
                 </TabPanel>
-                <TabPanel value={value} index={3}>
-                    Board
+                <TabPanel
+                    value={value}
+                    index={3}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabMemberConfig
+                        participants={participants}
+                        updateParticipants={updateParticipants}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={4}>
-                    Item Five
+                    Board
                 </TabPanel>
             </Box>
 

@@ -596,6 +596,10 @@ const Board = (props) => {
         console.log(response);
     };
 
+    const updateParticipants = async (new_participant) => {
+        await setParticipants(new_participant);
+    };
+
     // #endregion
 
     return (
@@ -664,8 +668,10 @@ const Board = (props) => {
                     <ConfigBoardModal
                         board_id={board_id}
                         board_info={board_info}
+                        participants={participants}
                         closeModal={closeModal}
                         updateWithNewBoardInfo={updateWithNewBoardInfo}
+                        updateParticipants={updateParticipants}
                     />
                 )}
             </Modal>
