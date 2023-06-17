@@ -13,7 +13,8 @@ import {
 } from '@mui/material';
 import {
     addUserToBoard,
-    deleteUserFromBoard
+    deleteUserFromBoard,
+    updateUserPermission
 } from '../../services/board-service';
 import { findByUsername } from '../../services/user-service';
 
@@ -73,19 +74,38 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
             permission_id
         );
 
+        console.log(response);
+
         const temp_participants = [...participants];
-
         found_user.id_permission = permission_id;
-
         temp_participants.push(found_user);
 
         await updateParticipants(temp_participants);
+
         setFoundUser(null);
         username.current.value = '';
     };
 
-    const updateUserPermission = async (id_user, id_permission) => {
-        console.log(id_user, id_permission);
+    const updateCurrentUserPermission = async (id_user, id_permission) => {
+        const response = await updateUserPermission(
+            id_user,
+            board_id,
+            id_permission
+        );
+
+        if (response.result) {
+            const temp_participants = [...participants];
+
+            temp_participants.map((participant) => {
+                if (participant.id_user == id_user) {
+                    participant.id_permission = id_permission;
+                }
+            });
+
+            await updateParticipants(temp_participants);
+        }
+
+        console.log(response);
     };
 
     const removeUserFromBoard = async (id_user) => {
@@ -214,7 +234,7 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
                                     <Button
                                         variant="contained"
                                         onClick={() =>
-                                            updateUserPermission(
+                                            updateCurrentUserPermission(
                                                 this_participant.id_user,
                                                 1
                                             )
@@ -225,7 +245,7 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
                                     <Button
                                         variant="contained"
                                         onClick={() =>
-                                            updateUserPermission(
+                                            updateCurrentUserPermission(
                                                 this_participant.id_user,
                                                 2
                                             )
@@ -236,7 +256,7 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
                                     <Button
                                         variant="contained"
                                         onClick={() =>
-                                            updateUserPermission(
+                                            updateCurrentUserPermission(
                                                 this_participant.id_user,
                                                 3
                                             )
