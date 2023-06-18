@@ -29,6 +29,7 @@
         "replace-in-file": "^6.3.5",
         "resize-observer": "^1.0.4",
         "sass": "^1.55.0",
+        "socket.io-client": "^4.6.2",
         "styled-components": "^5.3.11",
         "swr": "^0.5.7",
         "tachyons": "^4.12.0",

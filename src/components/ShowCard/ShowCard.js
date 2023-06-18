@@ -1,8 +1,16 @@
 /* eslint-disable */
 // eslint-disable-next-line
 import React, { useState, useRef, useEffect } from 'react';
-import dayjs from 'dayjs';
 
+//#region SOCKET
+
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3001');
+
+//#endregion
+
+import dayjs from 'dayjs';
 import propTypes from 'prop-types';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
