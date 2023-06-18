@@ -162,6 +162,10 @@ const ShowCard = ({
         return [];
     };
 
+    const getNewMessages = async () => {
+        setMessages(await getMessages());
+    };
+
     const validateInputs = async () => {
         if (!title.current.value) {
             toast('Preencha o título do card.');
@@ -642,7 +646,15 @@ const ShowCard = ({
                 </Stack>
             </div>
             <div className="ma3">
-                <Chat id={id} user={user} socket={socket} messages={messages} />
+                {messages && (
+                    <Chat
+                        id={id}
+                        user={user}
+                        socket={socket}
+                        messages={messages}
+                        getNewMessages={getNewMessages}
+                    />
+                )}
             </div>
         </Box>
     );

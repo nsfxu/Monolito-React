@@ -3,13 +3,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import propTypes from 'prop-types';
 import { Avatar, Typography } from '@mui/material';
+import { createComment } from '../../services/comment-service';
 
-const Chat = ({ id, user, socket, messages }) => {
+const Chat = ({ id, user, socket, messages, getNewMessages }) => {
     const comment = useRef();
 
     useEffect(() => {
         socket.on('receive_message', (data) => {
             console.log(data);
+            updateComment(data);
         });
     }, [socket]);
 
@@ -33,9 +35,28 @@ const Chat = ({ id, user, socket, messages }) => {
             time: now
         };
 
-        await socket.emit('send_message', messageData);
+        const should_emit_message = sendCommentToDB(message);
+
+        if (should_emit_message) {
+            updateComment(messageData);
+            await socket.emit('send_message', messageData);
+        }
 
         console.log(messageData);
+    };
+
+    const sendCommentToDB = async (message) => {
+        const response = await createComment(id, user.id_user, message);
+
+        if (response.result.affectedRows == 0) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const updateComment = async () => {
+        getNewMessages();
     };
 
     function stringToColor(string) {
@@ -90,7 +111,7 @@ const Chat = ({ id, user, socket, messages }) => {
                             <Avatar {...stringAvatar(this_messages.name)} />
                             <div className="flex flex-column pl2 w-100">
                                 <div className="flex flex-row">
-                                    <Typography variant="body1" className='pr1'>
+                                    <Typography variant="body1" className="pr1">
                                         {this_messages.name}
                                     </Typography>
                                     <Typography
@@ -107,6 +128,8 @@ const Chat = ({ id, user, socket, messages }) => {
                         </div>
                     ))}
             </section>
+            <hr></hr>
+            <h2>Enviar um comentário</h2>
             <section id="input">
                 <input
                     type="text"
@@ -123,7 +146,8 @@ Chat.propTypes = {
     id: propTypes.number,
     user: propTypes.object,
     socket: propTypes.any,
-    messages: propTypes.array
+    messages: propTypes.array,
+    getNewMessages: propTypes.func
 };
 
 export default Chat;
