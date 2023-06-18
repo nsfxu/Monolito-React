@@ -2,7 +2,7 @@
 // eslint-disable-next-line
 import React, { useState, useRef, useEffect } from 'react';
 import propTypes from 'prop-types';
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, Button, TextField, Typography } from '@mui/material';
 import { createComment } from '../../services/comment-service';
 
 const Chat = ({ id, user, socket, messages, getNewMessages }) => {
@@ -98,6 +98,17 @@ const Chat = ({ id, user, socket, messages, getNewMessages }) => {
         };
     }
 
+    const multiStyle = {
+        label: { color: 'grey', fontSize: '22px' },
+        textareaStyle: { color: '#F2F7F2' },
+        '& label.Mui-focused': {
+            color: '#F0F0F0'
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#F0F0F0'
+        }
+    };
+
     return (
         <>
             <h2>Comentários</h2>
@@ -131,12 +142,36 @@ const Chat = ({ id, user, socket, messages, getNewMessages }) => {
             <hr></hr>
             <h2>Enviar um comentário</h2>
             <section id="input">
-                <input
-                    type="text"
-                    placeholder="Digite seu comentario"
-                    ref={comment}
-                ></input>
-                <button onClick={() => sendComment()}>Enviar</button>
+                <TextField
+                    fullWidth
+                    multiline
+                    margin="normal"
+                    id="comment"
+                    label="Comentário"
+                    name="comment"
+                    rows={10}
+                    variant="standard"
+                    sx={multiStyle}
+                    inputProps={{
+                        style: {
+                            color: 'white',
+                            paddingTop: '10px',
+                            border: '1px'
+                        }
+                    }}
+                    InputLabelProps={{
+                        shrink: true
+                    }}
+                    inputRef={comment}
+                />
+
+                <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => sendComment()}
+                >
+                    Enviar
+                </Button>
             </section>
         </>
     );

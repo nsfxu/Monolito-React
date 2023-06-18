@@ -393,7 +393,7 @@ const ShowCard = ({
 
     return (
         <Box className="flex flex-row">
-            <div className="br">
+            <div className="br w-70">
                 {/* Title */}
                 <div className="">
                     <TextField
@@ -645,7 +645,7 @@ const ShowCard = ({
                     </div>
                 </Stack>
             </div>
-            <div className="ma3">
+            <div className="ma3 w-30">
                 {messages && (
                     <Chat
                         id={id}
