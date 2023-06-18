@@ -38,6 +38,7 @@ import { updateCardTags } from '../../services/tags-services';
 import { deleteCard, updateCard } from '../../services/card-service';
 import { useHistory } from 'react-router-dom';
 import Chat from '../Chat/Chat';
+import { getCommentsByCardId } from '../../services/comment-service';
 
 const ShowCard = ({
     cardObj,
@@ -49,7 +50,6 @@ const ShowCard = ({
     getInfoByBoardId
 }) => {
     const [open, setOpen] = useState(false);
-
 
     const title = useRef();
     const description = useRef();
@@ -70,6 +70,7 @@ const ShowCard = ({
 
     const history = useHistory();
     const [user, setUser] = useState(undefined);
+    const [messages, setMessages] = useState(undefined);
 
     useEffect(() => {
         const loggedUser = localStorage.getItem('user');
@@ -142,6 +143,24 @@ const ShowCard = ({
             setExpectedDate(dayjs(`${year}-${month}-${day}`));
         }
     }, [cardObj]);
+
+    useEffect(async () => {
+        if (!messages) {
+            setMessages(await getMessages());
+        }
+
+        console.log(messages);
+    }, [messages]);
+
+    const getMessages = async () => {
+        const response = await getCommentsByCardId(id);
+
+        if (response.result) {
+            return response.result;
+        }
+
+        return [];
+    };
 
     const validateInputs = async () => {
         if (!title.current.value) {
@@ -623,7 +642,7 @@ const ShowCard = ({
                 </Stack>
             </div>
             <div className="ma3">
-                <Chat id={id} user={user} socket={socket} />
+                <Chat id={id} user={user} socket={socket} messages={messages} />
             </div>
         </Box>
     );
