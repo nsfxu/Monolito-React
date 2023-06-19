@@ -142,6 +142,7 @@ const ConfigBoardModal = ({
                     }}
                 >
                     <TabTagConfig
+                        board_id={board_id}
                         board_tags={board_info.tags}
                         updateNewBoardTags={updateNewBoardTags}
                     />

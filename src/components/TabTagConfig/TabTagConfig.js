@@ -1,13 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
+
 import { Button, Chip, Stack } from '@mui/material';
+
+import Modal from 'react-modal';
+import ModalStyles from '../../constants/modal-styles';
+
 import TabTagInfo from '../TabTagInfo/TabTagInfo';
+import CreateTag from '../CreateTag';
+import { createTag } from '../../services/tags-services';
+
+const CREATE_TAG = 'CreateTag';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabTagConfig = ({ board_tags, updateNewBoardTags }) => {
+const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
     const [temp_tags, setTempTags] = useState(board_tags);
     const [selected_tag, setSelectedTag] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modal_type, setModalType] = useState(null);
+    const [modal_style, setModalStyle] = useState(null);
+
+    //#region Modal stuff
+
+    const openCustomModal = (modal) => {
+        if (modal === CREATE_TAG) {
+            setModalType(modal);
+            setModalStyle(ModalStyles.createTag);
+        }
+
+        openModal();
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const getModalResult = async (result, modal_type) => {
+        switch (modal_type) {
+            case CREATE_TAG:
+                const default_style = {
+                    backgroundColor: '#565B61',
+                    color: '#FFFFFF'
+                };
+
+                const tag_response = await createTag(
+                    board_id,
+                    result,
+                    default_style
+                );
+
+                if (tag_response.error) {
+                    return;
+                }
+
+                const new_tag = {
+                    id: tag_response.result.id,
+                    name: result,
+                    style: JSON.stringify(default_style)
+                };
+
+                board_tags.push(new_tag);
+
+                await updateNewBoardTags(board_tags);
+                await setTempTags(board_tags);
+
+                break;
+
+            default:
+                return;
+        }
+    };
+
+    //#endregion
 
     const setSelectedTagById = (this_id) => {
         console.log(this_id);
@@ -48,7 +118,12 @@ const TabTagConfig = ({ board_tags, updateNewBoardTags }) => {
             <section className="flex flex-column ma3 h-100">
                 <h2>Etiquetas</h2>
                 <Stack direction="row" spacing={2}>
-                    <Button color="success" variant="contained">
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            openCustomModal(CREATE_TAG);
+                        }}
+                    >
                         Criar Etiqueta
                     </Button>
                 </Stack>
@@ -62,7 +137,7 @@ const TabTagConfig = ({ board_tags, updateNewBoardTags }) => {
                                     await setSelectedTag(null);
                                     setSelectedTagById(tag.id);
                                 }}
-                                sx={JSON.parse(tag.style)}
+                                sx={tag.style ? JSON.parse(tag.style) : ''}
                             />
                         ))}
                 </div>
@@ -77,6 +152,20 @@ const TabTagConfig = ({ board_tags, updateNewBoardTags }) => {
                     )}
                 </div>
             </section>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                style={modal_style}
+                appElement={document.getElementById('root')}
+            >
+                {modal_type === 'CreateTag' && (
+                    <CreateTag
+                        returnResult={getModalResult}
+                        modal_type={modal_type}
+                        closeModal={closeModal}
+                    />
+                )}
+            </Modal>
         </>
     );
 };

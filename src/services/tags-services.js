@@ -18,7 +18,7 @@ const createTag = async (id_board, name, style) => {
         const { data } = await api.post(`/tags/create`, {
             id_board: id_board,
             name: name,
-            style: style
+            style: JSON.stringify(style)
         });
         return data;
     } catch (err) {
