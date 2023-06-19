@@ -9,6 +9,7 @@ import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
 import TabMemberConfig from '../TabMemberConfig/TabMemberConfig';
 import TabBoardConfig from '../TabBoardConfig/TabBoardConfig';
+import TabTagConfig from '../TabTagConfig/TabTagConfig';
 
 const SECTION_TITLE_COLOR = 'white';
 const TAB_PANEL_BACKGROUND = '#4D5156';
@@ -127,8 +128,15 @@ const ConfigBoardModal = ({
                         updateNewBoardSwinlanes={updateNewBoardSwinlanes}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Tags
+                <TabPanel
+                    value={value}
+                    index={2}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabTagConfig board_tags={board_info.tags} />
                 </TabPanel>
                 <TabPanel
                     value={value}

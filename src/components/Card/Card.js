@@ -59,7 +59,7 @@ const Card = ({
             (user) => object.id_user == user.id_user
         );
 
-        if (object.id_user == 1 || !this_card_user.name) {
+        if (object.id_user == 1 || !this_card_user || !this_card_user.name) {
             setResponsibleName('?');
 
             return;
