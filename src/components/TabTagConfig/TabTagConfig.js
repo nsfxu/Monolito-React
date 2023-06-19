@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
-
+/* eslint-disable */
+// eslint-disable-next-line
 import { Button, Chip, Stack } from '@mui/material';
 
 import Modal from 'react-modal';
@@ -8,12 +9,10 @@ import ModalStyles from '../../constants/modal-styles';
 
 import TabTagInfo from '../TabTagInfo/TabTagInfo';
 import CreateTag from '../CreateTag';
-import { createTag } from '../../services/tags-services';
+import { createTag, deleteTag } from '../../services/tags-services';
 
 const CREATE_TAG = 'CreateTag';
 
-/* eslint-disable */
-// eslint-disable-next-line
 const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
     const [temp_tags, setTempTags] = useState(board_tags);
     const [selected_tag, setSelectedTag] = useState(null);
@@ -106,6 +105,16 @@ const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
         updateNewBoardTags(temp_tags);
     };
 
+    const deleteThisTag = async (obj) => {
+        const pos = board_tags.indexOf(obj);
+        const removed_tag = board_tags.splice(pos, 1);
+
+        if (removed_tag.length > 0) {
+            await deleteTag(removed_tag[0].id);
+            updateNewBoardTags(board_tags);
+        }
+    };
+
     useEffect(() => {
         if (selected_tag) {
             console.log(selected_tag);
@@ -146,6 +155,7 @@ const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
                         <TabTagInfo
                             selected_tag={selected_tag}
                             updateTagsInfo={updateTagsInfo}
+                            deleteThisTag={deleteThisTag}
                         />
                     ) : (
                         <p>Selecione uma etiqueta para editar</p>

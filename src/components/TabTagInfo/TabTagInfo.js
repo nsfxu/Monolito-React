@@ -15,7 +15,7 @@ const DEFAULT_STATE = {
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabTagInfo = ({ selected_tag, updateTagsInfo }) => {
+const TabTagInfo = ({ selected_tag, updateTagsInfo, deleteThisTag }) => {
     const name = useRef();
     const [state, setState] = useState(DEFAULT_STATE);
 
@@ -85,7 +85,10 @@ const TabTagInfo = ({ selected_tag, updateTagsInfo }) => {
         const this_color = state.color ? state.color : '#565B61';
         const this_textColor = state.textColor ? state.textColor : 'white';
 
-        const style_json = { backgroundColor: this_color, color: this_textColor };
+        const style_json = {
+            backgroundColor: this_color,
+            color: this_textColor
+        };
 
         const response = await updateTag(
             selected_tag.id,
@@ -98,7 +101,9 @@ const TabTagInfo = ({ selected_tag, updateTagsInfo }) => {
         updateHasUnsavedData();
     };
 
-    const deleteSelectedTag = async () => {};
+    const deleteSelectedTag = async () => {
+        deleteThisTag(selected_tag);
+    };
 
     //#region COLOR PICKER FUNCS
 
