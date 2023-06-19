@@ -261,7 +261,7 @@ const TabSwinlaneInfo = ({
                         </div>
 
                         <TextField
-                            label="Raia da coluna"
+                            label="Nome da Raia"
                             defaultValue={current_swinlane.name}
                             inputRef={name}
                             sx={swinlane_name_style}
@@ -304,9 +304,9 @@ const TabSwinlaneInfo = ({
                         </div>
 
                         {/* Cor do texto raia */}
-                        <div className="flex flex-row justify-start align-center pt3 pl2 pb3">
+                        <div className="flex flex-row justify-start align-center pt1 pl2 pb3">
                             <Typography variant="h6">
-                                Cor do texto raia
+                                Cor do texto da raia
                             </Typography>
                             <div>
                                 <div
