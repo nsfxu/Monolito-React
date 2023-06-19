@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { SketchPicker } from 'react-color';
 
 import propTypes from 'prop-types';
-import { TextField, Typography } from '@mui/material';
+import { TextField, Typography, Stack, Button } from '@mui/material';
 
 const DEFAULT_STATE = {
     displayColorPicker: false,
@@ -17,10 +17,16 @@ const TabTagInfo = ({ selected_tag }) => {
     const name = useRef();
     const [state, setState] = useState(DEFAULT_STATE);
 
+    const [has_unsaved_data, setHasUnsavedData] = useState(true);
+
     useEffect(async () => {
         if (!selected_tag) {
             return;
         }
+
+        updateHasUnsavedData();
+        await setState(DEFAULT_STATE);
+
         const temp_state = { ...state };
 
         let tag_color = '#565B61';
@@ -38,6 +44,51 @@ const TabTagInfo = ({ selected_tag }) => {
 
         console.log(selected_tag);
     }, [selected_tag]);
+
+    const updateHasUnsavedData = async () => {
+        const current_color = selected_tag.style
+            ? JSON.parse(selected_tag.style).color
+            : '#565B61';
+
+        const current_textColor = selected_tag.style
+            ? JSON.parse(selected_tag.style).textColor
+            : 'white';
+
+        // validades if the name is the same
+        if (name && name.current && name.current.value != selected_tag.name) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        // validates if the color its the same
+        if (state.color != current_color) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        // validates if the text color its the same
+        if (state.textColor != current_textColor) {
+            await setHasUnsavedData(false);
+
+            return;
+        }
+
+        await setHasUnsavedData(true);
+    };
+
+    const saveTagInfo = async () => {
+        const this_name = name.current ? name.current.value : null;
+        const this_color = state.color ? state.color : '#565B61';
+        const this_textColor = state.textColor ? state.textColor : 'white';
+
+        const style_json = { color: this_color, textColor: this_textColor };
+
+        updateHasUnsavedData();
+    };
+
+    const deleteSelectedTag = async () => {};
 
     //#region COLOR PICKER FUNCS
 
@@ -63,7 +114,7 @@ const TabTagInfo = ({ selected_tag }) => {
         temp_state.color = color.hex;
 
         setState(temp_state);
-        // updateHasUnsavedData();
+        updateHasUnsavedData();
     };
 
     const handleTextClick = () => {
@@ -88,7 +139,7 @@ const TabTagInfo = ({ selected_tag }) => {
         temp_state.textColor = color.hex;
 
         setState(temp_state);
-        // updateHasUnsavedData();
+        updateHasUnsavedData();
     };
 
     //#endregion
@@ -172,7 +223,7 @@ const TabTagInfo = ({ selected_tag }) => {
                         defaultValue={selected_tag.name}
                         inputRef={name}
                         sx={tag_name_style}
-                        // onKeyUp={() => updateHasUnsavedData()}
+                        onKeyUp={() => updateHasUnsavedData()}
                     />
                 </div>
 
@@ -232,6 +283,27 @@ const TabTagInfo = ({ selected_tag }) => {
                         ) : null}
                     </div>
                 </div>
+
+                <Stack direction="row" spacing={2} className="pb2 pt2 pl2">
+                    <Button
+                        variant="contained"
+                        color="success"
+                        disabled={has_unsaved_data}
+                        onClick={() => saveTagInfo()}
+                    >
+                        Salvar tag
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        className="w-20"
+                        onClick={() => {
+                            deleteSelectedTag();
+                        }}
+                    >
+                        Remover tag
+                    </Button>
+                </Stack>
             </section>
         </>
     );
