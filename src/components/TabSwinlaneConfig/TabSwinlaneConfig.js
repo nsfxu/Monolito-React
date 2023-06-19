@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import propTypes from 'prop-types';
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -88,9 +88,6 @@ const TabSwinlaneConfig = ({
 
     //#endregion
 
-    useEffect(() => {
-        console.log(selected_swinlane);
-    }, [selected_swinlane]);
 
     const grid = 8;
 

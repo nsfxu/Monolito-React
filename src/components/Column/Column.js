@@ -77,7 +77,6 @@ const Column = ({
 
         if (response.error) {
             toast('Aconteceu algum erro ao adicionar o card');
-            console.log(response);
 
             return;
         }

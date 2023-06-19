@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import propTypes from 'prop-types';
 /* eslint-disable */
 // eslint-disable-next-line
@@ -79,7 +79,6 @@ const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
     //#endregion
 
     const setSelectedTagById = (this_id) => {
-        console.log(this_id);
 
         board_tags.map((tag) => {
             if (tag.id == this_id) {
@@ -115,13 +114,6 @@ const TabTagConfig = ({ board_id, board_tags, updateNewBoardTags }) => {
         }
     };
 
-    useEffect(() => {
-        if (selected_tag) {
-            console.log(selected_tag);
-        }
-    }, [selected_tag]);
-
-    console.log(temp_tags);
     return (
         <>
             <section className="flex flex-column ma3 h-100">

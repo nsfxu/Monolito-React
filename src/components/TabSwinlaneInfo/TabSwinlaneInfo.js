@@ -59,7 +59,6 @@ const TabSwinlaneInfo = ({
 
         setState(temp_state);
 
-        console.log(current_swinlane);
     }, [current_swinlane]);
 
     const saveSwinlaneInfo = async () => {
@@ -75,7 +74,6 @@ const TabSwinlaneInfo = ({
             style_json
         );
 
-        console.log(response);
         await updateSwinlaneInfo(selected_swinlane, this_name, style_json);
         updateHasUnsavedData();
     };

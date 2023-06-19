@@ -193,7 +193,6 @@ const Card = ({
 
         const response = await updateCardExpectedDate(object.id, new_date);
 
-        console.log(response);
     };
 
     function TypographyField(props) {

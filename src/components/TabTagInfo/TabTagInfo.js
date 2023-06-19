@@ -43,8 +43,6 @@ const TabTagInfo = ({ selected_tag, updateTagsInfo, deleteThisTag }) => {
         temp_state.textColor = tag_textColor;
 
         setState(temp_state);
-
-        console.log(selected_tag);
     }, [selected_tag]);
 
     const updateHasUnsavedData = async () => {
@@ -96,7 +94,6 @@ const TabTagInfo = ({ selected_tag, updateTagsInfo, deleteThisTag }) => {
             style_json
         );
 
-        console.log(response);
         await updateTagsInfo(selected_tag.id, this_name, style_json);
         updateHasUnsavedData();
     };

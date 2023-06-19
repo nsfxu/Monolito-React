@@ -10,7 +10,6 @@ const Chat = ({ id, user, socket, messages, getNewMessages }) => {
 
     useEffect(() => {
         socket.on('receive_message', (data) => {
-            console.log(data);
             updateComment(data);
         });
     }, [socket]);
@@ -42,7 +41,6 @@ const Chat = ({ id, user, socket, messages, getNewMessages }) => {
             await socket.emit('send_message', messageData);
         }
 
-        console.log(messageData);
     };
 
     const sendCommentToDB = async (message) => {

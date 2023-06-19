@@ -132,7 +132,6 @@ const ShowCard = ({
             }
         });
 
-        console.log(current_tags, tagsArr);
         setSelectedTags(current_tags);
     }, [cardObj, tagsArr]);
 
@@ -149,7 +148,6 @@ const ShowCard = ({
             setMessages(await getMessages());
         }
 
-        console.log(messages);
     }, [messages]);
 
     const getMessages = async () => {
@@ -211,7 +209,6 @@ const ShowCard = ({
             null
         );
 
-        console.log(card_result);
 
         await getInfoByBoardId();
     };

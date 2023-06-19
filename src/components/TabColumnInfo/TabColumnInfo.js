@@ -292,8 +292,7 @@ const TabColumnInfo = ({
         switch (modal_type) {
             case CREATE_SUBCOLUMN:
                 const response = await createGroup(selected_column, result);
-                console.log(response);
-                console.log(result, selected_column);
+
 
                 current_column.groups.push({
                     id: response.result.id_group,

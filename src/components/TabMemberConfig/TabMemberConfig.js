@@ -54,7 +54,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
 
             let user_exists = false;
             participants.map((this_participant) => {
-                console.log(this_participant);
 
                 if (this_participant.id_user == user.id_user) {
                     user_exists = true;
@@ -74,7 +73,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
             permission_id
         );
 
-        console.log(response);
 
         const temp_participants = [...participants];
         found_user.id_permission = permission_id;
@@ -105,7 +103,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
             await updateParticipants(temp_participants);
         }
 
-        console.log(response);
     };
 
     const removeUserFromBoard = async (id_user) => {
@@ -127,7 +124,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
             updateParticipants(temp_participants);
         }
 
-        console.log(response);
     };
 
     function stringToColor(string) {

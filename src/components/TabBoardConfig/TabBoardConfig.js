@@ -36,7 +36,6 @@ const TabBoardConfig = ({ board_id }) => {
             name.current.value,
             description.current.value
         );
-        console.log(response);
     };
 
     const inputStyle = {
