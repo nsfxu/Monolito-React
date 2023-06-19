@@ -43,6 +43,11 @@ const ConfigBoardModal = ({
         updateWithNewBoardInfo(board_info);
     };
 
+    const updateNewBoardTags = (new_board_tags) => {
+        board_info.tags = new_board_tags;
+        updateWithNewBoardInfo(board_info);
+    };
+
     function a11yProps(index) {
         return {
             id: `vertical-tab-${index}`,
@@ -136,7 +141,10 @@ const ConfigBoardModal = ({
                         color: TAB_PANEL_TEXT_COLOR
                     }}
                 >
-                    <TabTagConfig board_tags={board_info.tags} />
+                    <TabTagConfig
+                        board_tags={board_info.tags}
+                        updateNewBoardTags={updateNewBoardTags}
+                    />
                 </TabPanel>
                 <TabPanel
                     value={value}

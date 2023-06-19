@@ -4,6 +4,8 @@ import { SketchPicker } from 'react-color';
 import propTypes from 'prop-types';
 import { TextField, Typography, Stack, Button } from '@mui/material';
 
+import { updateTag } from '../../services/tags-services';
+
 const DEFAULT_STATE = {
     displayColorPicker: false,
     displayTextColorPicker: false,
@@ -13,7 +15,7 @@ const DEFAULT_STATE = {
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabTagInfo = ({ selected_tag }) => {
+const TabTagInfo = ({ selected_tag, updateTagsInfo }) => {
     const name = useRef();
     const [state, setState] = useState(DEFAULT_STATE);
 
@@ -33,8 +35,8 @@ const TabTagInfo = ({ selected_tag }) => {
         let tag_textColor = 'white';
 
         if (selected_tag.style) {
-            tag_color = JSON.parse(selected_tag.style).color;
-            tag_textColor = JSON.parse(selected_tag.style).textColor;
+            tag_color = JSON.parse(selected_tag.style).backgroundColor;
+            tag_textColor = JSON.parse(selected_tag.style).color;
         }
 
         temp_state.color = tag_color;
@@ -83,8 +85,16 @@ const TabTagInfo = ({ selected_tag }) => {
         const this_color = state.color ? state.color : '#565B61';
         const this_textColor = state.textColor ? state.textColor : 'white';
 
-        const style_json = { color: this_color, textColor: this_textColor };
+        const style_json = { backgroundColor: this_color, color: this_textColor };
 
+        const response = await updateTag(
+            selected_tag.id,
+            this_name,
+            style_json
+        );
+
+        console.log(response);
+        await updateTagsInfo(selected_tag.id, this_name, style_json);
         updateHasUnsavedData();
     };
 

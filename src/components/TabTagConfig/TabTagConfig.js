@@ -5,7 +5,7 @@ import TabTagInfo from '../TabTagInfo/TabTagInfo';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const TabTagConfig = ({ board_tags }) => {
+const TabTagConfig = ({ board_tags, updateNewBoardTags }) => {
     const [temp_tags, setTempTags] = useState(board_tags);
     const [selected_tag, setSelectedTag] = useState(null);
 
@@ -19,6 +19,21 @@ const TabTagConfig = ({ board_tags }) => {
                 return;
             }
         });
+    };
+
+    const updateTagsInfo = (this_tag, name, style) => {
+        const temp_tags = [...board_tags];
+
+        temp_tags.map((tag) => {
+            if (tag.id == this_tag) {
+                tag.name = name;
+                tag.style = JSON.stringify(style);
+
+                return;
+            }
+        });
+
+        updateNewBoardTags(temp_tags);
     };
 
     useEffect(() => {
@@ -53,7 +68,10 @@ const TabTagConfig = ({ board_tags }) => {
                 </div>
                 <div className="bt mt3">
                     {selected_tag ? (
-                        <TabTagInfo selected_tag={selected_tag} />
+                        <TabTagInfo
+                            selected_tag={selected_tag}
+                            updateTagsInfo={updateTagsInfo}
+                        />
                     ) : (
                         <p>Selecione uma etiqueta para editar</p>
                     )}
