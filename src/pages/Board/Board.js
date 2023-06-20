@@ -309,7 +309,7 @@ const Board = (props) => {
         }
     };
 
-    const handleWhenSourceIsSubColumn = (
+    const handleWhenSourceIsSubColumn = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -343,16 +343,20 @@ const Board = (props) => {
             removed_item[0]
         );
 
-        updateCardGroup(
-            removed_item[0].id,
-            destination_pos_id,
-            source_pos_id,
-            column_to_add.groups[0].id,
-            removed_item[0].laneId
-        );
+        removed_item[0].id_group = column_to_add.groups[0].id;
+
+        getAllCardPos(column_to_add.groups[0], removed_item[0]);
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     column_to_add.groups[0].id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenDestinationIsSubColumn = (
+    const handleWhenDestinationIsSubColumn = async (
         items,
         source_column_id,
         destination_column_id,
@@ -385,22 +389,26 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
-        addObjectIntoPosition(
+        await addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
 
-        updateCardGroup(
-            removed_item[0].id,
-            destination_pos_id,
-            source_pos_id,
-            subcolumn_to_add.id,
-            removed_item[0].laneId
-        );
+        removed_item[0].id_group = subcolumn_to_add.id;
+
+        getAllCardPos(subcolumn_to_add, removed_item[0]);
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenSourceIsDestination = (
+    const handleWhenSourceIsDestination = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -431,22 +439,28 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
-        addObjectIntoPosition(
+        await addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
 
-        updateCardGroup(
-            removed_item[0].id,
-            destination_pos_id,
-            source_pos_id,
-            subcolumn_to_add.id,
-            removed_item[0].laneId
-        );
+        if (source_subcolumn_id != destination_subcolumn_id) {
+            getAllCardPos(subcolumn_to_add, removed_item[0]);
+        } else {
+            getAllCardPos(subcolumn_to_add, null);
+        }
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenSourceIsntDestination = (
+    const handleWhenSourceIsntDestination = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -480,19 +494,23 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
+        removed_item[0].id_group = subcolumn_to_add.id;
+
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
 
-        updateCardGroup(
-            removed_item[0].id,
-            destination_pos_id,
-            source_pos_id,
-            subcolumn_to_add.id,
-            removed_item[0].laneId
-        );
+        getAllCardPos(subcolumn_to_add);
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
     const handleOnDragEnd = (result) => {
@@ -561,21 +579,45 @@ const Board = (props) => {
             (column) => column.id == destination_column_id
         );
 
+        // update group_id
+        removed_item[0].id_group = column_to_add.groups[0].id;
+
         column_to_add.groups[0].cards.splice(
             destination_pos_id,
             0,
             removed_item[0]
         );
 
-        updateCurrentCardGroup(
-            removed_item[0].id,
-            destination_pos_id,
-            source_pos_id,
-            column_to_add.groups[0].id,
-            removed_item[0].laneId
-        );
+        if (source_column_id != destination_column_id) {
+            getAllCardPos(column_to_add.groups[0], removed_item[0]);
+        } else {
+            getAllCardPos(column_to_add.groups[0], null);
+        }
+
+        // updateCurrentCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     column_to_add.groups[0].id,
+        //     removed_item[0].laneId
+        // );
 
         updateBoardInfo(items);
+    };
+
+    const getAllCardPos = async (group, new_card) => {
+        const id_group = group.id;
+
+        const cardArr = [...group.cards];
+        const apiObj = [];
+
+        if (cardArr.length > 0) {
+            cardArr.map((this_card, index) => {
+                apiObj.push({ id_card: this_card.id, order: index });
+            });
+        }
+
+        console.log(id_group, new_card, apiObj);
     };
 
     const updateCurrentCardGroup = async (
