@@ -26,7 +26,10 @@ import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
 
-import { updateCardGroup } from '../../services/card-service';
+import {
+    updateCardGroup,
+    updateCardGroupV2
+} from '../../services/card-service';
 import {
     getBoardInfo,
     getBoardParticipants
@@ -345,7 +348,11 @@ const Board = (props) => {
 
         removed_item[0].id_group = column_to_add.groups[0].id;
 
-        getAllCardPos(column_to_add.groups[0], removed_item[0]);
+        getAllCardPos(
+            column_to_add.groups[0],
+            removed_item[0],
+            removed_item[0].laneId
+        );
 
         // updateCardGroup(
         //     removed_item[0].id,
@@ -397,7 +404,11 @@ const Board = (props) => {
 
         removed_item[0].id_group = subcolumn_to_add.id;
 
-        getAllCardPos(subcolumn_to_add, removed_item[0]);
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
 
         // updateCardGroup(
         //     removed_item[0].id,
@@ -446,9 +457,13 @@ const Board = (props) => {
         );
 
         if (source_subcolumn_id != destination_subcolumn_id) {
-            getAllCardPos(subcolumn_to_add, removed_item[0]);
+            getAllCardPos(
+                subcolumn_to_add,
+                removed_item[0],
+                removed_item[0].laneId
+            );
         } else {
-            getAllCardPos(subcolumn_to_add, null);
+            getAllCardPos(subcolumn_to_add, null, removed_item[0].laneId);
         }
 
         // updateCardGroup(
@@ -502,7 +517,11 @@ const Board = (props) => {
             removed_item[0]
         );
 
-        getAllCardPos(subcolumn_to_add);
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
 
         // updateCardGroup(
         //     removed_item[0].id,
@@ -589,9 +608,9 @@ const Board = (props) => {
         );
 
         if (source_column_id != destination_column_id) {
-            getAllCardPos(column_to_add.groups[0], removed_item[0]);
+            getAllCardPos(column_to_add.groups[0], removed_item[0], null);
         } else {
-            getAllCardPos(column_to_add.groups[0], null);
+            getAllCardPos(column_to_add.groups[0], null, null);
         }
 
         // updateCurrentCardGroup(
@@ -605,8 +624,18 @@ const Board = (props) => {
         updateBoardInfo(items);
     };
 
-    const getAllCardPos = async (group, new_card) => {
+    const getAllCardPos = async (group, this_card, laneId) => {
         const id_group = group.id;
+        let cardObj = null;
+
+        console.log(this_card);
+
+        if (this_card) {
+            cardObj = {
+                id_card: this_card.id,
+                id_swinlane: laneId ? laneId : null
+            };
+        }
 
         const cardArr = [...group.cards];
         const apiObj = [];
@@ -616,8 +645,8 @@ const Board = (props) => {
                 apiObj.push({ id_card: this_card.id, order: index });
             });
         }
-
-        console.log(id_group, new_card, apiObj);
+        const response = await updateCardGroupV2(id_group, cardObj, apiObj);
+        console.log(response);
     };
 
     const updateCurrentCardGroup = async (

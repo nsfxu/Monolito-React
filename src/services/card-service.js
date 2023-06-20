@@ -22,6 +22,19 @@ const updateCardGroup = async (
     }
 };
 
+const updateCardGroupV2 = async (id_group, new_card, cardOrder) => {
+    try {
+        const { data } = await api.post(`/card/order`, {
+            id_group: id_group,
+            new_card: new_card ? new_card : null,
+            cardOrder: cardOrder
+        });
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const createCard = async (
     name,
     description,
@@ -96,6 +109,7 @@ const deleteCard = async (id_card) => {
 };
 
 export {
+    updateCardGroupV2,
     updateCardGroup,
     updateCard,
     createCard,
