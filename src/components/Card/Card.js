@@ -102,6 +102,11 @@ const Card = ({
             });
         }
 
+        if (object.id == 33) {
+            console.log(object);
+            console.log(tagsArr);
+            console.log(tempTagsArr);
+        }
         setCardTags(tempTagsArr);
     };
 

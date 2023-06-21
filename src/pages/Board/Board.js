@@ -150,15 +150,21 @@ const Board = (props) => {
                     if (this_group.cards.length > 0) {
                         this_group.cards.map((this_card) => {
                             board_info.card_tags.map((ct) => {
-                                if (this_card.id == ct.id_card)
+                                if (this_card.id == ct.id_card) {
                                     this_card.id_tags = JSON.parse(ct.tags);
-                                else this_card.id_tags = [];
+                                } else {
+                                    if (!this_card.id_tags) {
+                                        this_card.id_tags = [];
+                                    }
+                                }
                             });
                         });
                     }
                 });
             }
         });
+
+        console.log(board_info);
     };
 
     const getAllParticipants = async (id_board) => {
