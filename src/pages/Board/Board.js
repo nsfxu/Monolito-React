@@ -182,6 +182,7 @@ const Board = (props) => {
     const getAllColumns = () => {
         let columnInfo = [];
 
+        console.log(board_info);
         board_info.columns.map((column) => {
             columnInfo.push({ id: column.id, name: column.name });
         });

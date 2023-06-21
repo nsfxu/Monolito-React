@@ -1,9 +1,12 @@
 import React, { useRef, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import propTypes from 'prop-types';
 
 import { Stack, Typography, TextField, Button } from '@mui/material';
 
 import {
+    deleteBoard,
     getBoardInformation,
     updateBoardInfo
 } from '../../services/board-service';
@@ -13,6 +16,8 @@ import {
 const TabBoardConfig = ({ board_id }) => {
     const name = useRef();
     const description = useRef();
+
+    const history = useHistory();
 
     useEffect(async () => {
         const temp_info = await getBoardInformation(board_id);
@@ -36,6 +41,14 @@ const TabBoardConfig = ({ board_id }) => {
             name.current.value,
             description.current.value
         );
+    };
+
+    const deleteThisBoard = async () => {
+        const response = await deleteBoard(board_id);
+
+        if (response.result) {
+            history.push('/dashboard');
+        }
     };
 
     const inputStyle = {
@@ -104,15 +117,26 @@ const TabBoardConfig = ({ board_id }) => {
                         />
                     </div>
                 </Stack>
-                <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => {
-                        updateThisBoardInfo();
-                    }}
-                >
-                    Atualizar
-                </Button>
+                <Stack spacing={3}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => {
+                            updateThisBoardInfo();
+                        }}
+                    >
+                        Atualizar
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            deleteThisBoard();
+                        }}
+                    >
+                        DELETAR ESSE BOARD
+                    </Button>
+                </Stack>
             </section>
         </>
     );

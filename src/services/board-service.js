@@ -45,6 +45,15 @@ const createBoard = async (id_user, name, description) => {
     }
 };
 
+const deleteBoard = async (id_board) => {
+    try {
+        const { data } = await api.delete(`/board/${id_board}`);
+        return data;
+    } catch (err) {
+        return false;
+    }
+};
+
 const addUserToBoard = async (id_user, id_board, id_permission) => {
     try {
         const { data } = await api.post(`/board/${id_board}/users/${id_user}`, {
@@ -88,6 +97,7 @@ const getBoardParticipants = async (id) => {
 };
 
 export {
+    deleteBoard,
     getBoardInfo,
     getBoardInformation,
     getBoardParticipants,
