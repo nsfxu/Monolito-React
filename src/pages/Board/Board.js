@@ -456,15 +456,23 @@ const Board = (props) => {
             removed_item[0]
         );
 
-        if (source_subcolumn_id != destination_subcolumn_id) {
-            getAllCardPos(
-                subcolumn_to_add,
-                removed_item[0],
-                removed_item[0].laneId
-            );
-        } else {
-            getAllCardPos(subcolumn_to_add, null, removed_item[0].laneId);
-        }
+        console.log(removed_item[0].laneId);
+
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
+
+        // if (source_subcolumn_id != destination_subcolumn_id) {
+        //     getAllCardPos(
+        //         subcolumn_to_add,
+        //         removed_item[0],
+        //         removed_item[0].laneId
+        //     );
+        // } else {
+        //     getAllCardPos(subcolumn_to_add, null, removed_item[0].laneId);
+        // }
 
         // updateCardGroup(
         //     removed_item[0].id,

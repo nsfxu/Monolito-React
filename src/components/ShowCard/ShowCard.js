@@ -49,6 +49,7 @@ const ShowCard = ({
     closeModal,
     getInfoByBoardId
 }) => {
+    console.log(cardObj);
     const [open, setOpen] = useState(false);
 
     const title = useRef();
@@ -147,7 +148,6 @@ const ShowCard = ({
         if (!messages) {
             setMessages(await getMessages());
         }
-
     }, [messages]);
 
     const getMessages = async () => {
@@ -208,7 +208,6 @@ const ShowCard = ({
             temp_swinlane,
             null
         );
-
 
         await getInfoByBoardId();
     };
