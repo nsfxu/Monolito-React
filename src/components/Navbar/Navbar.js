@@ -73,7 +73,7 @@ const Navbar = ({ userObject }) => {
         } else {
             validated_name = name.toUpperCase().split(' ')[0][0];
         }
-        
+
         return {
             sx: {
                 bgcolor: stringToColor(name)
@@ -115,7 +115,10 @@ const Navbar = ({ userObject }) => {
     };
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: '#35393C' }}>
+        <AppBar
+            position="fixed"
+            sx={{ backgroundColor: '#35393C' }}
+        >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Box
