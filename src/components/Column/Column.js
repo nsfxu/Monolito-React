@@ -125,6 +125,7 @@ const Column = ({
             addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
         }
 
+        getInfoByBoardId();
         // forceUpdate();
         toast('Card criado com sucesso.');
         updateBoardInfo(items);
@@ -151,7 +152,9 @@ const Column = ({
                                         <>
                                             <SwinlaneHeader
                                                 toast={toast}
-                                                current_user_permission={current_user_permission}
+                                                current_user_permission={
+                                                    current_user_permission
+                                                }
                                                 columns={swinlane_columns}
                                                 all_swinlanes={swinlanes}
                                                 tags={tags}
@@ -172,7 +175,9 @@ const Column = ({
                                 <NormalColumn
                                     key={index}
                                     toast={toast}
-                                    current_user_permission={current_user_permission}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
                                     this_column={column}
                                     tags={tags}
                                     swinlanes={swinlanes}
