@@ -142,13 +142,13 @@ const SwinlaneHeader = ({
                                     >
                                         {is_first_column && (
                                             <ListItemText
-                                                color={
-                                                    swinlane.style
+                                                sx={{
+                                                    color: swinlane.style
                                                         ? JSON.parse(
                                                               swinlane.style
                                                           ).textColor
                                                         : 'white'
-                                                }
+                                                }}
                                                 primary={swinlane.name}
                                             ></ListItemText>
                                         )}
