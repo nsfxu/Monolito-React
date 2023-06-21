@@ -53,7 +53,7 @@ const SubColumnSwinlane = ({
                 style={{
                     minWidth: '240px',
                     minHeight: '10em',
-                    backgroundColor: 'red'
+                    backgroundColor: 'gray'
                 }}
             >
                 {current_group.cards.map((card, index) => {

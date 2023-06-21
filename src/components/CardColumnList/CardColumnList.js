@@ -47,7 +47,7 @@ const CardColumnList = ({
             style={{
                 minWidth: '240px',
                 minHeight: '10em',
-                backgroundColor: 'red'
+                backgroundColor: 'gray'
             }}
             {...provided.droppableProps}
             ref={provided.innerRef}

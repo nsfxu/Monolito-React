@@ -628,8 +628,6 @@ const Board = (props) => {
         const id_group = group.id;
         let cardObj = null;
 
-        console.log(this_card);
-
         if (this_card) {
             cardObj = {
                 id_card: this_card.id,
