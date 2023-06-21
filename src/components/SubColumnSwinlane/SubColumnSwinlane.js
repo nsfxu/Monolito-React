@@ -111,7 +111,7 @@ const SubColumnSwinlane = ({
                 sx={{
                     backgroundColor: swinlane.style
                         ? JSON.parse(swinlane.style).color
-                        : 'cyan'
+                        : '#565B61'
                 }}
                 style={{ minHeight: '3em' }}
                 className="w-100"
@@ -124,7 +124,7 @@ const SubColumnSwinlane = ({
                         sx={{
                             color: swinlane.style
                                 ? JSON.parse(swinlane.style).textColor
-                                : 'cyan'
+                                : '#565B61'
                         }}
                         primary={swinlane.name}
                     ></ListItemText>

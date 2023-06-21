@@ -632,11 +632,11 @@ const Board = (props) => {
             removed_item[0]
         );
 
-        if (source_column_id != destination_column_id) {
-            getAllCardPos(column_to_add.groups[0], removed_item[0], null);
-        } else {
-            getAllCardPos(column_to_add.groups[0], null, null);
-        }
+        getAllCardPos(
+            column_to_add.groups[0],
+            removed_item[0],
+            removed_item[0].laneId
+        );
 
         // updateCurrentCardGroup(
         //     removed_item[0].id,
