@@ -39,7 +39,11 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
     };
 
     const searchUser = async () => {
-        if (!username.current) {
+        if (
+            !username.current ||
+            username.current.value.length == 0 ||
+            username.current.value == ''
+        ) {
             return;
         }
 
@@ -54,7 +58,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
 
             let user_exists = false;
             participants.map((this_participant) => {
-
                 if (this_participant.id_user == user.id_user) {
                     user_exists = true;
                 }
@@ -72,7 +75,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
             board_id,
             permission_id
         );
-
 
         const temp_participants = [...participants];
         found_user.id_permission = permission_id;
@@ -102,7 +104,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
 
             await updateParticipants(temp_participants);
         }
-
     };
 
     const removeUserFromBoard = async (id_user) => {
@@ -123,7 +124,6 @@ const TabMemberConfig = ({ board_id, participants, updateParticipants }) => {
 
             updateParticipants(temp_participants);
         }
-
     };
 
     function stringToColor(string) {
