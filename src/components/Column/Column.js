@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+
 import Modal from 'react-modal';
 
 import propTypes from 'prop-types';
@@ -87,11 +89,15 @@ const Column = ({
             name: new_card.title,
             description: new_card.description,
             creationDate: new_card.creationDate,
-            expectedDate: new_card.expectedDate,
+            expectedDate: new_card.expectedDate
+                ? dayjs(new_card.expectedDate).format('DD/MM/YYYY')
+                : null,
             id_tags: new_card.tags,
             id_user: new_card.person,
             laneId: new_card.laneId
         };
+
+        console.log(card_object);
 
         const tag_result = await updateCardTags(card_object.id, new_card.tags);
 
