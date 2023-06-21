@@ -83,6 +83,7 @@ const Column = ({
 
         const card_object = {
             id: response.result.id_card,
+            id_group: new_card.groupId,
             name: new_card.title,
             description: new_card.description,
             creationDate: new_card.creationDate,
