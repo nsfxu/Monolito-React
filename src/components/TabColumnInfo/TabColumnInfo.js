@@ -55,6 +55,7 @@ const TabColumnInfo = ({
     const [has_unsaved_data_column, setHasUnsavedDataColumn] = useState(true);
     const [has_unsaved_data_group, setHasUnsavedDataGroup] = useState(true);
 
+    const [isNotHidden, setIsNotHidden] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
@@ -62,8 +63,10 @@ const TabColumnInfo = ({
     const grid = 8;
 
     const name = useRef();
+    const wip_limit = useRef();
     const subcolumn_name = useRef();
     const show_swin_lane = useRef();
+    const show_wip = useRef();
 
     useEffect(async () => {
         await setCurrentColumn(undefined);
@@ -90,6 +93,11 @@ const TabColumnInfo = ({
     useEffect(async () => {
         if (!current_column) {
             return;
+        }
+        console.log(current_column);
+
+        if (current_column.showWip) {
+            setIsNotHidden(true);
         }
 
         await setHasSubcolumn(hasSubColumns(current_column.groups));
@@ -210,6 +218,26 @@ const TabColumnInfo = ({
             return;
         }
 
+        // valide if show_wip changed
+        if (
+            show_wip.current &&
+            show_wip.current.checked != current_column.showWip
+        ) {
+            await setHasUnsavedDataColumn(false);
+
+            return;
+        }
+
+        // valide if wip_limit changed
+        if (
+            wip_limit.current &&
+            wip_limit.current.value != current_column.wip_limit
+        ) {
+            await setHasUnsavedDataColumn(false);
+
+            return;
+        }
+
         await setHasUnsavedDataColumn(true);
     };
 
@@ -293,7 +321,6 @@ const TabColumnInfo = ({
             case CREATE_SUBCOLUMN:
                 const response = await createGroup(selected_column, result);
 
-
                 current_column.groups.push({
                     id: response.result.id_group,
                     name: result,
@@ -372,13 +399,47 @@ const TabColumnInfo = ({
                                         defaultChecked={
                                             current_column.showSwinLanes
                                         }
-                                        onClick={() =>
+                                        onClick={(e) =>
                                             updateHasUnsavedDataColumn()
                                         }
                                     />
                                 }
                                 label="Mostrar com raias"
                                 className="pl2"
+                            />
+                        )}
+
+                        {current_column.showWip && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        inputRef={show_wip}
+                                        sx={{ color: 'white' }}
+                                        color="default"
+                                        defaultChecked={current_column.showWip}
+                                        onClick={(e) => {
+                                            setIsNotHidden(e.target.checked);
+                                            updateHasUnsavedDataColumn();
+                                        }}
+                                    />
+                                }
+                                label="Mostrar WIP"
+                                className="pl2"
+                            />
+                        )}
+
+                        {isNotHidden && (
+                            <TextField
+                                type="number"
+                                defaultValue={
+                                    current_column.wip_limit
+                                        ? current_column.wip_limit
+                                        : 0
+                                }
+                                label="Limite"
+                                sx={column_name_style}
+                                inputRef={wip_limit}
+                                onChange={() => updateHasUnsavedDataColumn()}
                             />
                         )}
 
