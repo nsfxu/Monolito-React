@@ -43,7 +43,6 @@ const ColumnHeader = ({ this_column, openModal }) => {
         }
     }, [cardCount]);
 
-    console.log(this_column);
     return (
         <div
             className="bb flex flex-column justify-center items-center"

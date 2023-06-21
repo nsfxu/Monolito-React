@@ -645,6 +645,10 @@ const Board = (props) => {
         }
         const response = await updateCardGroupV2(id_group, cardObj, apiObj);
         console.log(response);
+
+        const temp_board = { ...board_info };
+        await updateBoardInfo(null);
+        await updateBoardInfo(temp_board);
     };
 
     const updateCurrentCardGroup = async (
