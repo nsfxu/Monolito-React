@@ -426,24 +426,22 @@ const TabColumnInfo = ({
                             />
                         )}
 
-                        {current_column.showWip && (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        inputRef={show_wip}
-                                        sx={{ color: 'white' }}
-                                        color="default"
-                                        defaultChecked={current_column.showWip}
-                                        onClick={(e) => {
-                                            setIsNotHidden(e.target.checked);
-                                            updateHasUnsavedDataColumn();
-                                        }}
-                                    />
-                                }
-                                label="Mostrar WIP"
-                                className="pl2"
-                            />
-                        )}
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    inputRef={show_wip}
+                                    sx={{ color: 'white' }}
+                                    color="default"
+                                    defaultChecked={current_column.showWip}
+                                    onClick={(e) => {
+                                        setIsNotHidden(e.target.checked);
+                                        updateHasUnsavedDataColumn();
+                                    }}
+                                />
+                            }
+                            label="Mostrar WIP"
+                            className="pl2"
+                        />
 
                         {isNotHidden && (
                             <TextField
