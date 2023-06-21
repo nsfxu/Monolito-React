@@ -40,7 +40,8 @@ const TabColumnInfo = ({
     selected_column,
     deleteColumnByPos,
     board_columns,
-    board_swinlanes
+    board_swinlanes,
+    returnUpdatedColumn
 }) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
@@ -94,7 +95,6 @@ const TabColumnInfo = ({
         if (!current_column) {
             return;
         }
-        console.log(current_column);
 
         if (current_column.showWip) {
             setIsNotHidden(true);
@@ -140,6 +140,13 @@ const TabColumnInfo = ({
     const saveColumnInfo = async () => {
         const this_name = name.current ? name.current.value : null;
 
+        const this_wip_limit = wip_limit.current ? wip_limit.current.value : 0;
+
+        current_column.wip_limit =
+            this_wip_limit && this_wip_limit != current_column.wip_limit
+                ? this_wip_limit
+                : current_column.wip_limit;
+
         current_column.name =
             this_name && this_name != current_column.name
                 ? this_name
@@ -151,6 +158,12 @@ const TabColumnInfo = ({
                 ? show_swin_lane.current.checked
                 : current_column.showSwinLanes;
 
+        current_column.showWip =
+            show_wip.current &&
+            show_wip.current.checked != current_column.showWip
+                ? show_wip.current.checked
+                : current_column.showWip;
+
         if (board_swinlanes.length == 0) {
             current_column.showSwinLanes = false;
         }
@@ -158,10 +171,14 @@ const TabColumnInfo = ({
         await updateColumn(
             selected_column,
             current_column.name,
-            current_column.showSwinLanes
+            current_column.showSwinLanes,
+            current_column.showWip,
+            current_column.wip_limit
         );
 
         await setCurrentColumn(findById(board_columns, selected_column));
+
+        returnUpdatedColumn(current_column);
         await updateHasUnsavedDataColumn();
     };
 

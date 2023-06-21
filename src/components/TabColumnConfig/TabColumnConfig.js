@@ -244,6 +244,18 @@ const TabColumnConfig = ({
         await separateColumns();
     };
 
+    const updateThisColumn = async (column) => {
+        const temp_columns = [...board_columns];
+
+        temp_columns.map((this_column) => {
+            if (this_column.id == column.id) {
+                this_column = column;
+            }
+        });
+
+        updateNewBoardColumns(temp_columns);
+    };
+
     return (
         <>
             <section className="ma3 h-100">
@@ -341,6 +353,7 @@ const TabColumnConfig = ({
                         deleteColumnByPos={deleteColumnByPos}
                         board_columns={board_columns}
                         board_swinlanes={board_swinlanes}
+                        returnUpdatedColumn={updateThisColumn}
                     />
                 ) : (
                     'Clique em um item para editar suas propriedades.'

@@ -32,11 +32,13 @@ const deleteColumn = async (id_column) => {
     }
 };
 
-const updateColumn = async (id_column, name, show_swinlane) => {
+const updateColumn = async (id_column, name, show_swinlane, show_wip, wip_limit) => {
     try {
         const { data } = await api.put(`/column/${id_column}`, {
             name: name,
-            show_swinlane: show_swinlane
+            show_swinlane: show_swinlane,
+            show_wip: show_wip,
+            wip_limit: wip_limit,
         });
         return data;
     } catch (err) {
