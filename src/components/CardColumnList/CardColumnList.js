@@ -8,6 +8,8 @@ import Card from '../Card';
 /* eslint-disable */
 // eslint-disable-next-line
 const CardColumnList = ({
+    toast,
+    current_user_permission,
     cards,
     tagsArr,
     swinlanes,
@@ -28,6 +30,8 @@ const CardColumnList = ({
                         className="bw1 mt3"
                     >
                         <Card
+                            toast={toast}
+                            current_user_permission={current_user_permission}
                             object={card}
                             tagsArr={tagsArr}
                             swinlanes={swinlanes}

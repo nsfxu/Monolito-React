@@ -33,6 +33,8 @@ import {
 /* eslint-disable */
 // eslint-disable-next-line
 const Card = ({
+    toast,
+    current_user_permission,
     object,
     tagsArr,
     swinlanes,
@@ -145,6 +147,11 @@ const Card = ({
     }
 
     const handleChangeColumn = async (e) => {
+        if (current_user_permission == 3) {
+            toast('Convidados não podem alterar a posição de cards.');
+
+            return;
+        }
         const new_column_id = e.target.value;
 
         let temp_swinlane = null;
@@ -185,6 +192,14 @@ const Card = ({
     };
 
     const updateExpectedDateInDB = async (new_date) => {
+        if (current_user_permission == 3) {
+            toast(
+                'Convidados não podem alterar a data de expectativa dos cards.'
+            );
+
+            return;
+        }
+
         setValue(new_date);
 
         if (new_date) {
@@ -354,6 +369,8 @@ const Card = ({
                 appElement={document.getElementById('root')}
             >
                 <ShowCard
+                    toast={toast}
+                    current_user_permission={current_user_permission}
                     cardObj={object}
                     participants={participants}
                     swinlanes={swinlanes}

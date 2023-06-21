@@ -54,6 +54,7 @@ const Board = (props) => {
     const [tags, setTags] = useState([{}]);
 
     const [user, setUser] = useState(undefined);
+    const [current_user_permission, setCurrentUserPermission] = useState(null);
 
     useEffect(() => {
         const loggedUser = localStorage.getItem('user');
@@ -92,10 +93,15 @@ const Board = (props) => {
     }, [board_info]);
 
     useEffect(() => {
-        if (participants.length > 0) {
-            console.log(participants);
+        if (participants.length > 0 && user) {
+            participants.map((this_part) => {
+                if (this_part.id_user == user.id_user) {
+                    setCurrentUserPermission(this_part.id_permission);
+                }
+            });
+            console.log(participants, user);
         }
-    }, [participants]);
+    }, [participants, user]);
 
     //#region functions
 
@@ -539,6 +545,12 @@ const Board = (props) => {
     };
 
     const handleOnDragEnd = (result) => {
+        if (current_user_permission == 3) {
+            toast(
+                'Você não pode alterar a posição desse card por ser um convidado.'
+            );
+            return;
+        }
         if (!result.destination) return;
 
         const items = board_info;
@@ -652,7 +664,6 @@ const Board = (props) => {
         const response = await updateCardGroupV2(id_group, cardObj, apiObj);
         console.log(response);
 
-
         getInfoByBoardId();
         // const temp_board = { ...board_info };
         // await updateBoardInfo(null);
@@ -685,10 +696,10 @@ const Board = (props) => {
 
     return (
         <>
-            {user && board_info && (
+            {user && board_info && current_user_permission && (
                 <>
                     <Navbar userObject={user} />
-                    <div className="flex flex-column items-center mt5 ml5 ba bw">
+                    <div className="flex flex-column items-center mt5 ml5 bw">
                         <div className="ma3 pl3 w-100">
                             <Stack
                                 direction="row"
@@ -697,32 +708,40 @@ const Board = (props) => {
                                 }
                                 spacing={2}
                             >
-                                <Button
-                                    variant="contained"
-                                    size="medium"
-                                    onClick={(e) => {
-                                        openCustomModal(CONFIG_BOARD);
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    Configurar quadro
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    size="medium"
-                                    onClick={(e) => {
-                                        console.log(board_info);
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    DEBUG
-                                </Button>
+                                {current_user_permission == 1 && (
+                                    <>
+                                        <Button
+                                            variant="contained"
+                                            size="medium"
+                                            onClick={(e) => {
+                                                openCustomModal(CONFIG_BOARD);
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            Configurar quadro
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            size="medium"
+                                            onClick={(e) => {
+                                                console.log(board_info);
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            DEBUG
+                                        </Button>
+                                    </>
+                                )}
                             </Stack>
                         </div>
 
                         {board_info && participants && (
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Column
+                                    toast={toast}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
                                     board_info={board_info}
                                     columns={board_info.columns}
                                     swinlanes={board_info.swinlanes}

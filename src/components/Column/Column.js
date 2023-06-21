@@ -5,8 +5,6 @@ import Modal from 'react-modal';
 
 import propTypes from 'prop-types';
 
-import { ToastContainer, toast } from 'react-toastify';
-
 import { Grid } from '@mui/material';
 
 import ModalStyles from '../../constants/modal-styles';
@@ -26,6 +24,8 @@ import { updateCardTags } from '../../services/tags-services';
 /* eslint-disable */
 // eslint-disable-next-line
 const Column = ({
+    toast,
+    current_user_permission,
     board_info,
     columns,
     swinlanes,
@@ -58,6 +58,10 @@ const Column = ({
     };
 
     const openModal = () => {
+        if (current_user_permission == 3) {
+            toast('Convidados não podem criar cards.');
+            return;
+        }
         setIsModalOpen(true);
     };
 
@@ -146,6 +150,8 @@ const Column = ({
                                     {!isSwinlaneGroupShown && (
                                         <>
                                             <SwinlaneHeader
+                                                toast={toast}
+                                                current_user_permission={current_user_permission}
                                                 columns={swinlane_columns}
                                                 all_swinlanes={swinlanes}
                                                 tags={tags}
@@ -165,6 +171,8 @@ const Column = ({
                             ) : (
                                 <NormalColumn
                                     key={index}
+                                    toast={toast}
+                                    current_user_permission={current_user_permission}
                                     this_column={column}
                                     tags={tags}
                                     swinlanes={swinlanes}
@@ -195,7 +203,6 @@ const Column = ({
                     toast={toast}
                 />
             </Modal>
-            <ToastContainer />
         </>
     );
 };

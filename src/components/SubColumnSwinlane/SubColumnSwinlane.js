@@ -10,6 +10,8 @@ import CardColumnList from '../CardColumnList';
 /* eslint-disable */
 // eslint-disable-next-line
 const SubColumnSwinlane = ({
+    toast,
+    current_user_permission,
     parentColumnId,
     all_swinlanes,
     all_groups,
@@ -30,6 +32,10 @@ const SubColumnSwinlane = ({
                     >
                         {(provided) => (
                             <CardColumnList
+                                toast={toast}
+                                current_user_permission={
+                                    current_user_permission
+                                }
                                 cards={current_group.cards}
                                 tagsArr={tagsArr}
                                 swinlanes={swinlanes}
@@ -61,6 +67,10 @@ const SubColumnSwinlane = ({
                         return (
                             <li className="bw1 mt3" key={index}>
                                 <Card
+                                    toast={toast}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
                                     object={card}
                                     tagsArr={tagsArr}
                                     swinlanes={swinlanes}

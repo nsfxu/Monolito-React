@@ -14,6 +14,8 @@ import CardColumnList from '../CardColumnList';
 /* eslint-disable */
 // eslint-disable-next-line
 const NormalColumn = ({
+    toast,
+    current_user_permission,
     this_column,
     tags,
     swinlanes,
@@ -41,6 +43,8 @@ const NormalColumn = ({
                     <div className="flex flex-row items-start justify-center h-100">
                         {this_column.groups?.map((group) => (
                             <SubColumn
+                                toast={toast}
+                                current_user_permission={current_user_permission}
                                 parentColumnId={this_column.id}
                                 title={group.name}
                                 groupId={group.id}
@@ -58,6 +62,8 @@ const NormalColumn = ({
                     <Droppable droppableId={`${this_column.id}`}>
                         {(provided) => (
                             <CardColumnList
+                                toast={toast}
+                                current_user_permission={current_user_permission}
                                 cards={this_column.groups[0].cards}
                                 tagsArr={tags}
                                 swinlanes={swinlanes}

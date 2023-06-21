@@ -41,6 +41,8 @@ import Chat from '../Chat/Chat';
 import { getCommentsByCardId } from '../../services/comment-service';
 
 const ShowCard = ({
+    toast,
+    current_user_permission,
     cardObj,
     participants,
     swinlanes,
@@ -49,6 +51,7 @@ const ShowCard = ({
     closeModal,
     getInfoByBoardId
 }) => {
+    console.log(current_user_permission);
     const [open, setOpen] = useState(false);
 
     const title = useRef();
@@ -164,6 +167,11 @@ const ShowCard = ({
     };
 
     const validateInputs = async () => {
+        if (current_user_permission == 3) {
+            toast('Convidados não podem atualizar o card.');
+            return;
+        }
+
         if (!title.current.value) {
             toast('Preencha o título do card.');
             return;
@@ -255,6 +263,11 @@ const ShowCard = ({
     };
 
     const deleteCurrentCard = async () => {
+        if (current_user_permission == 3) {
+            toast('Convidados não podem deletar o card.');
+            return;
+        }
+
         await deleteCard(cardObj.id);
 
         // resolvido, obrigado a todos os envolvidos
@@ -609,26 +622,31 @@ const ShowCard = ({
 
                     <div className="mt3">
                         <Stack direction="row" spacing={3}>
-                            <Button
-                                variant="contained"
-                                color="success"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    validateInputs();
-                                }}
-                            >
-                                Atualizar card
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    deleteCurrentCard();
-                                }}
-                            >
-                                Excluir card
-                            </Button>
+                            {current_user_permission != 3 && (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            validateInputs();
+                                        }}
+                                    >
+                                        Atualizar card
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            deleteCurrentCard();
+                                        }}
+                                    >
+                                        Excluir card
+                                    </Button>
+                                </>
+                            )}
+
                             <Button
                                 variant="outlined"
                                 color="error"

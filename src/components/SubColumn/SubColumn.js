@@ -9,6 +9,8 @@ import CardColumnList from '../CardColumnList';
 /* eslint-disable */
 // eslint-disable-next-line
 const SubColumn = ({
+    toast,
+    current_user_permission,
     parentColumnId,
     groupId,
     title,
@@ -29,6 +31,8 @@ const SubColumn = ({
                     <Droppable droppableId={`${parentColumnId};${groupId}`}>
                         {(provided) => (
                             <CardColumnList
+                                toast={toast}
+                                current_user_permission={current_user_permission}
                                 cards={data}
                                 tagsArr={tagsArr}
                                 swinlanes={swinlanes}

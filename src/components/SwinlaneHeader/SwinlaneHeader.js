@@ -14,6 +14,8 @@ import CardColumnList from '../CardColumnList';
 /* eslint-disable */
 // eslint-disable-next-line
 const SwinlaneHeader = ({
+    toast,
+    current_user_permission,
     columns,
     all_swinlanes,
     tags,
@@ -30,6 +32,8 @@ const SwinlaneHeader = ({
                 <Droppable droppableId={`${this_column.id}-${swinlane_id}`}>
                     {(provided) => (
                         <CardColumnList
+                            toast={toast}
+                            current_user_permission={current_user_permission}
                             cards={this_column.groups[0].cards}
                             tagsArr={tags}
                             swinlanes={swinlanes}
@@ -60,6 +64,10 @@ const SwinlaneHeader = ({
                         return (
                             <li className="bw1 mt3" key={index}>
                                 <Card
+                                    toast={toast}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
                                     object={card}
                                     tagsArr={tags}
                                     swinlanes={swinlanes}
@@ -102,6 +110,10 @@ const SwinlaneHeader = ({
                     <div>
                         {hasSubColumns(this_column.groups) ? (
                             <SubColumnSwinlane
+                                toast={toast}
+                                current_user_permission={
+                                    current_user_permission
+                                }
                                 parentColumnId={this_column.id}
                                 all_swinlanes={all_swinlanes}
                                 all_groups={this_column.groups}
