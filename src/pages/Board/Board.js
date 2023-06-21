@@ -456,8 +456,6 @@ const Board = (props) => {
             removed_item[0]
         );
 
-        console.log(removed_item[0].laneId);
-
         getAllCardPos(
             subcolumn_to_add,
             removed_item[0],
@@ -654,9 +652,11 @@ const Board = (props) => {
         const response = await updateCardGroupV2(id_group, cardObj, apiObj);
         console.log(response);
 
-        const temp_board = { ...board_info };
-        await updateBoardInfo(null);
-        await updateBoardInfo(temp_board);
+
+        getInfoByBoardId();
+        // const temp_board = { ...board_info };
+        // await updateBoardInfo(null);
+        // await updateBoardInfo(temp_board);
     };
 
     const updateCurrentCardGroup = async (

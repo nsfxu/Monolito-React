@@ -49,7 +49,6 @@ const ShowCard = ({
     closeModal,
     getInfoByBoardId
 }) => {
-    console.log(cardObj);
     const [open, setOpen] = useState(false);
 
     const title = useRef();
