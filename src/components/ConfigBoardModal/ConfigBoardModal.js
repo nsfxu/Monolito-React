@@ -1,18 +1,29 @@
 import React, { useState, useCallback } from 'react';
 import propTypes from 'prop-types';
 
-import { Tab, Tabs, Box } from '@mui/material';
+import { Tab, Tabs, Box, Typography, Button } from '@mui/material';
 
 import TabPanel from '../TabPanel';
+
 import TabColumnConfig from '../TabColumnConfig/TabColumnConfig';
 import TabSwinlaneConfig from '../TabSwinlaneConfig/TabSwinlaneConfig';
+import TabMemberConfig from '../TabMemberConfig/TabMemberConfig';
+import TabBoardConfig from '../TabBoardConfig/TabBoardConfig';
+import TabTagConfig from '../TabTagConfig/TabTagConfig';
+
+const SECTION_TITLE_COLOR = 'white';
+const TAB_PANEL_BACKGROUND = '#4D5156';
+const TAB_PANEL_TEXT_COLOR = 'white';
 
 /* eslint-disable */
 // eslint-disable-next-line
 const ConfigBoardModal = ({
+    board_id,
     board_info,
+    participants,
     closeModal,
-    updateWithNewBoardInfo
+    updateWithNewBoardInfo,
+    updateParticipants
 }) => {
     const [value, setValue] = useState(0);
     const [, updateState] = useState();
@@ -27,19 +38,14 @@ const ConfigBoardModal = ({
         updateWithNewBoardInfo(board_info);
     };
 
-    const getNextGroupId = (new_id) => {
-        board_info.nextGroupId = parseInt(new_id) + 1;
-        forceUpdate();
+    const updateNewBoardSwinlanes = (new_board_swinlanes) => {
+        board_info.swinlanes = new_board_swinlanes;
+        updateWithNewBoardInfo(board_info);
     };
 
-    const getNextColumnId = (new_id) => {
-        board_info.nextColumnId = parseInt(new_id) + 1;
-        forceUpdate();
-    };
-
-    const getNextSwinlaneId = (new_id) => {
-        board_info.nextSwinlaneId = parseInt(new_id) + 1;
-        forceUpdate();
+    const updateNewBoardTags = (new_board_tags) => {
+        board_info.tags = new_board_tags;
+        updateWithNewBoardInfo(board_info);
     };
 
     function a11yProps(index) {
@@ -50,76 +56,140 @@ const ConfigBoardModal = ({
     }
 
     return (
-        <section>
-            <button
-                onClick={() => {
-                    closeModal();
-                }}
-            >
-                Fechar
-            </button>
+        <section className="flex flex-column ma3 h-100">
+            <Typography variant="h4">Configurações do quadro</Typography>
+
+            <hr className="mt3 mb3 w-100" style={{ borderColor: 'grey' }}></hr>
+
             <Box
                 sx={{
                     flexGrow: 1,
-                    bgcolor: 'background.paper',
+                    bgcolor: '#43474C',
                     display: 'flex',
-                    height: '550'
+                    height: '980px'
                 }}
+                className="br1 h-100"
             >
                 <Tabs
+                    className="ml2"
                     orientation="vertical"
                     variant="scrollable"
                     value={value}
                     onChange={handleChange}
                     aria-label="Vertical tabs example"
                 >
-                    <Tab label="Colunas/Subcolunas" {...a11yProps(0)} />
-                    <Tab label="Raias" {...a11yProps(1)} />
-                    <Tab label="Etiquetas" {...a11yProps(2)} />
-                    <Tab label="Item Four" {...a11yProps(3)} />
-                    <Tab label="Item Five" {...a11yProps(4)} />
-                    <Tab label="Item Six" {...a11yProps(5)} />
-                    <Tab label="Item Seven" {...a11yProps(6)} />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Colunas/Subcolunas"
+                        {...a11yProps(0)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Raias"
+                        {...a11yProps(1)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Etiquetas"
+                        {...a11yProps(2)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Membros"
+                        {...a11yProps(3)}
+                    />
+                    <Tab
+                        sx={{ color: SECTION_TITLE_COLOR }}
+                        label="Quadro"
+                        {...a11yProps(4)}
+                    />
                 </Tabs>
-                <TabPanel value={value} index={0}>
+                <TabPanel
+                    value={value}
+                    index={0}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
                     <TabColumnConfig
+                        board_id={board_id}
                         board_columns={board_info.columns}
                         board_swinlanes={board_info.swinlanes}
-                        board_next_group_id={board_info.nextGroupId}
-                        board_next_column_id={board_info.nextColumnId}
                         updateNewBoardColumns={updateNewBoardColumns}
-                        returnNextGroupId={getNextGroupId}
-                        returnNextColumnId={getNextColumnId}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={1}>
+                <TabPanel
+                    value={value}
+                    index={1}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
                     <TabSwinlaneConfig
+                        board_id={board_id}
                         board_swinlanes={board_info.swinlanes}
-                        board_next_swinlane_id={board_info.nextSwinlaneId}
-                        returnNextColumnId={getNextSwinlaneId}
+                        updateNewBoardSwinlanes={updateNewBoardSwinlanes}
                     />
                 </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Item Three
+                <TabPanel
+                    value={value}
+                    index={2}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabTagConfig
+                        board_id={board_id}
+                        board_tags={board_info.tags}
+                        updateNewBoardTags={updateNewBoardTags}
+                    />
                 </TabPanel>
-                <TabPanel value={value} index={3}>
-                    Item Four
+                <TabPanel
+                    value={value}
+                    index={3}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabMemberConfig
+                        board_id={board_id}
+                        participants={participants}
+                        updateParticipants={updateParticipants}
+                    />
                 </TabPanel>
-                <TabPanel value={value} index={4}>
-                    Item Five
-                </TabPanel>
-                <TabPanel value={value} index={5}>
-                    Item Six
-                </TabPanel>
-                <TabPanel value={value} index={6}>
-                    Item Seven
+                <TabPanel
+                    value={value}
+                    index={4}
+                    style={{
+                        backgroundColor: TAB_PANEL_BACKGROUND,
+                        color: TAB_PANEL_TEXT_COLOR
+                    }}
+                >
+                    <TabBoardConfig board_id={board_id} />
                 </TabPanel>
             </Box>
+
+            <div className="pt3">
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                        closeModal();
+                    }}
+                >
+                    Fechar
+                </Button>
+            </div>
         </section>
     );
 };
 
 ConfigBoardModal.propTypes = {
+    board_id: propTypes.number,
     board_info: propTypes.object,
     closeModal: propTypes.func,
     updateWithNewBoardInfo: propTypes.func

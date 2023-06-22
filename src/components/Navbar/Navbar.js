@@ -64,13 +64,21 @@ const Navbar = ({ userObject }) => {
     }
 
     function stringAvatar(name) {
+        let validated_name = name.toUpperCase().split(' ');
+
+        if (validated_name.length > 1) {
+            validated_name = `${name.toUpperCase().split(' ')[0][0]}${
+                name.toUpperCase().split(' ')[1][0]
+            }`;
+        } else {
+            validated_name = name.toUpperCase().split(' ')[0][0];
+        }
+
         return {
             sx: {
                 bgcolor: stringToColor(name)
             },
-            children: `${name.toUpperCase().split(' ')[0][0]}${
-                name.toUpperCase().split(' ')[1][0]
-            }`
+            children: validated_name
         };
     }
 
@@ -107,7 +115,10 @@ const Navbar = ({ userObject }) => {
     };
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: '#35393C' }}>
+        <AppBar
+            position="fixed"
+            sx={{ backgroundColor: '#35393C' }}
+        >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Box

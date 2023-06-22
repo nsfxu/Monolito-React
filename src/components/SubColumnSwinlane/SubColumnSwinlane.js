@@ -10,12 +10,18 @@ import CardColumnList from '../CardColumnList';
 /* eslint-disable */
 // eslint-disable-next-line
 const SubColumnSwinlane = ({
+    toast,
+    current_user_permission,
     parentColumnId,
     all_swinlanes,
     all_groups,
     tagsArr,
+    swinlanes,
+    status,
+    participants,
     is_first_column,
-    toggleSwinlane
+    toggleSwinlane,
+    getInfoByBoardId
 }) => {
     const renderDroppable = (current_group, swinlane_id, swinlane_expanded) => {
         if (swinlane_expanded) {
@@ -26,13 +32,21 @@ const SubColumnSwinlane = ({
                     >
                         {(provided) => (
                             <CardColumnList
+                                toast={toast}
+                                current_user_permission={
+                                    current_user_permission
+                                }
                                 cards={current_group.cards}
                                 tagsArr={tagsArr}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 provided={provided}
                                 swinlane={{
                                     is_swinlane: true,
                                     id: swinlane_id
                                 }}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         )}
                     </Droppable>
@@ -45,14 +59,24 @@ const SubColumnSwinlane = ({
                 style={{
                     minWidth: '240px',
                     minHeight: '10em',
-                    backgroundColor: 'red'
+                    backgroundColor: 'gray'
                 }}
             >
                 {current_group.cards.map((card, index) => {
                     if (card.laneId == swinlane_id) {
                         return (
                             <li className="bw1 mt3" key={index}>
-                                <Card object={card} tagsArr={tagsArr} />
+                                <Card
+                                    toast={toast}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
+                                    object={card}
+                                    tagsArr={tagsArr}
+                                    swinlanes={swinlanes}
+                                    status={status}
+                                    getInfoByBoardId={getInfoByBoardId}
+                                />
                             </li>
                         );
                     }
@@ -84,7 +108,11 @@ const SubColumnSwinlane = ({
     return all_swinlanes.map((swinlane, index) => (
         <div key={index}>
             <ListItemButton
-                sx={{ backgroundColor: 'cyan' }}
+                sx={{backgroundColor: swinlane.style
+                    ? JSON.parse(swinlane.style).color
+                    : '#565B61'
+                    
+                }}
                 style={{ minHeight: '3em' }}
                 className="w-100"
                 onClick={() => {
@@ -92,7 +120,14 @@ const SubColumnSwinlane = ({
                 }}
             >
                 {is_first_column && (
-                    <ListItemText primary={swinlane.name}></ListItemText>
+                    <ListItemText
+                        sx={{
+                            color: swinlane.style
+                                ? JSON.parse(swinlane.style).textColor
+                                : '#565B61'
+                        }}
+                        primary={swinlane.name}
+                    ></ListItemText>
                 )}
             </ListItemButton>
             <Collapse in={swinlane.expanded} className="w-100">
@@ -109,6 +144,7 @@ SubColumnSwinlane.propTypes = {
     all_swinlanes: propTypes.any,
     title: propTypes.string,
     tagsArr: propTypes.array,
+    participants: propTypes.array,
     is_first_column: propTypes.bool,
     toggleSwinlane: propTypes.func
 };

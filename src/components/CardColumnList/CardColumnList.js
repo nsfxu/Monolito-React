@@ -7,7 +7,18 @@ import Card from '../Card';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const CardColumnList = ({ cards, tagsArr, provided, swinlane }) => {
+const CardColumnList = ({
+    toast,
+    current_user_permission,
+    cards,
+    tagsArr,
+    swinlanes,
+    status,
+    participants,
+    provided,
+    swinlane,
+    getInfoByBoardId
+}) => {
     const renderDraggableCards = (card, index) => {
         return (
             <Draggable key={card.id} draggableId={`${card.id}`} index={index}>
@@ -18,7 +29,16 @@ const CardColumnList = ({ cards, tagsArr, provided, swinlane }) => {
                         {...provided.dragHandleProps}
                         className="bw1 mt3"
                     >
-                        <Card object={card} tagsArr={tagsArr} />
+                        <Card
+                            toast={toast}
+                            current_user_permission={current_user_permission}
+                            object={card}
+                            tagsArr={tagsArr}
+                            swinlanes={swinlanes}
+                            status={status}
+                            participants={participants}
+                            getInfoByBoardId={getInfoByBoardId}
+                        />
                     </li>
                 )}
             </Draggable>
@@ -31,7 +51,7 @@ const CardColumnList = ({ cards, tagsArr, provided, swinlane }) => {
             style={{
                 minWidth: '240px',
                 minHeight: '10em',
-                backgroundColor: 'red'
+                backgroundColor: 'gray'
             }}
             {...provided.droppableProps}
             ref={provided.innerRef}
@@ -51,6 +71,9 @@ const CardColumnList = ({ cards, tagsArr, provided, swinlane }) => {
 CardColumnList.propTypes = {
     cards: propTypes.array,
     tagsArr: propTypes.array,
+    swinlanes: propTypes.array,
+    status: propTypes.array,
+    participants: propTypes.array,
     provided: propTypes.any,
     swinlane_id: propTypes.any
 };

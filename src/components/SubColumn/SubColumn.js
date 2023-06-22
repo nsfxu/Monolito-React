@@ -8,7 +8,19 @@ import CardColumnList from '../CardColumnList';
 
 /* eslint-disable */
 // eslint-disable-next-line
-const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
+const SubColumn = ({
+    toast,
+    current_user_permission,
+    parentColumnId,
+    groupId,
+    title,
+    data,
+    tagsArr,
+    swinlanes,
+    status,
+    participants,
+    getInfoByBoardId
+}) => {
     return (
         <div className="w-100 h-100 flex flex-column items-start justify-center ma3">
             <header className="self-center">
@@ -19,13 +31,19 @@ const SubColumn = ({ parentColumnId, groupId, title, data, tagsArr }) => {
                     <Droppable droppableId={`${parentColumnId};${groupId}`}>
                         {(provided) => (
                             <CardColumnList
+                                toast={toast}
+                                current_user_permission={current_user_permission}
                                 cards={data}
                                 tagsArr={tagsArr}
+                                swinlanes={swinlanes}
+                                status={status}
+                                participants={participants}
                                 provided={provided}
                                 swinlane={{
                                     is_swinlane: false,
                                     id: null
                                 }}
+                                getInfoByBoardId={getInfoByBoardId}
                             />
                         )}
                     </Droppable>

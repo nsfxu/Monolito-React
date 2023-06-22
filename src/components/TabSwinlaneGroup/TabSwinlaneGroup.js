@@ -35,14 +35,14 @@ const TabSwinlaneGroup = ({
         margin: `0 ${grid}px 0 0`,
 
         // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
+        background: isDragging ? 'lightgrey' : '#565B61',
 
         // styles we need to apply on draggables
         ...draggableStyle
     });
 
     const getListStyle = (isDraggingOver) => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        background: isDraggingOver ? 'lightblue' : '#35393C',
 
         display: 'flex',
         padding: grid,
@@ -100,35 +100,52 @@ const TabSwinlaneGroup = ({
                                     )}
                                     {...provided.droppableProps}
                                 >
-                                    {all_columns.map((column, index) => (
-                                        <Draggable
-                                            key={`${column.id}`}
-                                            draggableId={`${column.id}`}
-                                            index={index}
-                                        >
-                                            {(provided, snapshot) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    style={getItemStyle(
-                                                        snapshot.isDragging,
-                                                        provided.draggableProps
-                                                            .style
-                                                    )}
-                                                    onClick={() => {
-                                                        setSelectedColumn(
-                                                            `${column.id}`
-                                                        );
-                                                    }}
-                                                >
-                                                    <TabColumn
-                                                        column_info={column}
-                                                    />
-                                                </div>
+                                    <div className="flex flex-column items-center">
+                                        <div>
+                                            <p>Grupo de raias</p>
+                                        </div>
+                                        <div className="flex flex-row">
+                                            {all_columns.map(
+                                                (column, index) => (
+                                                    <Draggable
+                                                        key={`${column.id}`}
+                                                        draggableId={`${column.id}`}
+                                                        index={index}
+                                                    >
+                                                        {(
+                                                            provided,
+                                                            snapshot
+                                                        ) => (
+                                                            <div
+                                                                ref={
+                                                                    provided.innerRef
+                                                                }
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                style={getItemStyle(
+                                                                    snapshot.isDragging,
+                                                                    provided
+                                                                        .draggableProps
+                                                                        .style
+                                                                )}
+                                                                onClick={() => {
+                                                                    setSelectedColumn(
+                                                                        `${column.id}`
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <TabColumn
+                                                                    column_info={
+                                                                        column
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
+                                                )
                                             )}
-                                        </Draggable>
-                                    ))}
+                                        </div>
+                                    </div>
                                     {provided.placeholder}
                                 </div>
                             )}

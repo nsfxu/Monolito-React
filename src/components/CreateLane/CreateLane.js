@@ -10,7 +10,6 @@ const CreateLane = ({ current_lanes }) => {
     const handleOnDragEnd = (result) => {
         if (!result.destination) return;
 
-        console.log(result);
     };
 
     return (

@@ -26,6 +26,15 @@ import Column from '../../components/Column';
 import ConfigBoardModal from '../../components/ConfigBoardModal';
 import Navbar from '../../components/Navbar/Navbar';
 
+import {
+    updateCardGroup,
+    updateCardGroupV2
+} from '../../services/card-service';
+import {
+    getBoardInfo,
+    getBoardParticipants
+} from '../../services/board-service';
+
 const CONFIG_BOARD = 'ConfigBoard';
 
 const Board = (props) => {
@@ -34,15 +43,18 @@ const Board = (props) => {
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
 
+    const [board_id, setBoardId] = useState(undefined);
     const [board_info, updateBoardInfo] = useState(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modal_type, setModalType] = useState(null);
     const [modal_style, setModalStyle] = useState(null);
 
+    const [participants, setParticipants] = useState([]);
     const [status, setStatus] = useState([]);
     const [tags, setTags] = useState([{}]);
 
     const [user, setUser] = useState(undefined);
+    const [current_user_permission, setCurrentUserPermission] = useState(null);
 
     useEffect(() => {
         const loggedUser = localStorage.getItem('user');
@@ -55,8 +67,8 @@ const Board = (props) => {
     }, []);
 
     useEffect(async () => {
-        if (props.location.state) {
-            await updateBoardInfo(props.location.state);
+        if (props.location.state && !board_id) {
+            await setBoardId(props.location.state);
 
             return;
         }
@@ -64,18 +76,41 @@ const Board = (props) => {
         history.push('/dashboard');
     }, [props]);
 
+    useEffect(async () => {
+        if (board_id) {
+            await getInfoByBoardId();
+        }
+    }, [board_id]);
+
     useEffect(() => {
         if (board_info) {
             getAllColumns();
             getAllTags();
-
+            insertAllCardTags();
             forceUpdate();
+            console.log(board_info);
         }
-
-        console.log(board_info);
     }, [board_info]);
 
+    useEffect(() => {
+        if (participants.length > 0 && user) {
+            participants.map((this_part) => {
+                if (this_part.id_user == user.id_user) {
+                    setCurrentUserPermission(this_part.id_permission);
+                }
+            });
+            console.log(participants, user);
+        }
+    }, [participants, user]);
+
     //#region functions
+
+    const getInfoByBoardId = async () => {
+        const db_board_data = await getBoardInfo(board_id);
+
+        await updateBoardInfo({ ...db_board_data.result });
+        await getAllParticipants(board_id);
+    };
 
     const updateWithNewBoardInfo = async (board_info) => {
         await updateBoardInfo({
@@ -87,8 +122,6 @@ const Board = (props) => {
             nextColumnId: 0
         });
         await updateBoardInfo(board_info);
-
-        console.log(board_info);
 
         await getAllColumns();
         await getAllTags();
@@ -106,6 +139,42 @@ const Board = (props) => {
         forceUpdate();
     };
 
+    const insertAllCardTags = () => {
+        if (board_info.columns.length == 0) {
+            return;
+        }
+
+        board_info.columns.map((this_column) => {
+            if (this_column.groups.length > 0) {
+                this_column.groups.map((this_group) => {
+                    if (this_group.cards.length > 0) {
+                        this_group.cards.map((this_card) => {
+                            board_info.card_tags.map((ct) => {
+                                if (this_card.id == ct.id_card) {
+                                    this_card.id_tags = JSON.parse(ct.tags);
+                                } else {
+                                    if (!this_card.id_tags) {
+                                        this_card.id_tags = [];
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+            }
+        });
+
+        console.log(board_info);
+    };
+
+    const getAllParticipants = async (id_board) => {
+        const response = await getBoardParticipants(id_board);
+
+        if (response.result) {
+            await setParticipants(response.result);
+        }
+    };
+
     const getAllTags = () => {
         setTags(board_info.tags);
     };
@@ -113,6 +182,7 @@ const Board = (props) => {
     const getAllColumns = () => {
         let columnInfo = [];
 
+        console.log(board_info);
         board_info.columns.map((column) => {
             columnInfo.push({ id: column.id, name: column.name });
         });
@@ -255,7 +325,7 @@ const Board = (props) => {
         }
     };
 
-    const handleWhenSourceIsSubColumn = (
+    const handleWhenSourceIsSubColumn = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -288,9 +358,25 @@ const Board = (props) => {
             destination_pos_id,
             removed_item[0]
         );
+
+        removed_item[0].id_group = column_to_add.groups[0].id;
+
+        getAllCardPos(
+            column_to_add.groups[0],
+            removed_item[0],
+            removed_item[0].laneId
+        );
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     column_to_add.groups[0].id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenDestinationIsSubColumn = (
+    const handleWhenDestinationIsSubColumn = async (
         items,
         source_column_id,
         destination_column_id,
@@ -323,14 +409,30 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
-        addObjectIntoPosition(
+        await addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
+
+        removed_item[0].id_group = subcolumn_to_add.id;
+
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenSourceIsDestination = (
+    const handleWhenSourceIsDestination = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -361,14 +463,38 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
-        addObjectIntoPosition(
+        await addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
+
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
+
+        // if (source_subcolumn_id != destination_subcolumn_id) {
+        //     getAllCardPos(
+        //         subcolumn_to_add,
+        //         removed_item[0],
+        //         removed_item[0].laneId
+        //     );
+        // } else {
+        //     getAllCardPos(subcolumn_to_add, null, removed_item[0].laneId);
+        // }
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
-    const handleWhenSourceIsntDestination = (
+    const handleWhenSourceIsntDestination = async (
         items,
         source_column_id,
         source_subcolumn_id,
@@ -402,14 +528,36 @@ const Board = (props) => {
             destination_subcolumn_id
         );
 
+        removed_item[0].id_group = subcolumn_to_add.id;
+
         addObjectIntoPosition(
             subcolumn_to_add,
             destination_pos_id,
             removed_item[0]
         );
+
+        getAllCardPos(
+            subcolumn_to_add,
+            removed_item[0],
+            removed_item[0].laneId
+        );
+
+        // updateCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     subcolumn_to_add.id,
+        //     removed_item[0].laneId
+        // );
     };
 
     const handleOnDragEnd = (result) => {
+        if (current_user_permission == 3) {
+            toast(
+                'Você não pode alterar a posição desse card por ser um convidado.'
+            );
+            return;
+        }
         if (!result.destination) return;
 
         const items = board_info;
@@ -475,95 +623,90 @@ const Board = (props) => {
             (column) => column.id == destination_column_id
         );
 
+        // update group_id
+        removed_item[0].id_group = column_to_add.groups[0].id;
+
         column_to_add.groups[0].cards.splice(
             destination_pos_id,
             0,
             removed_item[0]
         );
 
-        updateBoardInfo(items);
-    };
-
-    const addNewCard = (currentColumn, new_card) => {
-        const items = board_info;
-
-        const card_object = {
-            id: items.nextCardId,
-            name: new_card.title,
-            description: new_card.description
-        };
-
-        if (currentColumn.showSwinLanes) {
-            card_object.laneId = new_card.laneId;
-        }
-
-        const column_to_add = findColumnById(items, new_card.status);
-
-        if (new_card.groupId) {
-            const groupIndex = column_to_add.groups.findIndex((group) => {
-                return group.id == new_card.groupId;
-            });
-
-            addObjectIntoPosition(
-                column_to_add.groups[parseInt(groupIndex)],
-                0,
-                card_object
-            );
-        } else {
-            addObjectIntoPosition(column_to_add.groups[0], 0, card_object);
-        }
-
-        items.nextCardId++;
-
-        forceUpdate();
-        toast('Card adicionado');
-        updateBoardInfo(items);
-    };
-
-    const addNewColumn = (name) => {
-        const items = board_info;
-
-        items.columns.push({
-            id: items.nextColumnId,
-            name: name,
-            groups: [{ id: items.nextGroupId, name: 'Doing', cards: [] }],
-            showSwinLanes: false
-        });
-
-        items.nextColumnId++;
-        items.nextGroupId++;
-
-        updateBoardInfo(items);
-        toast('Coluna criada');
-    };
-
-    const addNewSubColumn = (columnId) => {
-        const items = board_info;
-
-        const column_to_add = items.columns.find(
-            (column) => column.id == columnId
+        getAllCardPos(
+            column_to_add.groups[0],
+            removed_item[0],
+            removed_item[0].laneId
         );
 
-        column_to_add.groups.push({
-            id: items.nextGroupId,
-            name: 'Done',
-            cards: []
-        });
-        items.nextGroupId++;
+        // updateCurrentCardGroup(
+        //     removed_item[0].id,
+        //     destination_pos_id,
+        //     source_pos_id,
+        //     column_to_add.groups[0].id,
+        //     removed_item[0].laneId
+        // );
 
-        forceUpdate();
         updateBoardInfo(items);
-        toast('Subcoluna criada');
+    };
+
+    const getAllCardPos = async (group, this_card, laneId) => {
+        const id_group = group.id;
+        let cardObj = null;
+
+        if (this_card) {
+            cardObj = {
+                id_card: this_card.id,
+                id_swinlane: laneId ? laneId : null
+            };
+        }
+
+        const cardArr = [...group.cards];
+        const apiObj = [];
+
+        if (cardArr.length > 0) {
+            cardArr.map((this_card, index) => {
+                apiObj.push({ id_card: this_card.id, order: index });
+            });
+        }
+        const response = await updateCardGroupV2(id_group, cardObj, apiObj);
+        console.log(response);
+
+        getInfoByBoardId();
+        // const temp_board = { ...board_info };
+        // await updateBoardInfo(null);
+        // await updateBoardInfo(temp_board);
+    };
+
+    const updateCurrentCardGroup = async (
+        id_card,
+        new_order,
+        old_order,
+        id_group,
+        id_swinlane
+    ) => {
+        const response = await updateCardGroup(
+            id_card,
+            new_order,
+            old_order,
+            id_group,
+            id_swinlane
+        );
+
+        console.log(response);
+    };
+
+    const updateParticipants = async (new_participant) => {
+        await setParticipants(new_participant);
     };
 
     // #endregion
 
     return (
         <>
-            {user && board_info && (
+            {user && board_info && current_user_permission && (
                 <>
                     <Navbar userObject={user} />
-                    <div className="flex flex-column items-center mt5 ml5 ba bw">
+                    <div className="flex flex-column items-center mt5 ml5 bw">
                         <div className="ma3 pl3 w-100">
                             <Stack
                                 direction="row"
@@ -572,38 +715,49 @@ const Board = (props) => {
                                 }
                                 spacing={2}
                             >
-                                <Button
-                                    variant="contained"
-                                    size="medium"
-                                    onClick={(e) => {
-                                        openCustomModal(CONFIG_BOARD);
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    Configurar quadro
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    size="medium"
-                                    onClick={(e) => {
-                                        console.log(board_info);
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    DEBUG
-                                </Button>
+                                {current_user_permission == 1 && (
+                                    <>
+                                        <Button
+                                            variant="contained"
+                                            size="medium"
+                                            onClick={(e) => {
+                                                openCustomModal(CONFIG_BOARD);
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            Configurar quadro
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            size="medium"
+                                            onClick={(e) => {
+                                                console.log(board_info);
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            DEBUG
+                                        </Button>
+                                    </>
+                                )}
                             </Stack>
                         </div>
 
-                        {board_info && (
+                        {board_info && participants && (
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Column
+                                    toast={toast}
+                                    current_user_permission={
+                                        current_user_permission
+                                    }
+                                    board_info={board_info}
                                     columns={board_info.columns}
                                     swinlanes={board_info.swinlanes}
+                                    participants={participants}
                                     status={status}
                                     tags={tags}
-                                    addNewCard={addNewCard}
                                     toggleSwinlane={toggleSwinlane}
+                                    updateBoardInfo={updateBoardInfo}
+                                    getInfoByBoardId={getInfoByBoardId}
                                 />
                             </DragDropContext>
                         )}
@@ -619,9 +773,12 @@ const Board = (props) => {
             >
                 {modal_type === 'ConfigBoard' && (
                     <ConfigBoardModal
+                        board_id={board_id}
                         board_info={board_info}
+                        participants={participants}
                         closeModal={closeModal}
                         updateWithNewBoardInfo={updateWithNewBoardInfo}
+                        updateParticipants={updateParticipants}
                     />
                 )}
             </Modal>
