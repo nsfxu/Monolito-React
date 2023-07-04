@@ -61,7 +61,7 @@ const Card = ({
             (user) => object.id_user == user.id_user
         );
 
-        if (object.id_user == 1 || !this_card_user || !this_card_user.name) {
+        if (!this_card_user || !this_card_user.name) {
             setResponsibleName('?');
 
             return;
@@ -102,11 +102,6 @@ const Card = ({
             });
         }
 
-        if (object.id == 33) {
-            console.log(object);
-            console.log(tagsArr);
-            console.log(tempTagsArr);
-        }
         setCardTags(tempTagsArr);
     };
 
@@ -131,6 +126,7 @@ const Card = ({
     }
 
     function stringAvatar(name) {
+        console.log(name);
         let validated_name = name.toUpperCase().split(' ');
 
         if (validated_name.length > 1) {
